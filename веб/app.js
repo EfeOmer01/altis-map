@@ -6,8 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
   //  1. КОНСТАНТЫ И СИСТЕМА КООРДИНАТ
   // ======================================================================
   const WORLD   = 30720;
-  const CRS_MAX = 512;
-  const K       = WORLD / CRS_MAX; // 60 метров на 1 CRS единицу
+  // Готовая топографическая подложка Altis имеет 144 условные единицы по стороне.
+  // Все игровые координаты пересчитываются в неё без смещения.
+  const CRS_MAX = 144;
+  const K       = WORLD / CRS_MAX;
 
   function gameToLatLng(gx, gy) {
     return L.latLng((gy - WORLD) / K, gx / K);
@@ -26,8 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // ======================================================================
   const map = L.map('map', {
     crs: L.CRS.Simple,
-    minZoom: 0,
-    maxZoom: 8,
+    minZoom: 2,
+    maxZoom: 7,
     zoomSnap: 1,
     zoomDelta: 1,
     attributionControl: false,
@@ -37,15 +39,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   map.fitBounds(mapBounds);
 
-  // Тайловый слой (бесшовный, спутник)
-  const tileLayer = L.tileLayer('/tiles/{z}/{x}/{y}.webp', {
-    tileSize: 512,
-    minZoom: 0,
-    maxZoom: 8,
-    maxNativeZoom: 6,
+  // Топографическая карта Altis: здания, дороги, высоты, леса и береговая линия
+  // уже находятся в готовом рендере, поэтому не дублируются векторными слоями.
+  const tileLayer = L.tileLayer('', {
+    tileSize: 256,
+    minZoom: 2,
+    maxZoom: 7,
+    maxNativeZoom: 7,
     noWrap: true,
     bounds: mapBounds
-  }).addTo(map);
+  });
+  tileLayer.getTileUrl = (coords) => {
+    if (coords.z < 4) return `/topo-tiles/overview/${coords.z}/${coords.x}/${coords.y}.jpg`;
+    return `/topo-tiles/${coords.z + 8}/map_${coords.x}_${coords.y}.jpg`;
+  };
+  tileLayer.addTo(map);
 
   // ======================================================================
   //  3. КООРДИНАТНАЯ СЕТКА ARMA 3 (HUD И ОВЕРЛЕЙ)
@@ -65,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     posCoordEl.textContent  = `X: ${String(gx).padStart(5, ' ')} | Y: ${String(gy).padStart(5, ' ')}`;
   });
 
-  const gridLayer = L.layerGroup().addTo(map);
+  const gridLayer = L.layerGroup();
   function redrawArmaGrid() {
     gridLayer.clearLayers();
     const bounds = map.getBounds();
@@ -96,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ======================================================================
   //  4. ВЕКТОРНАЯ ДОРОЖНАЯ СЕТЬ (ИЗ ROADS.SHP / ROADS.DBF)
   // ======================================================================
-  const roadsLayer = L.layerGroup().addTo(map);
+  const roadsLayer = L.layerGroup();
 
   fetch('/api/roads')
     .then(r => r.json())
@@ -845,14 +853,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // ======================================================================
   //  13. ДОПОЛНИТЕЛЬНЫЕ КНОПКИ ВЕРХНЕЙ ПАНЕЛИ HUD
   // ======================================================================
-  let roadsOn = true;
+  let roadsOn = false;
   document.getElementById('btn-toggle-roads')?.addEventListener('click', function() {
     roadsOn = !roadsOn;
     this.classList.toggle('active', roadsOn);
     roadsOn ? map.addLayer(roadsLayer) : map.removeLayer(roadsLayer);
   });
 
-  let gridOn = true;
+  let gridOn = false;
   document.getElementById('btn-toggle-grid')?.addEventListener('click', function() {
     gridOn = !gridOn;
     this.classList.toggle('active', gridOn);
