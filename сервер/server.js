@@ -54,16 +54,6 @@ app.get('/tiles/:z/:x/:y', (req, res) => {
   res.status(404).end();
 });
 
-// Прозрачный слой крыш и теней, сгенерированный из точных координат объектов WRP.
-const BUILDINGS_OVERLAY_DIR = path.join(WEB_DIR, 'слой_зданий');
-app.get('/building-overlay/:z/:x/:y.webp', (req, res) => {
-  const filePath = path.join(BUILDINGS_OVERLAY_DIR, req.params.z, req.params.x, `${req.params.y}.webp`);
-  const blankPath = path.join(BUILDINGS_OVERLAY_DIR, 'пустой.webp');
-  const responsePath = fs.existsSync(filePath) ? filePath : blankPath;
-  if (fs.existsSync(responsePath)) return res.type('image/webp').sendFile(responsePath);
-  res.status(404).end();
-});
-
 // ============================================================
 //  БАЗА ДАННЫХ СКВАДОВ (двойной режим: MongoDB / локальный файл)
 // ============================================================
