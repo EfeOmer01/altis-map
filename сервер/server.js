@@ -15,9 +15,13 @@ const PORT = process.env.PORT || 3000;
 const DATA_DIR = path.join(__dirname, '..', 'данные');
 const WEB_DIR = path.join(__dirname, '..', 'веб');
 const DB_FILE = path.join(DATA_DIR, 'база_сквадов.json');
+const MONGODB_URI = process.env.MONGODB_URI;
 
 app.use(cors());
 app.use(express.json());
+
+// Health-check для UptimeRobot (не даёт бесплатному Render уснуть)
+app.get('/health', (req, res) => res.status(200).send('OK'));
 
 // Статика веб-клиента с отключением кэша для свежих стилей и скриптов
 app.use(express.static(WEB_DIR, {
@@ -50,23 +54,93 @@ app.get('/tiles/:z/:x/:y', (req, res) => {
   res.status(404).end();
 });
 
-// База данных сквадов
-let squadsDb = {};
+// ============================================================
+//  БАЗА ДАННЫХ СКВАДОВ (двойной режим: MongoDB / локальный файл)
+// ============================================================
+
+let squadsDb = {};     // Кэш в оперативной памяти (для быстрого Socket.io)
+let Squad;             // Mongoose-модель (только при подключённой MongoDB)
+let useMongoDb = false;
+
+// Загружаем начальное состояние из локального JSON (если есть)
 if (fs.existsSync(DB_FILE)) {
-  try {
-    squadsDb = JSON.parse(fs.readFileSync(DB_FILE, 'utf-8'));
-  } catch (e) {
-    squadsDb = {};
+  try { squadsDb = JSON.parse(fs.readFileSync(DB_FILE, 'utf-8')); } catch (e) { squadsDb = {}; }
+}
+
+// Сохранение в локальный файл (только в режиме без MongoDB)
+function saveToFile() {
+  if (!useMongoDb) {
+    try { fs.writeFileSync(DB_FILE, JSON.stringify(squadsDb, null, 2), 'utf-8'); }
+    catch (e) { console.error('Ошибка записи базы сквадов:', e); }
   }
 }
 
-function saveDb() {
-  try {
-    fs.writeFileSync(DB_FILE, JSON.stringify(squadsDb, null, 2), 'utf-8');
-  } catch (e) {
-    console.error('Ошибка записи базы сквадов:', e);
+// Сохранение в MongoDB (асинхронно, не блокирует Socket.io)
+async function saveToMongo(squadName) {
+  if (useMongoDb && Squad && squadsDb[squadName]) {
+    try {
+      await Squad.findOneAndUpdate(
+        { name: squadName },
+        { $set: { claims: squadsDb[squadName].claims || {}, markers: squadsDb[squadName].markers || [] } },
+        { upsert: true, new: true }
+      );
+    } catch (e) { console.error('Ошибка записи в MongoDB:', e); }
   }
 }
+
+// Единая функция сохранения: пишет и в файл (если нет Mongo), и в Mongo (если есть)
+function saveDb(squadName) {
+  saveToFile();
+  if (squadName) saveToMongo(squadName);
+}
+
+// Подключение к MongoDB Atlas (если задана переменная окружения MONGODB_URI)
+if (MONGODB_URI) {
+  const mongoose = require('mongoose');
+
+  const squadSchema = new mongoose.Schema({
+    name: { type: String, unique: true, required: true },
+    claims: { type: mongoose.Schema.Types.Mixed, default: {} },
+    markers: { type: [mongoose.Schema.Types.Mixed], default: [] }
+  }, { strict: false, minimize: false });
+
+  Squad = mongoose.model('Squad', squadSchema);
+
+  mongoose.connect(MONGODB_URI)
+    .then(async () => {
+      console.log('✅ MongoDB Atlas подключена');
+      useMongoDb = true;
+
+      // Загружаем все сквады из MongoDB в оперативную память
+      const allSquads = await Squad.find({});
+      if (allSquads.length > 0) {
+        squadsDb = {};
+        for (const s of allSquads) {
+          squadsDb[s.name] = { name: s.name, claims: s.claims || {}, markers: s.markers || [] };
+        }
+        console.log(`✅ Загружено ${allSquads.length} сквадов из MongoDB`);
+      } else if (Object.keys(squadsDb).length > 0) {
+        // Первый запуск: автоматическая миграция данных из JSON в MongoDB
+        console.log('📦 Миграция данных из JSON в MongoDB...');
+        for (const [name, data] of Object.entries(squadsDb)) {
+          await Squad.findOneAndUpdate(
+            { name },
+            { $set: { claims: data.claims || {}, markers: data.markers || [] } },
+            { upsert: true }
+          );
+        }
+        console.log('✅ Миграция завершена');
+      }
+    })
+    .catch(err => {
+      console.error('❌ Ошибка подключения к MongoDB:', err.message);
+      console.log('⚠️  Работаем в режиме локального файла');
+    });
+}
+
+// ============================================================
+//  API ДАННЫХ КАРТЫ
+// ============================================================
 
 // 1. API интерактивных объектов (гаражи миссии)
 app.get('/api/buildings', (req, res) => {
@@ -110,7 +184,10 @@ app.get('/api/territories', (req, res) => {
   res.json([]);
 });
 
-// Socket.io для синхронизации сквадов
+// ============================================================
+//  SOCKET.IO — СИНХРОНИЗАЦИЯ СКВАДОВ В РЕАЛЬНОМ ВРЕМЕНИ
+// ============================================================
+
 const squadOnline = {};
 
 io.on('connection', (socket) => {
@@ -135,7 +212,7 @@ io.on('connection', (socket) => {
 
     if (!squadsDb[currentSquad]) {
       squadsDb[currentSquad] = { name: currentSquad, claims: {}, markers: [] };
-      saveDb();
+      saveDb(currentSquad);
     }
 
     socket.emit('squad_data', squadsDb[currentSquad]);
@@ -148,7 +225,7 @@ io.on('connection', (socket) => {
 
     if (!squadsDb[sName]) squadsDb[sName] = { name: sName, claims: {}, markers: [] };
     squadsDb[sName].claims[claim.id] = claim;
-    saveDb();
+    saveDb(sName);
     io.to(sName).emit('claim_updated', claim);
   });
 
@@ -158,7 +235,7 @@ io.on('connection', (socket) => {
 
     if (squadsDb[sName] && squadsDb[sName].claims[claimId]) {
       delete squadsDb[sName].claims[claimId];
-      saveDb();
+      saveDb(sName);
       io.to(sName).emit('claim_removed', claimId);
     }
   });
@@ -171,9 +248,14 @@ io.on('connection', (socket) => {
   });
 });
 
+// ============================================================
+//  ЗАПУСК СЕРВЕРА
+// ============================================================
+
 server.listen(PORT, () => {
   console.log(`====================================================`);
   console.log(` Тактический сервер Arma 3 Altis успешно запущен!   `);
   console.log(` Адрес в браузере: http://localhost:${PORT}          `);
+  console.log(` Режим базы: ${MONGODB_URI ? 'MongoDB Atlas ☁️' : 'Локальный файл 💾'}`);
   console.log(`====================================================`);
 });
