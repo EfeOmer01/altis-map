@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Топографическая карта Altis: здания, дороги, высоты, леса и береговая линия
   // уже находятся в готовом рендере, поэтому не дублируются векторными слоями.
-  const tileLayer = L.tileLayer('', {
+  const topoLayer = L.tileLayer('', {
     tileSize: 256,
     minZoom: 2,
     maxZoom: 8,
@@ -49,11 +49,39 @@ document.addEventListener('DOMContentLoaded', () => {
     noWrap: true,
     bounds: mapBounds
   });
-  tileLayer.getTileUrl = (coords) => {
+  topoLayer.getTileUrl = (coords) => {
     if (coords.z < 4) return `/topo-tiles/overview/${coords.z}/${coords.x}/${coords.y}.jpg`;
     return `/topo-tiles/${coords.z + 8}/map_${coords.x}_${coords.y}.jpg`;
   };
-  tileLayer.addTo(map);
+  topoLayer.addTo(map);
+
+  // Цветная спутниковая версия собрана из исходных тайлов PBO. В ней остаются
+  // все кастомные изменения острова, включая широкую реку. Геометрия тайлов
+  // приведена к тем же границам, что и топографическая подложка.
+  const satelliteLayer = L.tileLayer('/tiles/{z}/{x}/{y}.webp', {
+    tileSize: 144,
+    minZoom: 0,
+    maxZoom: 8,
+    maxNativeZoom: 6,
+    noWrap: true,
+    bounds: mapBounds
+  });
+  let satelliteMode = false;
+  const basemapButton = document.getElementById('btn-toggle-basemap');
+  basemapButton?.addEventListener('click', () => {
+    satelliteMode = !satelliteMode;
+    if (satelliteMode) {
+      map.removeLayer(topoLayer);
+      satelliteLayer.addTo(map);
+      basemapButton.textContent = 'ТОПО';
+      basemapButton.classList.add('active');
+    } else {
+      map.removeLayer(satelliteLayer);
+      topoLayer.addTo(map);
+      basemapButton.textContent = 'СПУТНИК';
+      basemapButton.classList.remove('active');
+    }
+  });
 
   // ======================================================================
   //  3. КООРДИНАТНАЯ СЕТКА ARMA 3 (HUD И ОВЕРЛЕЙ)
