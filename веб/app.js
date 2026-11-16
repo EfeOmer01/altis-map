@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const map = L.map('map', {
     crs: L.CRS.Simple,
     minZoom: 2,
-    maxZoom: 7,
+    maxZoom: 8,
     zoomSnap: 1,
     zoomDelta: 1,
     attributionControl: false,
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const tileLayer = L.tileLayer('', {
     tileSize: 256,
     minZoom: 2,
-    maxZoom: 7,
+    maxZoom: 8,
     maxNativeZoom: 7,
     noWrap: true,
     bounds: mapBounds
@@ -101,37 +101,28 @@ document.addEventListener('DOMContentLoaded', () => {
   map.on('moveend zoomend', redrawArmaGrid);
   redrawArmaGrid();
 
-  // ======================================================================
-  //  4. ВЕКТОРНАЯ ДОРОЖНАЯ СЕТЬ (ИЗ ROADS.SHP / ROADS.DBF)
-  // ======================================================================
+  /*
+   * ВЕКТОРНАЯ ДОРОЖНАЯ СЕТЬ ИЗ КАСТОМНОЙ PBO.
+   * Временно выключена: готовая топографическая подложка содержит свою сеть
+   * дорог, а обе сети не совпадают. Код сохранён для будущей отдельной
+   * подложки, построенной из той же PBO.
+   *
   const roadsLayer = L.layerGroup();
-
   fetch('/api/roads')
     .then(r => r.json())
-    .then(roads => {
-      roads.forEach(rd => {
-        const latlngs = rd.pts.map(pt => gameToLatLng(pt[0], pt[1]));
-
-        if (rd.type === 1) {
-          // Федеральная трасса: внешняя обводка + ядро
-          roadsLayer.addLayer(L.polyline(latlngs, { className: 'road-highway-casing', interactive: false }));
-          roadsLayer.addLayer(L.polyline(latlngs, { className: 'road-highway-core', interactive: false }));
-        } else if (rd.type === 2) {
-          // Асфальтовая дорога
-          roadsLayer.addLayer(L.polyline(latlngs, { className: 'road-main-casing', interactive: false }));
-          roadsLayer.addLayer(L.polyline(latlngs, { className: 'road-main-core', interactive: false }));
-        } else if (rd.type === 4) {
-          // Городская дорога
-          roadsLayer.addLayer(L.polyline(latlngs, { className: 'road-city', interactive: false }));
-        } else if (rd.type === 3) {
-          // Грунтовка
-          roadsLayer.addLayer(L.polyline(latlngs, { className: 'road-dirt', interactive: false }));
-        } else if (rd.type === 5) {
-          // Тропа
-          roadsLayer.addLayer(L.polyline(latlngs, { className: 'road-path', interactive: false }));
-        }
-      });
-    });
+    .then(roads => roads.forEach(rd => {
+      const latlngs = rd.pts.map(pt => gameToLatLng(pt[0], pt[1]));
+      if (rd.type === 1) {
+        roadsLayer.addLayer(L.polyline(latlngs, { className: 'road-highway-casing', interactive: false }));
+        roadsLayer.addLayer(L.polyline(latlngs, { className: 'road-highway-core', interactive: false }));
+      } else if (rd.type === 2) {
+        roadsLayer.addLayer(L.polyline(latlngs, { className: 'road-main-casing', interactive: false }));
+        roadsLayer.addLayer(L.polyline(latlngs, { className: 'road-main-core', interactive: false }));
+      } else if (rd.type === 4) roadsLayer.addLayer(L.polyline(latlngs, { className: 'road-city', interactive: false }));
+      else if (rd.type === 3) roadsLayer.addLayer(L.polyline(latlngs, { className: 'road-dirt', interactive: false }));
+      else if (rd.type === 5) roadsLayer.addLayer(L.polyline(latlngs, { className: 'road-path', interactive: false }));
+    }));
+  */
 
   // ======================================================================
   //  5. ИНТЕРАКТИВНЫЕ ГАРАЖИ МИССИИ (КЛИКАБЕЛЬНЫЕ, СИСТЕМА ЗАХВАТА И ПАРОЛЕЙ)
@@ -158,6 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(r => r.json())
     .then(garages => {
       garages.forEach(g => {
+        // Навесы миссии не являются гаражами для захвата и не показываются на карте.
+        if (g.class === 'Land_GarageShelter_01_F') return;
+
         // Увеличенные размеры квадратиков (16х18м) для отличной видимости и кликабельности
         const coords = rotatedBox(g.x, g.y, g.w || 16, g.l || 18, g.dir || g.yaw || 0);
         const isMission = (g.source === 'mission');
@@ -283,11 +277,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // ======================================================================
   const allMarkerEntries = []; // { marker, data, cat }
 
+  function cleanMarkerLabel(value) {
+    return String(value || '')
+      .replace(/^\s*amazingrp(?:g)?\.ru\s*\|\s*/i, '')
+      .trim();
+  }
+
   fetch('/api/markers')
     .then(r => r.json())
     .then(markers => {
       markers.forEach(m => {
         const isDP = (m.category === 'dp');
+        const label = cleanMarkerLabel(m.text);
         let iconInner = '';
 
         if (m.icon) {
@@ -303,13 +304,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const iconWrapClass = isDP ? 'arma-marker-wrap arma-marker-dp' : 'arma-marker-wrap';
         const icon = L.divIcon({
           className: iconWrapClass,
-          html: `${iconInner}<span class="arma-marker-text">${m.text}</span>`,
+          html: `${iconInner}<span class="arma-marker-text">${label}</span>`,
           iconSize: null,
           iconAnchor: [14, 14]
         });
 
         const marker = L.marker(gameToLatLng(m.x, m.y), { icon });
-        marker.bindTooltip(`<b>${m.text}</b><br><small style="color:#8b949e">Категория: ${m.category}<br>X: ${m.x} | Y: ${m.y}</small>`, {
+        marker.bindTooltip(`<b>${label}</b><br><small style="color:#8b949e">Категория: ${m.category}<br>X: ${m.x} | Y: ${m.y}</small>`, {
           className: 'tactical-tooltip',
           offset: [0, -12]
         });
@@ -853,12 +854,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ======================================================================
   //  13. ДОПОЛНИТЕЛЬНЫЕ КНОПКИ ВЕРХНЕЙ ПАНЕЛИ HUD
   // ======================================================================
-  let roadsOn = false;
-  document.getElementById('btn-toggle-roads')?.addEventListener('click', function() {
-    roadsOn = !roadsOn;
-    this.classList.toggle('active', roadsOn);
-    roadsOn ? map.addLayer(roadsLayer) : map.removeLayer(roadsLayer);
-  });
+  // Переключатель кастомных дорог выключен вместе с самим слоем; см. блок выше.
 
   let gridOn = false;
   document.getElementById('btn-toggle-grid')?.addEventListener('click', function() {
