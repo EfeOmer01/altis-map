@@ -47,6 +47,19 @@ document.addEventListener('DOMContentLoaded', () => {
     bounds: mapBounds
   }).addTo(map);
 
+  // Точные крыши и тени объектов из WRP. Слой прозрачный: реки и спутниковая
+  // текстура остаются базой карты, а здания появляются поверх неё.
+  const buildingsOverlay = L.tileLayer('/building-overlay/{z}/{x}/{y}.webp', {
+    tileSize: 512,
+    minZoom: 0,
+    maxZoom: 8,
+    maxNativeZoom: 6,
+    noWrap: true,
+    bounds: mapBounds,
+    opacity: 0.82,
+    zIndex: 210
+  }).addTo(map);
+
   // ======================================================================
   //  3. КООРДИНАТНАЯ СЕТКА ARMA 3 (HUD И ОВЕРЛЕЙ)
   // ======================================================================
