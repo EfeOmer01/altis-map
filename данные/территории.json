@@ -1,0 +1,110 @@
+[
+  {
+    "name": "marker_26",
+    "label": "marker_26",
+    "shape": "ellipse",
+    "x": 5473.0,
+    "y": 14992.0,
+    "radius_x": 90.0,
+    "radius_y": 90.0,
+    "angle": 0.0,
+    "color": "#22c55e",
+    "category": "territories"
+  },
+  {
+    "name": "uran_zone",
+    "label": "Зона радиации / Уран",
+    "shape": "ellipse",
+    "x": 2336.5,
+    "y": 22285.0,
+    "radius_x": 500.0,
+    "radius_y": 500.0,
+    "angle": 0.0,
+    "color": "#ef4444",
+    "category": "territories"
+  },
+  {
+    "name": "safe_zone_1",
+    "label": "Безопасная зона (safe_zone_1)",
+    "shape": "ellipse",
+    "x": 3666.5,
+    "y": 13120.9,
+    "radius_x": 65.0,
+    "radius_y": 65.0,
+    "angle": 0.0,
+    "color": "#22c55e",
+    "category": "territories"
+  },
+  {
+    "name": "hunting_zone",
+    "label": "Охотничьи угодья",
+    "shape": "ellipse",
+    "x": 14270.9,
+    "y": 21916.0,
+    "radius_x": 450.0,
+    "radius_y": 450.0,
+    "angle": 0.0,
+    "color": "#ef4444",
+    "category": "territories"
+  },
+  {
+    "name": "safe_zone_2",
+    "label": "Безопасная зона (safe_zone_2)",
+    "shape": "ellipse",
+    "x": 25763.5,
+    "y": 21216.5,
+    "radius_x": 60.0,
+    "radius_y": 60.0,
+    "angle": 0.0,
+    "color": "#22c55e",
+    "category": "territories"
+  },
+  {
+    "name": "marker_0",
+    "label": "marker_0",
+    "shape": "rectangle",
+    "x": 15389.8,
+    "y": 12999.4,
+    "radius_x": 1165.0,
+    "radius_y": 5.0,
+    "angle": 178.99994,
+    "color": "#3b82f6",
+    "category": "territories"
+  },
+  {
+    "name": "safe_zone_3",
+    "label": "Безопасная зона (safe_zone_3)",
+    "shape": "ellipse",
+    "x": 11191.8,
+    "y": 8720.6,
+    "radius_x": 60.0,
+    "radius_y": 60.0,
+    "angle": 0.0,
+    "color": "#22c55e",
+    "category": "territories"
+  },
+  {
+    "name": "safe_zone_4",
+    "label": "Безопасная зона (safe_zone_4)",
+    "shape": "ellipse",
+    "x": 9193.1,
+    "y": 21669.8,
+    "radius_x": 40.0,
+    "radius_y": 40.0,
+    "angle": 0.0,
+    "color": "#22c55e",
+    "category": "territories"
+  },
+  {
+    "name": "safe_zone_5",
+    "label": "Безопасная зона (safe_zone_5)",
+    "shape": "ellipse",
+    "x": 3492.3,
+    "y": 13444.0,
+    "radius_x": 50.0,
+    "radius_y": 50.0,
+    "angle": 0.0,
+    "color": "#22c55e",
+    "category": "territories"
+  }
+]

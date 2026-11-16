@@ -1,0 +1,1054 @@
+/* === АРХИТЕКТУРА СТИЛЕЙ ТАКТИЧЕСКОЙ КАРТЫ ARMA 3 === */
+
+:root {
+  --bg-main: #0c0f12;
+  --bg-panel: #161b22;
+  --bg-card: #21262d;
+  --bg-hover: #30363d;
+  --border-color: #30363d;
+  --border-focus: #58a6ff;
+  
+  --text-main: #f0f6fc;
+  --text-muted: #8b949e;
+  --text-mono: #58a6ff;
+  
+  --color-green: #3fb950;
+  --color-red: #f85149;
+  --color-yellow: #d29922;
+  --color-blue: #58a6ff;
+  --color-cyan: #39c5bb;
+  --color-purple: #bc8cff;
+
+  --font-mono: 'Share Tech Mono', monospace;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-arma: 'Roboto Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+/* --- ВЕРХНЯЯ ПАНЕЛЬ (HUD) --- */
+.hud-top {
+  height: 52px;
+  background: rgba(18, 22, 28, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.hud-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hud-status-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-green);
+  box-shadow: 0 0 8px var(--color-green);
+  animation: pulse-online 2s infinite;
+}
+
+@keyframes pulse-online {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.hud-title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 1.5px;
+  color: #fff;
+}
+
+.hud-subtitle {
+  font-size: 11px;
+  color: var(--color-yellow);
+  font-family: var(--font-mono);
+  background: rgba(210, 153, 34, 0.15);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(210, 153, 34, 0.3);
+}
+
+.hud-coords {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hud-label {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.hud-value {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--color-blue);
+  font-weight: bold;
+}
+
+.hud-squad-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-squad-badge {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 4px 10px;
+  background: rgba(88, 166, 255, 0.15);
+  border: 1px solid var(--color-blue);
+  border-radius: 4px;
+  color: var(--color-blue);
+  font-weight: bold;
+}
+
+.hud-controls {
+  display: flex;
+  gap: 8px;
+}
+
+/* --- КНОПКИ --- */
+.btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 6px 14px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-main);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--text-muted);
+}
+
+.btn-hud.active {
+  border-color: var(--color-green);
+  background: rgba(63, 185, 80, 0.15);
+  color: #fff;
+  box-shadow: 0 0 8px rgba(63, 185, 80, 0.3);
+}
+
+.btn-primary {
+  background: #238636;
+  border-color: rgba(240, 246, 252, 0.1);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: #2ea043;
+}
+
+.btn-secondary {
+  background: var(--bg-card);
+  border-color: var(--border-color);
+  color: var(--text-main);
+}
+
+.btn-danger {
+  background: rgba(248, 81, 73, 0.15);
+  border-color: var(--color-red);
+  color: var(--color-red);
+}
+
+.btn-danger:hover {
+  background: var(--color-red);
+  color: #fff;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.btn-icon:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* --- КАРТА --- */
+#map {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  background: #284660;
+}
+
+.leaflet-container {
+  background: #284660 !important;
+  font-family: var(--font-sans) !important;
+}
+
+.leaflet-tile {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* --- НАЗВАНИЯ ГОРОДОВ И ПОСЕЛКОВ (ТОЧНО КАК В ARMA 3) --- */
+.arma-city-label {
+  font-family: var(--font-arma);
+  white-space: nowrap;
+  pointer-events: none;
+  text-align: center;
+  user-select: none;
+}
+
+.arma-city-capital {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #111417;
+  text-shadow: 
+    -1.5px -1.5px 0 #ffffff,
+     1.5px -1.5px 0 #ffffff,
+    -1.5px  1.5px 0 #ffffff,
+     1.5px  1.5px 0 #ffffff,
+     0px 0px 4px #ffffff,
+     0px 0px 8px #ffffff;
+}
+
+.arma-city-normal {
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: none;
+  color: #1a1e23;
+  text-shadow: 
+    -1.2px -1.2px 0 #ffffff,
+     1.2px -1.2px 0 #ffffff,
+    -1.2px  1.2px 0 #ffffff,
+     1.2px  1.2px 0 #ffffff,
+     0px 0px 4px #ffffff;
+}
+
+.arma-city-village {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: none;
+  color: #2b3137;
+  text-shadow: 
+    -1px -1px 0 #ffffff,
+     1px -1px 0 #ffffff,
+    -1px  1px 0 #ffffff,
+     1px  1px 0 #ffffff,
+     0px 0px 3px #ffffff;
+}
+
+.arma-city-local {
+  font-family: var(--font-arma);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: lowercase;
+  color: #71614e; /* Каноничный коричнево-песочный цвет поселений и промзон Arma 3 */
+  text-shadow: 0.5px 0.5px 0 rgba(255, 255, 255, 0.5), -0.5px -0.5px 0 rgba(255, 255, 255, 0.5);
+}
+
+.arma-city-hill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #6d3a17;
+  text-shadow: 
+    -1px -1px 0 #ffffff,
+     1px -1px 0 #ffffff,
+    -1px  1px 0 #ffffff,
+     1px  1px 0 #ffffff;
+}
+
+/* --- ПОСТРОЙКИ (СЕРЫЕ СИЛУЭТЫ КАК В ARMA 3) --- */
+.building-polygon {
+  stroke-width: 1 !important;
+  stroke: #3c4249 !important;
+  fill: #7c8591 !important;
+  fill-opacity: 0.95 !important;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.building-polygon:hover {
+  stroke: #f59e0b !important;
+  stroke-width: 2.5 !important;
+  fill: rgba(245, 158, 11, 0.85) !important;
+}
+
+.building-claimed-friendly {
+  stroke: var(--color-green) !important;
+  fill: rgba(63, 185, 80, 0.85) !important;
+}
+
+.building-claimed-hostile {
+  stroke: var(--color-red) !important;
+  fill: rgba(248, 81, 73, 0.85) !important;
+}
+
+.building-claimed-loot {
+  stroke: var(--color-yellow) !important;
+  fill: rgba(210, 153, 34, 0.85) !important;
+}
+
+/* ГАРАЖИ (УВЕЛИЧЕННЫЕ И ЯРКИЕ КЛИКАБЕЛЬНЫЕ ЗДАНИЯ) */
+.garage-polygon {
+  stroke-width: 2.5 !important;
+  stroke: #00f0ff !important;
+  fill: rgba(0, 240, 255, 0.75) !important;
+  cursor: pointer;
+  filter: drop-shadow(0 0 4px rgba(0, 240, 255, 0.6));
+  transition: all 0.2s ease;
+}
+
+.garage-polygon.garage-mission {
+  stroke: #fbbf24 !important;
+  fill: rgba(251, 191, 36, 0.8) !important;
+  filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.7));
+}
+
+.garage-polygon:hover {
+  stroke: #ffffff !important;
+  stroke-width: 4 !important;
+  fill: rgba(255, 255, 255, 0.95) !important;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.9));
+}
+
+/* --- ДОРОГИ (ТОЧНЫЕ ЦВЕТА ARMA 3 ALTIS) --- */
+.road-highway-casing {
+  stroke: #1c2025;
+  stroke-width: 6.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.road-highway-core {
+  stroke: #ffffff;
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.road-main-casing {
+  stroke: #2c3138;
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.road-main-core {
+  stroke: #f3efe6;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.road-city {
+  stroke: #dfd7c8;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.road-dirt {
+  stroke: #967d60;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.road-path {
+  stroke: #876e53;
+  stroke-width: 1.5;
+  stroke-dasharray: 4, 4;
+}
+
+/* --- МАРКЕРЫ МИССИИ (ОРИГИНАЛЬНЫЕ PNG ИКОНКИ) --- */
+.arma-marker-wrap {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(18, 22, 28, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 2px 6px;
+  border-radius: 12px;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.arma-marker-wrap:hover {
+  transform: scale(1.15);
+  border-color: var(--color-yellow);
+  z-index: 1000 !important;
+}
+
+.arma-marker-img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+.arma-marker-icon {
+  font-size: 14px;
+}
+
+.arma-marker-text {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* Всплывающие тултипы */
+.tactical-tooltip {
+  background: rgba(14, 17, 23, 0.95) !important;
+  border: 1px solid var(--color-blue) !important;
+  color: var(--text-main) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 12px !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
+}
+
+.tactical-tooltip::before {
+  border-top-color: var(--color-blue) !important;
+}
+
+/* Координатная сетка Arma 3 */
+.arma-grid-line-major {
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 1;
+}
+
+/* --- БОКОВАЯ ПАНЕЛЬ ПОСТРОЙКИ --- */
+.side-panel {
+  position: absolute;
+  top: 64px;
+  right: 16px;
+  width: 340px;
+  background: rgba(22, 27, 34, 0.97);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  z-index: 1001;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.side-panel.hidden {
+  transform: translateX(380px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.panel-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.panel-tag {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--color-yellow);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.panel-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin: 2px 0;
+  word-break: break-all;
+}
+
+.panel-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.panel-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.form-input {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 8px 10px;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: var(--border-focus);
+}
+
+.password-input-wrap {
+  display: flex;
+  gap: 6px;
+}
+
+.password-input-wrap .form-input {
+  flex: 1;
+  font-family: var(--font-mono);
+}
+
+.panel-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.panel-actions .btn {
+  flex: 1;
+  padding: 10px;
+}
+
+/* --- МОДАЛЬНЫЕ ОКНА --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-box {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 580px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+}
+
+.modal-wide {
+  max-width: 850px;
+}
+
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.modal-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.squad-tabs {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.squad-tab-card {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.squad-divider {
+  display: flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.tab-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.squad-active-members {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.squad-active-members h4 {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+#squad-members-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+#squad-members-list li {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: var(--bg-card);
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  color: var(--color-green);
+}
+
+#squad-members-list li.empty-list {
+  color: var(--text-muted);
+  border: none;
+  background: none;
+}
+
+/* Таблица сохраненных баз */
+.table-container {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.claims-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.claims-table th, .claims-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.claims-table th {
+  background: var(--bg-card);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  position: sticky;
+  top: 0;
+}
+
+.claims-table tr:hover td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ======================================================================
+   ПАНЕЛЬ «НАСТРОЙКА КАРТЫ» (ПОЛНОЕ СООТВЕТСТВИЕ ДИЗАЙНУ ARMA 3)
+   ====================================================================== */
+.settings-panel {
+  position: absolute;
+  top: 68px;
+  left: 20px;
+  width: 295px;
+  background: rgba(28, 32, 38, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.85), 0 0 1px rgba(255, 255, 255, 0.25);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  font-family: var(--font-arma);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.settings-panel.hidden {
+  display: none !important;
+}
+
+.settings-panel-header {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: rgba(18, 21, 26, 0.9);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0 12px;
+  cursor: grab;
+}
+
+.settings-panel-header:active {
+  cursor: grabbing;
+}
+
+.settings-title {
+  font-family: var(--font-arma);
+  font-size: 17px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.settings-btn-close {
+  position: absolute;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 3px;
+  transition: all 0.15s;
+}
+
+.settings-btn-close:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.settings-search-bar {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  background: rgba(14, 17, 21, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 6px;
+}
+
+.settings-nav-btn {
+  width: 26px;
+  height: 26px;
+  background: rgba(45, 52, 62, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  color: #ffffff;
+  font-family: var(--font-arma);
+  font-weight: 700;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.settings-nav-btn:hover {
+  background: rgba(75, 85, 99, 1);
+  border-color: #ffffff;
+}
+
+.settings-search-input {
+  flex: 1;
+  height: 26px;
+  background: #cbd5e1;
+  color: #0f172a;
+  border: none;
+  border-radius: 3px;
+  padding: 0 8px;
+  font-family: var(--font-arma);
+  font-size: 13px;
+  font-weight: 600;
+  outline: none;
+}
+
+.settings-search-input:focus {
+  background: #ffffff;
+  box-shadow: 0 0 0 1px #3b82f6;
+}
+
+.settings-search-input::placeholder {
+  color: #64748b;
+  font-weight: 400;
+}
+
+.settings-categories-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-row {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.12s;
+  cursor: pointer;
+}
+
+.settings-row:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.settings-row-label {
+  font-family: var(--font-arma);
+  font-size: 15px;
+  font-weight: 600;
+  color: #e2e8f0;
+  letter-spacing: 0.3px;
+}
+
+.settings-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.settings-action-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.settings-action-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Точный стиль чекбоксов со скриншота: темно-серый квадрат со скруглением и белой рамкой */
+.arma-checkbox-wrap {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  display: inline-block;
+  user-select: none;
+}
+
+.arma-checkbox-wrap input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.arma-checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: #1a1e24;
+  border: 2px solid #ffffff;
+  border-radius: 3px;
+  transition: all 0.15s;
+}
+
+.arma-checkbox-wrap:hover input ~ .arma-checkmark {
+  border-color: #60a5fa;
+}
+
+.arma-checkbox-wrap input:checked ~ .arma-checkmark {
+  background-color: #ffffff;
+}
+
+.arma-checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.arma-checkbox-wrap input:checked ~ .arma-checkmark:after {
+  display: block;
+}
+
+/* Темная галочка внутри белого квадрата при отметке */
+.arma-checkbox-wrap .arma-checkmark:after {
+  left: 5px;
+  top: 1px;
+  width: 4px;
+  height: 9px;
+  border: solid #0f172a;
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg);
+}
+
+/* DP метки курьера — желтый фон внутри и четкий контур как в Arma 3 */
+.arma-marker-wrap.arma-marker-dp {
+  background: #facc15 !important;
+  color: #000000 !important;
+  border: 1.5px solid #000000 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 8px rgba(250, 204, 21, 0.6) !important;
+}
+
+.arma-marker-wrap.arma-marker-dp .arma-marker-text {
+  color: #000000 !important;
+  font-weight: 700 !important;
+}
+
+/* Территории и зоны (сейфзоны, радиация, охота) */
+.arma-zone-label {
+  font-family: var(--font-arma);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  color: #ffffff;
+  text-shadow: 0 1px 4px #000000, 0 0 8px #000000;
+  pointer-events: none;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.territories-interactive-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.territories-interactive-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-family: var(--font-arma);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.territories-interactive-list li:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #3b82f6;
+  transform: translateX(4px);
+}
+
+.zone-color-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  display: inline-block;
+}

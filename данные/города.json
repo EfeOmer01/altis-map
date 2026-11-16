@@ -1,0 +1,1052 @@
+[
+  {
+    "name": "Aggelochori",
+    "type": "NameVillage",
+    "x": 3687.8,
+    "y": 13776.1
+  },
+  {
+    "name": "Neri",
+    "type": "NameVillage",
+    "x": 4116.1,
+    "y": 11736.1
+  },
+  {
+    "name": "Panochori",
+    "type": "NameVillage",
+    "x": 5033.3,
+    "y": 11245.2
+  },
+  {
+    "name": "Zaros",
+    "type": "NameCity",
+    "x": 9091.8,
+    "y": 11961.9
+  },
+  {
+    "name": "Therisa",
+    "type": "NameVillage",
+    "x": 10618.9,
+    "y": 12237.3
+  },
+  {
+    "name": "Katalaki",
+    "type": "NameVillage",
+    "x": 11701.1,
+    "y": 13672.1
+  },
+  {
+    "name": "Neochori",
+    "type": "NameCity",
+    "x": 12502.0,
+    "y": 14337.0
+  },
+  {
+    "name": "Stavros",
+    "type": "NameVillage",
+    "x": 12950.1,
+    "y": 15041.6
+  },
+  {
+    "name": "Lakka",
+    "type": "NameCity",
+    "x": 12282.0,
+    "y": 15732.3
+  },
+  {
+    "name": "Alikampos",
+    "type": "NameVillage",
+    "x": 11112.6,
+    "y": 14573.6
+  },
+  {
+    "name": "Agios Dionysios",
+    "type": "NameCity",
+    "x": 9188.0,
+    "y": 15947.8
+  },
+  {
+    "name": "Kore",
+    "type": "NameCity",
+    "x": 7062.4,
+    "y": 16472.1
+  },
+  {
+    "name": "Negades",
+    "type": "NameVillage",
+    "x": 4886.0,
+    "y": 16171.3
+  },
+  {
+    "name": "Agios Konstantinos",
+    "type": "NameVillage",
+    "x": 3948.8,
+    "y": 17277.8
+  },
+  {
+    "name": "Topolia",
+    "type": "NameVillage",
+    "x": 7375.8,
+    "y": 15429.5
+  },
+  {
+    "name": "Gravia",
+    "type": "NameCity",
+    "x": 14479.8,
+    "y": 17614.3
+  },
+  {
+    "name": "Athira",
+    "type": "NameCityCapital",
+    "x": 13993.0,
+    "y": 18709.4
+  },
+  {
+    "name": "Frini",
+    "type": "NameCity",
+    "x": 14612.5,
+    "y": 20786.7
+  },
+  {
+    "name": "Ifestiona",
+    "type": "NameVillage",
+    "x": 12787.0,
+    "y": 19679.3
+  },
+  {
+    "name": "Syrta",
+    "type": "NameCity",
+    "x": 8625.1,
+    "y": 18301.6
+  },
+  {
+    "name": "Galati",
+    "type": "NameVillage",
+    "x": 10270.3,
+    "y": 19036.0
+  },
+  {
+    "name": "Koroni",
+    "type": "NameVillage",
+    "x": 11786.7,
+    "y": 18372.4
+  },
+  {
+    "name": "Abdera",
+    "type": "NameVillage",
+    "x": 9425.4,
+    "y": 20284.0
+  },
+  {
+    "name": "Telos",
+    "type": "NameCity",
+    "x": 16207.0,
+    "y": 17296.7
+  },
+  {
+    "name": "Anthrakia",
+    "type": "NameVillage",
+    "x": 16584.3,
+    "y": 16104.0
+  },
+  {
+    "name": "Kalithea",
+    "type": "NameVillage",
+    "x": 17826.5,
+    "y": 18129.4
+  },
+  {
+    "name": "Agios Petros",
+    "type": "NameVillage",
+    "x": 19339.4,
+    "y": 17641.6
+  },
+  {
+    "name": "Paros",
+    "type": "NameCity",
+    "x": 20885.4,
+    "y": 16958.8
+  },
+  {
+    "name": "Kalochori",
+    "type": "NameCity",
+    "x": 21351.6,
+    "y": 16361.9
+  },
+  {
+    "name": "Sofia",
+    "type": "NameCity",
+    "x": 25680.5,
+    "y": 21365.1
+  },
+  {
+    "name": "Molos",
+    "type": "NameCity",
+    "x": 26943.9,
+    "y": 23170.7
+  },
+  {
+    "name": "Ioannina",
+    "type": "NameVillage",
+    "x": 23199.7,
+    "y": 19986.6
+  },
+  {
+    "name": "Delfinaki",
+    "type": "NameVillage",
+    "x": 23908.6,
+    "y": 20144.7
+  },
+  {
+    "name": "Nifi",
+    "type": "NameVillage",
+    "x": 19473.3,
+    "y": 15453.6
+  },
+  {
+    "name": "Charkia",
+    "type": "NameCity",
+    "x": 18049.1,
+    "y": 15264.1
+  },
+  {
+    "name": "Dorida",
+    "type": "NameCity",
+    "x": 19336.9,
+    "y": 13252.3
+  },
+  {
+    "name": "Chalkeia",
+    "type": "NameCity",
+    "x": 20194.6,
+    "y": 11660.7
+  },
+  {
+    "name": "Panagia",
+    "type": "NameVillage",
+    "x": 20490.2,
+    "y": 8907.1
+  },
+  {
+    "name": "Feres",
+    "type": "NameVillage",
+    "x": 21640.7,
+    "y": 7583.9
+  },
+  {
+    "name": "Selakano",
+    "type": "NameVillage",
+    "x": 20769.8,
+    "y": 6736.5
+  },
+  {
+    "name": "Pyrgos",
+    "type": "NameCityCapital",
+    "x": 16780.6,
+    "y": 12604.5
+  },
+  {
+    "name": "Neri",
+    "type": "CityCenter",
+    "x": 4183.1,
+    "y": 11744.0
+  },
+  {
+    "name": "Agios Dionysios",
+    "type": "CityCenter",
+    "x": 9287.7,
+    "y": 15858.1
+  },
+  {
+    "name": "Katalakes",
+    "type": "CityCenter",
+    "x": 9459.6,
+    "y": 20281.9
+  },
+  {
+    "name": "Kavala",
+    "type": "NameCityCapital",
+    "x": 3458.9,
+    "y": 12966.4
+  },
+  {
+    "name": "Poliakko",
+    "type": "NameCity",
+    "x": 10966.5,
+    "y": 13435.3
+  },
+  {
+    "name": "Bomos",
+    "type": "NameLocal",
+    "x": 2307.3,
+    "y": 22165.2
+  },
+  {
+    "name": "Oreokastro",
+    "type": "NameVillage",
+    "x": 4560.5,
+    "y": 21460.6
+  },
+  {
+    "name": "castle",
+    "type": "NameLocal",
+    "x": 4803.0,
+    "y": 21855.5
+  },
+  {
+    "name": "Thronos",
+    "type": "Hill",
+    "x": 4919.3,
+    "y": 21951.7
+  },
+  {
+    "name": "Faros",
+    "type": "NameLocal",
+    "x": 6565.3,
+    "y": 22639.1
+  },
+  {
+    "name": "dump",
+    "type": "NameLocal",
+    "x": 5887.1,
+    "y": 20236.5
+  },
+  {
+    "name": "Synneforos",
+    "type": "Hill",
+    "x": 6513.8,
+    "y": 21604.7
+  },
+  {
+    "name": "Aristi",
+    "type": "NameLocal",
+    "x": 7914.0,
+    "y": 21305.2
+  },
+  {
+    "name": "Fotia",
+    "type": "NameLocal",
+    "x": 2993.5,
+    "y": 18517.4
+  },
+  {
+    "name": "hill01",
+    "type": "Hill",
+    "x": 4162.7,
+    "y": 19455.5
+  },
+  {
+    "name": "Hill02",
+    "type": "Hill",
+    "x": 4808.2,
+    "y": 17694.3
+  },
+  {
+    "name": "Gori",
+    "type": "NameLocal",
+    "x": 5455.7,
+    "y": 17553.7
+  },
+  {
+    "name": "Agios Minas",
+    "type": "Hill",
+    "x": 7847.0,
+    "y": 18005.4
+  },
+  {
+    "name": "Pyrsos",
+    "type": "Hill",
+    "x": 9127.1,
+    "y": 19271.7
+  },
+  {
+    "name": "hill03",
+    "type": "Hill",
+    "x": 10748.9,
+    "y": 20401.0
+  },
+  {
+    "name": "Krya Nera",
+    "type": "NameLocal",
+    "x": 9681.6,
+    "y": 22294.5
+  },
+  {
+    "name": "hill04",
+    "type": "Hill",
+    "x": 14574.4,
+    "y": 21994.8
+  },
+  {
+    "name": "Cap Agrios",
+    "type": "NameLocal",
+    "x": 14688.2,
+    "y": 23496.2
+  },
+  {
+    "name": "Nychi",
+    "type": "NameLocal",
+    "x": 16837.4,
+    "y": 21890.0
+  },
+  {
+    "name": "factory01",
+    "type": "NameLocal",
+    "x": 14294.6,
+    "y": 18928.5
+  },
+  {
+    "name": "Agia Triada",
+    "type": "NameVillage",
+    "x": 16668.5,
+    "y": 20487.0
+  },
+  {
+    "name": "Orino",
+    "type": "NameVillage",
+    "x": 10410.4,
+    "y": 17243.1
+  },
+  {
+    "name": "military01",
+    "type": "NameLocal",
+    "x": 12771.6,
+    "y": 16694.3
+  },
+  {
+    "name": "factory02",
+    "type": "NameLocal",
+    "x": 12577.4,
+    "y": 16352.8
+  },
+  {
+    "name": "airbase01",
+    "type": "NameLocal",
+    "x": 14037.6,
+    "y": 16143.3
+  },
+  {
+    "name": "terminal01",
+    "type": "NameLocal",
+    "x": 14522.4,
+    "y": 16833.9
+  },
+  {
+    "name": "military02",
+    "type": "NameLocal",
+    "x": 15137.2,
+    "y": 17297.8
+  },
+  {
+    "name": "military03",
+    "type": "NameLocal",
+    "x": 16030.4,
+    "y": 17004.8
+  },
+  {
+    "name": "Power Plant01",
+    "type": "NameLocal",
+    "x": 15420.8,
+    "y": 16223.6
+  },
+  {
+    "name": "Amfissa",
+    "type": "NameLocal",
+    "x": 8088.8,
+    "y": 17257.7
+  },
+  {
+    "name": "Amoni",
+    "type": "Hill",
+    "x": 7860.0,
+    "y": 16673.6
+  },
+  {
+    "name": "factory03",
+    "type": "NameLocal",
+    "x": 6109.5,
+    "y": 16246.2
+  },
+  {
+    "name": "Stadium",
+    "type": "NameLocal",
+    "x": 5429.7,
+    "y": 14996.7
+  },
+  {
+    "name": "factory04",
+    "type": "NameLocal",
+    "x": 5307.1,
+    "y": 14500.1
+  },
+  {
+    "name": "hill05",
+    "type": "Hill",
+    "x": 9187.7,
+    "y": 11502.5
+  },
+  {
+    "name": "Xirolimni Dam",
+    "type": "NameLocal",
+    "x": 9115.2,
+    "y": 13959.9
+  },
+  {
+    "name": "Agia Stemma",
+    "type": "Hill",
+    "x": 7883.6,
+    "y": 14626.4
+  },
+  {
+    "name": "AACairfield",
+    "type": "NameLocal",
+    "x": 11461.2,
+    "y": 11661.7
+  },
+  {
+    "name": "Drimea",
+    "type": "NameLocal",
+    "x": 10781.9,
+    "y": 10881.6
+  },
+  {
+    "name": "Kastro",
+    "type": "NameLocal",
+    "x": 3041.4,
+    "y": 13162.8
+  },
+  {
+    "name": "Kavala Pier",
+    "type": "NameLocal",
+    "x": 3014.8,
+    "y": 12587.3
+  },
+  {
+    "name": "Power Plant02",
+    "type": "NameLocal",
+    "x": 4163.6,
+    "y": 15047.2
+  },
+  {
+    "name": "Magos",
+    "type": "Hill",
+    "x": 4564.7,
+    "y": 15393.2
+  },
+  {
+    "name": "quarry01",
+    "type": "NameLocal",
+    "x": 4379.1,
+    "y": 12594.4
+  },
+  {
+    "name": "Savri Island",
+    "type": "NameLocal",
+    "x": 2370.9,
+    "y": 11507.0
+  },
+  {
+    "name": "Cap Drakontas",
+    "type": "NameLocal",
+    "x": 2657.3,
+    "y": 11461.5
+  },
+  {
+    "name": "Fournos Island",
+    "type": "NameLocal",
+    "x": 2313.7,
+    "y": 9289.3
+  },
+  {
+    "name": "Athanos",
+    "type": "NameLocal",
+    "x": 3571.2,
+    "y": 10243.7
+  },
+  {
+    "name": "Edoris",
+    "type": "NameLocal",
+    "x": 6002.8,
+    "y": 10511.4
+  },
+  {
+    "name": "hill06",
+    "type": "Hill",
+    "x": 4189.0,
+    "y": 10754.9
+  },
+  {
+    "name": "hill07",
+    "type": "Hill",
+    "x": 5320.3,
+    "y": 10316.0
+  },
+  {
+    "name": "Tafos",
+    "type": "Hill",
+    "x": 5588.9,
+    "y": 11749.7
+  },
+  {
+    "name": "hill08",
+    "type": "Hill",
+    "x": 6405.7,
+    "y": 12365.6
+  },
+  {
+    "name": "Agios Panagiotis",
+    "type": "NameLocal",
+    "x": 6272.8,
+    "y": 12173.9
+  },
+  {
+    "name": "dump02",
+    "type": "NameLocal",
+    "x": 5900.5,
+    "y": 12454.4
+  },
+  {
+    "name": "Kavirida",
+    "type": "NameLocal",
+    "x": 7324.2,
+    "y": 12125.4
+  },
+  {
+    "name": "Edessa",
+    "type": "NameLocal",
+    "x": 7194.2,
+    "y": 11044.0
+  },
+  {
+    "name": "hill09",
+    "type": "Hill",
+    "x": 7048.1,
+    "y": 14070.4
+  },
+  {
+    "name": "Atsalis Island",
+    "type": "NameLocal",
+    "x": 8304.8,
+    "y": 25081.2
+  },
+  {
+    "name": "Vikos",
+    "type": "NameLocal",
+    "x": 11556.9,
+    "y": 9417.1
+  },
+  {
+    "name": "Agela",
+    "type": "Hill",
+    "x": 9186.3,
+    "y": 8388.4
+  },
+  {
+    "name": "hill10",
+    "type": "Hill",
+    "x": 10729.8,
+    "y": 7615.7
+  },
+  {
+    "name": "Skopos",
+    "type": "Hill",
+    "x": 11669.0,
+    "y": 7579.9
+  },
+  {
+    "name": "Cap Makrinos",
+    "type": "NameLocal",
+    "x": 14225.9,
+    "y": 6238.0
+  },
+  {
+    "name": "Pyrgi Island",
+    "type": "NameLocal",
+    "x": 14489.9,
+    "y": 5871.7
+  },
+  {
+    "name": "Eginio",
+    "type": "NameLocal",
+    "x": 11549.2,
+    "y": 7088.4
+  },
+  {
+    "name": "Sfaka",
+    "type": "NameLocal",
+    "x": 9214.0,
+    "y": 8079.0
+  },
+  {
+    "name": "Agios Kosmas",
+    "type": "NameLocal",
+    "x": 8555.3,
+    "y": 7335.5
+  },
+  {
+    "name": "Monisi Island",
+    "type": "NameLocal",
+    "x": 7813.4,
+    "y": 7641.2
+  },
+  {
+    "name": "Makrynisi Island",
+    "type": "NameLocal",
+    "x": 13471.9,
+    "y": 12018.5
+  },
+  {
+    "name": "Sagonisi Island",
+    "type": "NameLocal",
+    "x": 14281.2,
+    "y": 13469.3
+  },
+  {
+    "name": "Chelonisi Island",
+    "type": "NameLocal",
+    "x": 16636.5,
+    "y": 13582.2
+  },
+  {
+    "name": "Faronaki",
+    "type": "NameLocal",
+    "x": 14934.4,
+    "y": 11079.5
+  },
+  {
+    "name": "Ekali",
+    "type": "NameVillage",
+    "x": 17059.7,
+    "y": 9992.3
+  },
+  {
+    "name": "hill11",
+    "type": "Hill",
+    "x": 16536.0,
+    "y": 10787.2
+  },
+  {
+    "name": "Didymos",
+    "type": "Hill",
+    "x": 17768.9,
+    "y": 9914.4
+  },
+  {
+    "name": "hill12",
+    "type": "Hill",
+    "x": 18832.1,
+    "y": 10222.0
+  },
+  {
+    "name": "Aktinarki",
+    "type": "NameLocal",
+    "x": 21449.9,
+    "y": 10873.8
+  },
+  {
+    "name": "Trachia",
+    "type": "NameLocal",
+    "x": 22128.1,
+    "y": 8454.0
+  },
+  {
+    "name": "Agia Pelagia",
+    "type": "NameLocal",
+    "x": 22707.6,
+    "y": 6930.6
+  },
+  {
+    "name": "Mazi",
+    "type": "NameLocal",
+    "x": 21772.4,
+    "y": 6014.5
+  },
+  {
+    "name": "Livadi",
+    "type": "NameLocal",
+    "x": 18410.5,
+    "y": 8098.3
+  },
+  {
+    "name": "Cap Kategidis",
+    "type": "NameLocal",
+    "x": 22792.0,
+    "y": 13638.4
+  },
+  {
+    "name": "Sufr Club",
+    "type": "NameLocal",
+    "x": 21339.4,
+    "y": 10434.0
+  },
+  {
+    "name": "Limni",
+    "type": "NameLocal",
+    "x": 20920.8,
+    "y": 14775.4
+  },
+  {
+    "name": "Ochrolimni",
+    "type": "NameLocal",
+    "x": 23650.1,
+    "y": 16227.3
+  },
+  {
+    "name": "Cap Thelos",
+    "type": "NameLocal",
+    "x": 24067.6,
+    "y": 15560.2
+  },
+  {
+    "name": "Zeloran",
+    "type": "NameLocal",
+    "x": 17043.5,
+    "y": 19592.2
+  },
+  {
+    "name": "quarry02",
+    "type": "NameLocal",
+    "x": 17060.5,
+    "y": 11339.1
+  },
+  {
+    "name": "storage01",
+    "type": "NameLocal",
+    "x": 18260.6,
+    "y": 15551.2
+  },
+  {
+    "name": "quarry03",
+    "type": "NameLocal",
+    "x": 19566.4,
+    "y": 15617.3
+  },
+  {
+    "name": "Rodopoli",
+    "type": "NameCity",
+    "x": 18753.4,
+    "y": 16597.1
+  },
+  {
+    "name": "Cap Zefyris",
+    "type": "NameLocal",
+    "x": 18049.3,
+    "y": 19186.6
+  },
+  {
+    "name": "Agios Georgios",
+    "type": "NameLocal",
+    "x": 20296.3,
+    "y": 18635.1
+  },
+  {
+    "name": "Almyra",
+    "type": "NameLocal",
+    "x": 23495.6,
+    "y": 18392.6
+  },
+  {
+    "name": "Iraklia",
+    "type": "NameLocal",
+    "x": 21628.3,
+    "y": 21274.9
+  },
+  {
+    "name": "military04",
+    "type": "NameLocal",
+    "x": 23533.2,
+    "y": 21108.0
+  },
+  {
+    "name": "Nidasos",
+    "type": "NameLocal",
+    "x": 23662.9,
+    "y": 21796.1
+  },
+  {
+    "name": "military05",
+    "type": "NameLocal",
+    "x": 25350.6,
+    "y": 21790.9
+  },
+  {
+    "name": "Skiptro",
+    "type": "Hill",
+    "x": 24833.9,
+    "y": 21802.1
+  },
+  {
+    "name": "Power Plant03",
+    "type": "NameLocal",
+    "x": 25462.6,
+    "y": 20357.7
+  },
+  {
+    "name": "Gatolia",
+    "type": "NameLocal",
+    "x": 26723.0,
+    "y": 21230.3
+  },
+  {
+    "name": "Polemistia",
+    "type": "NameLocal",
+    "x": 27998.6,
+    "y": 23775.8
+  },
+  {
+    "name": "Molos Airfield",
+    "type": "NameLocal",
+    "x": 26939.8,
+    "y": 24743.8
+  },
+  {
+    "name": "Limnichori",
+    "type": "NameLocal",
+    "x": 25703.7,
+    "y": 23561.6
+  },
+  {
+    "name": "Cap Strigla",
+    "type": "NameLocal",
+    "x": 28059.2,
+    "y": 25626.4
+  },
+  {
+    "name": "Sideras",
+    "type": "NameLocal",
+    "x": 23274.5,
+    "y": 24198.3
+  },
+  {
+    "name": "Agios Andreas",
+    "type": "Hill",
+    "x": 23682.9,
+    "y": 24239.3
+  },
+  {
+    "name": "Neri Bay",
+    "type": "NameMarine",
+    "x": 3166.0,
+    "y": 11234.2
+  },
+  {
+    "name": "Kavala Bay",
+    "type": "NameMarine",
+    "x": 3004.6,
+    "y": 13675.9
+  },
+  {
+    "name": "Negades Bay",
+    "type": "NameMarine",
+    "x": 3458.0,
+    "y": 16859.6
+  },
+  {
+    "name": "Panochori Bay",
+    "type": "NameMarine",
+    "x": 4005.3,
+    "y": 9908.6
+  },
+  {
+    "name": "Iremi Bay",
+    "type": "NameMarine",
+    "x": 5117.6,
+    "y": 9761.5
+  },
+  {
+    "name": "Edessa Bay",
+    "type": "NameMarine",
+    "x": 6862.3,
+    "y": 10614.1
+  },
+  {
+    "name": "Zaros Bay",
+    "type": "NameMarine",
+    "x": 9210.7,
+    "y": 10250.5
+  },
+  {
+    "name": "Naftia Bay",
+    "type": "NameMarine",
+    "x": 12157.6,
+    "y": 6376.2
+  },
+  {
+    "name": "Melanera Bay",
+    "type": "NameMarine",
+    "x": 11226.2,
+    "y": 10574.7
+  },
+  {
+    "name": "Katalaki Bay",
+    "type": "NameMarine",
+    "x": 12269.9,
+    "y": 13659.3
+  },
+  {
+    "name": "Pyrgos Gulf",
+    "type": "NameMarine",
+    "x": 15139.2,
+    "y": 14229.9
+  },
+  {
+    "name": "Mazi Bay",
+    "type": "NameMarine",
+    "x": 22181.4,
+    "y": 6154.2
+  },
+  {
+    "name": "Chalkeia Bay",
+    "type": "NameMarine",
+    "x": 21859.6,
+    "y": 12594.9
+  },
+  {
+    "name": "Thelos Bay",
+    "type": "NameMarine",
+    "x": 22979.7,
+    "y": 14939.0
+  },
+  {
+    "name": "Molos Bay",
+    "type": "NameMarine",
+    "x": 27826.8,
+    "y": 24244.4
+  },
+  {
+    "name": "Galana Nera Bay",
+    "type": "NameMarine",
+    "x": 24924.1,
+    "y": 24206.6
+  },
+  {
+    "name": "Pefkas Bay",
+    "type": "NameMarine",
+    "x": 21204.7,
+    "y": 20464.6
+  },
+  {
+    "name": "Kalithea Bay",
+    "type": "NameMarine",
+    "x": 18161.0,
+    "y": 18676.6
+  },
+  {
+    "name": "Tonos Bay",
+    "type": "NameMarine",
+    "x": 11988.3,
+    "y": 22985.7
+  },
+  {
+    "name": "Ammolofi Bay",
+    "type": "NameMarine",
+    "x": 9525.4,
+    "y": 22649.0
+  },
+  {
+    "name": "Mine01",
+    "type": "NameLocal",
+    "x": 18435.1,
+    "y": 14301.8
+  }
+]

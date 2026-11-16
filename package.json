@@ -1,0 +1,17 @@
+{
+  "name": "altis-tactical-map",
+  "version": "1.0.0",
+  "description": "Тактическая онлайн карта Arma 3 Altis с выделением построек и синхронизацией сквадов",
+  "main": "сервер/server.js",
+  "scripts": {
+    "start": "node сервер/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

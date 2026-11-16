@@ -1,0 +1,1072 @@
+{
+  "plp_mark_flag_police": {
+    "class": "plp_mark_flag_police",
+    "name": "PLP Flag Police",
+    "icon": "\\amazing_markers\\icons\\flag_police.paa"
+  },
+  "plp_mark_flag_medic": {
+    "class": "plp_mark_flag_medic",
+    "name": "PLP Flag Medic",
+    "icon": "\\amazing_markers\\icons\\flag_medic.paa"
+  },
+  "plp_mark_as_airport": {
+    "class": "plp_mark_as_airport",
+    "name": "PLP ASSET Airport A",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_airport.paa"
+  },
+  "plp_mark_as_airport2": {
+    "class": "plp_mark_as_airport2",
+    "name": "PLP ASSET Airport B",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_airport2.paa"
+  },
+  "plp_mark_as_airradar": {
+    "class": "plp_mark_as_airradar",
+    "name": "PLP ASSET Air Radar",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_airradar.paa"
+  },
+  "plp_mark_as_ammunition": {
+    "class": "plp_mark_as_ammunition",
+    "name": "PLP ASSET Ammunition",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_ammunition.paa"
+  },
+  "plp_mark_as_aacannon": {
+    "class": "plp_mark_as_aacannon",
+    "name": "PLP ASSET Anti Air (Cannon)",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_aacannon.paa"
+  },
+  "plp_mark_as_aamissile": {
+    "class": "plp_mark_as_aamissile",
+    "name": "PLP ASSET Anti Air (Missile)",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_aamissile.paa"
+  },
+  "plp_mark_as_artycannon": {
+    "class": "plp_mark_as_artycannon",
+    "name": "PLP ASSET Artillery (Cannon)",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_artycannon.paa"
+  },
+  "plp_mark_as_artyrocket": {
+    "class": "plp_mark_as_artyrocket",
+    "name": "PLP ASSET Artillery (Rocket)",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_artyrocket.paa"
+  },
+  "plp_mark_as_backpack": {
+    "class": "plp_mark_as_backpack",
+    "name": "PLP ASSET Backpack",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_backpack.paa"
+  },
+  "plp_mark_as_bicycle": {
+    "class": "plp_mark_as_bicycle",
+    "name": "PLP ASSET Bicycle",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_bicycle.paa"
+  },
+  "plp_mark_as_binoculars": {
+    "class": "plp_mark_as_binoculars",
+    "name": "PLP ASSET Binoculars",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_binoculars.paa"
+  },
+  "plp_mark_as_boat": {
+    "class": "plp_mark_as_boat",
+    "name": "PLP ASSET Boat",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_boat.paa"
+  },
+  "plp_mark_as_building": {
+    "class": "plp_mark_as_building",
+    "name": "PLP ASSET Building",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_building.paa"
+  },
+  "plp_mark_as_camp": {
+    "class": "plp_mark_as_camp",
+    "name": "PLP ASSET Camp",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_camp.paa"
+  },
+  "plp_mark_as_cross": {
+    "class": "plp_mark_as_cross",
+    "name": "PLP ASSET Cross",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_cross.paa"
+  },
+  "plp_mark_as_canteen": {
+    "class": "plp_mark_as_canteen",
+    "name": "PLP ASSET Canteen",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_canteen.paa"
+  },
+  "plp_mark_as_checkpoint": {
+    "class": "plp_mark_as_checkpoint",
+    "name": "PLP ASSET Checkpoint",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_checkpoint.paa"
+  },
+  "plp_mark_as_drinkingwater": {
+    "class": "plp_mark_as_drinkingwater",
+    "name": "PLP ASSET Drinking Water",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_drinkingwater.paa"
+  },
+  "plp_mark_as_electronics": {
+    "class": "plp_mark_as_electronics",
+    "name": "PLP ASSET Electronics",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_electronics.paa"
+  },
+  "plp_mark_as_explosives": {
+    "class": "plp_mark_as_explosives",
+    "name": "PLP ASSET Explosives",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_explosives.paa"
+  },
+  "plp_mark_as_flag": {
+    "class": "plp_mark_as_flag",
+    "name": "PLP ASSET Flag",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_flag.paa"
+  },
+  "plp_mark_as_fuel": {
+    "class": "plp_mark_as_fuel",
+    "name": "PLP ASSET Fuel",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_fuel.paa"
+  },
+  "plp_mark_as_handgrenade": {
+    "class": "plp_mark_as_handgrenade",
+    "name": "PLP ASSET Handgrenade",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_handgrenade.paa"
+  },
+  "plp_mark_as_hardpoint": {
+    "class": "plp_mark_as_hardpoint",
+    "name": "PLP ASSET Hardpoint",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_hardpoint.paa"
+  },
+  "plp_mark_as_helicopter": {
+    "class": "plp_mark_as_helicopter",
+    "name": "PLP ASSET Helicopter",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_helicopter.paa"
+  },
+  "plp_mark_as_house": {
+    "class": "plp_mark_as_house",
+    "name": "PLP ASSET House",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_house.paa"
+  },
+  "plp_mark_as_industrial": {
+    "class": "plp_mark_as_industrial",
+    "name": "PLP ASSET Industrial",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_industrial.paa"
+  },
+  "plp_mark_as_infantry": {
+    "class": "plp_mark_as_infantry",
+    "name": "PLP ASSET Infantry",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_infantry.paa"
+  },
+  "plp_mark_as_launcher": {
+    "class": "plp_mark_as_launcher",
+    "name": "PLP ASSET Launcher",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_launcher.paa"
+  },
+  "plp_mark_as_machinegun": {
+    "class": "plp_mark_as_machinegun",
+    "name": "PLP ASSET Machinegun",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_machinegun.paa"
+  },
+  "plp_mark_as_machinegunnest": {
+    "class": "plp_mark_as_machinegunnest",
+    "name": "PLP ASSET Machinegun Nest",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_machinegunnest.paa"
+  },
+  "plp_mark_as_maptools": {
+    "class": "plp_mark_as_maptools",
+    "name": "PLP ASSET Map Tools",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_maptools.paa"
+  },
+  "plp_mark_as_mortar": {
+    "class": "plp_mark_as_mortar",
+    "name": "PLP ASSET Mortar",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_mortar.paa"
+  },
+  "plp_mark_as_motinfantry": {
+    "class": "plp_mark_as_motinfantry",
+    "name": "PLP ASSET Motorized Inf",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_motinfantry.paa"
+  },
+  "plp_mark_as_motorcycle": {
+    "class": "plp_mark_as_motorcycle",
+    "name": "PLP ASSET Motorcycle",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_motorcycle.paa"
+  },
+  "plp_mark_as_pistol": {
+    "class": "plp_mark_as_pistol",
+    "name": "PLP ASSET Pistol",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_pistol.paa"
+  },
+  "plp_mark_as_police": {
+    "class": "plp_mark_as_police",
+    "name": "PLP ASSET Police",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_police.paa"
+  },
+  "plp_mark_as_quad": {
+    "class": "plp_mark_as_quad",
+    "name": "PLP ASSET Quad",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_quad.paa"
+  },
+  "plp_mark_as_radiotower": {
+    "class": "plp_mark_as_radiotower",
+    "name": "PLP ASSET Radiotower",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_radiotower.paa"
+  },
+  "plp_mark_as_repairs": {
+    "class": "plp_mark_as_repairs",
+    "name": "PLP ASSET Repairs",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_repairs.paa"
+  },
+  "plp_mark_as_rifle": {
+    "class": "plp_mark_as_rifle",
+    "name": "PLP ASSET Rifle",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_rifle.paa"
+  },
+  "plp_mark_as_shotgun": {
+    "class": "plp_mark_as_shotgun",
+    "name": "PLP ASSET Shotgun",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_shotgun.paa"
+  },
+  "plp_mark_as_sniperrifle": {
+    "class": "plp_mark_as_sniperrifle",
+    "name": "PLP ASSET Sniper Rifle",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_sniperrifle.paa"
+  },
+  "plp_mark_as_specialforces": {
+    "class": "plp_mark_as_specialforces",
+    "name": "PLP ASSET Special Forces",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_specialforces.paa"
+  },
+  "plp_mark_as_storage": {
+    "class": "plp_mark_as_storage",
+    "name": "PLP ASSET Storage",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_storage.paa"
+  },
+  "plp_mark_as_submachinegun": {
+    "class": "plp_mark_as_submachinegun",
+    "name": "PLP ASSET Submachinegun",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_submachinegun.paa"
+  },
+  "plp_mark_as_tank": {
+    "class": "plp_mark_as_tank",
+    "name": "PLP ASSET Tank",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_tank.paa"
+  },
+  "plp_mark_as_truck": {
+    "class": "plp_mark_as_truck",
+    "name": "PLP ASSET Truck",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_truck.paa"
+  },
+  "plp_mark_as_vehicle": {
+    "class": "plp_mark_as_vehicle",
+    "name": "PLP ASSET Vehicle",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_vehicle.paa"
+  },
+  "plp_mark_as_voltage": {
+    "class": "plp_mark_as_voltage",
+    "name": "PLP ASSET Voltage",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_voltage.paa"
+  },
+  "plp_mark_as_watchtower": {
+    "class": "plp_mark_as_watchtower",
+    "name": "PLP ASSET Watchtower",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_watchtower.paa"
+  },
+  "plp_mark_civ_animals": {
+    "class": "plp_mark_civ_animals",
+    "name": "PLP CIVIL Animals",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_animals.paa"
+  },
+  "plp_mark_civ_beach": {
+    "class": "plp_mark_civ_beach",
+    "name": "PLP CIVIL Beach",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_beach.paa"
+  },
+  "plp_mark_civ_bed": {
+    "class": "plp_mark_civ_bed",
+    "name": "PLP CIVIL Bed",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_bed.paa"
+  },
+  "plp_mark_civ_bridge": {
+    "class": "plp_mark_civ_bridge",
+    "name": "PLP CIVIL Bridge",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_bridge.paa"
+  },
+  "plp_mark_civ_bus": {
+    "class": "plp_mark_civ_bus",
+    "name": "PLP CIVIL Bus",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_bus.paa"
+  },
+  "plp_mark_civ_carWorkshop": {
+    "class": "plp_mark_civ_carWorkshop",
+    "name": "PLP CIVIL Car Workshop",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_carWorkshop.paa"
+  },
+  "plp_mark_civ_campingsite": {
+    "class": "plp_mark_civ_campingsite",
+    "name": "PLP CIVIL Camping Site",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_campingsite.paa"
+  },
+  "plp_mark_civ_church": {
+    "class": "plp_mark_civ_church",
+    "name": "PLP CIVIL Church",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_church.paa"
+  },
+  "plp_mark_civ_commercialzone": {
+    "class": "plp_mark_civ_commercialzone",
+    "name": "PLP CIVIL Commercial Zone",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_commercialzone.paa"
+  },
+  "plp_mark_civ_coffee": {
+    "class": "plp_mark_civ_coffee",
+    "name": "PLP CIVIL Coffee",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_coffee.paa"
+  },
+  "plp_mark_civ_firedepartment": {
+    "class": "plp_mark_civ_firedepartment",
+    "name": "PLP CIVIL Fire department",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_firedepartment.paa"
+  },
+  "plp_mark_civ_food": {
+    "class": "plp_mark_civ_food",
+    "name": "PLP CIVIL Food",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_food.paa"
+  },
+  "plp_mark_civ_fuelstation": {
+    "class": "plp_mark_civ_fuelstation",
+    "name": "PLP CIVIL Fuel Station",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_fuelstation.paa"
+  },
+  "plp_mark_civ_harbor": {
+    "class": "plp_mark_civ_harbor",
+    "name": "PLP CIVIL Harbor",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_harbor.paa"
+  },
+  "plp_mark_civ_hikingtrail": {
+    "class": "plp_mark_civ_hikingtrail",
+    "name": "PLP CIVIL Hiking Trail",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_hikingtrail.paa"
+  },
+  "plp_mark_civ_hospitalA": {
+    "class": "plp_mark_civ_hospitalA",
+    "name": "PLP CIVIL Hospital A",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_hospitalA.paa"
+  },
+  "plp_mark_civ_hospitalB": {
+    "class": "plp_mark_civ_hospitalB",
+    "name": "PLP CIVIL Hospital B",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_hospitalB.paa"
+  },
+  "plp_mark_civ_industrial": {
+    "class": "plp_mark_civ_industrial",
+    "name": "PLP CIVIL Industrial",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_industrial.paa"
+  },
+  "plp_mark_civ_information": {
+    "class": "plp_mark_civ_information",
+    "name": "PLP CIVIL Information",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_information.paa"
+  },
+  "plp_mark_civ_lake": {
+    "class": "plp_mark_civ_lake",
+    "name": "PLP CIVIL Lake",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_lake.paa"
+  },
+  "plp_mark_civ_mobilehome": {
+    "class": "plp_mark_civ_mobilehome",
+    "name": "PLP CIVIL Mobile Home",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_mobilehome.paa"
+  },
+  "plp_mark_civ_mountain": {
+    "class": "plp_mark_civ_mountain",
+    "name": "PLP CIVIL Mountain",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_mountain.paa"
+  },
+  "plp_mark_civ_motorwayA": {
+    "class": "plp_mark_civ_motorwayA",
+    "name": "PLP CIVIL Motorway A",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_motorwayA.paa"
+  },
+  "plp_mark_civ_motorwayB": {
+    "class": "plp_mark_civ_motorwayB",
+    "name": "PLP CIVIL Motorway B",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_motorwayB.paa"
+  },
+  "plp_mark_civ_naturereserve": {
+    "class": "plp_mark_civ_naturereserve",
+    "name": "PLP CIVIL Nature Reserve",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_naturereserve.paa"
+  },
+  "plp_mark_civ_parkinglot": {
+    "class": "plp_mark_civ_parkinglot",
+    "name": "PLP CIVIL Parking Lot",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_parkinglot.paa"
+  },
+  "plp_mark_civ_parkinglotroofed": {
+    "class": "plp_mark_civ_parkinglotroofed",
+    "name": "PLP CIVIL Parking Lot (Roofed)",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_parkinglotroofed.paa"
+  },
+  "plp_mark_civ_radarcontrol": {
+    "class": "plp_mark_civ_radarcontrol",
+    "name": "PLP CIVIL Radar Control",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_radarcontrol.paa"
+  },
+  "plp_mark_civ_roadworks": {
+    "class": "plp_mark_civ_roadworks",
+    "name": "PLP CIVIL Road works",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_roadworks.paa"
+  },
+  "plp_mark_civ_pickaxe": {
+    "class": "plp_mark_civ_pickaxe",
+    "name": "PLP CIVIL pickaxe",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_pickaxe.paa"
+  },
+  "plp_mark_civ_shovel": {
+    "class": "plp_mark_civ_shovel",
+    "name": "PLP CIVIL shovel",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_shovel.paa"
+  },
+  "plp_mark_civ_axe": {
+    "class": "plp_mark_civ_axe",
+    "name": "PLP CIVIL axe",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_axe.paa"
+  },
+  "plp_mark_civ_ruins": {
+    "class": "plp_mark_civ_ruins",
+    "name": "PLP CIVIL Ruins",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_ruins.paa"
+  },
+  "plp_mark_civ_shoppingcart": {
+    "class": "plp_mark_civ_shoppingcart",
+    "name": "PLP CIVIL Shopping Cart",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_shoppingcart.paa"
+  },
+  "plp_mark_civ_taxi": {
+    "class": "plp_mark_civ_taxi",
+    "name": "PLP CIVIL Taxi",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_taxi.paa"
+  },
+  "plp_mark_civ_telephone": {
+    "class": "plp_mark_civ_telephone",
+    "name": "PLP CIVIL Telephone",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_telephone.paa"
+  },
+  "plp_mark_civ_toilets": {
+    "class": "plp_mark_civ_toilets",
+    "name": "PLP CIVIL Toilets",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_toilets.paa"
+  },
+  "plp_mark_civ_train": {
+    "class": "plp_mark_civ_train",
+    "name": "PLP CIVIL Train",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_train.paa"
+  },
+  "plp_mark_civ_tree": {
+    "class": "plp_mark_civ_tree",
+    "name": "PLP CIVIL Tree",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_tree.paa"
+  },
+  "plp_mark_civ_viewpoint": {
+    "class": "plp_mark_civ_viewpoint",
+    "name": "PLP CIVIL Viewpoint",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_viewpoint.paa"
+  },
+  "plp_mark_trg_Civil": {
+    "class": "plp_mark_trg_Civil",
+    "name": "plp_mark_trg_Civil",
+    "icon": "\\amazing_markers\\icons\\plp_mark_trg_Civil.paa"
+  },
+  "plp_mark_trg_Asset": {
+    "class": "plp_mark_trg_Asset",
+    "name": "plp_mark_trg_Asset",
+    "icon": "\\amazing_markers\\icons\\plp_mark_trg_Asset.paa"
+  },
+  "plp_mark_obj_question": {
+    "class": "plp_mark_obj_question",
+    "name": "plp_mark_obj_question",
+    "icon": "\\amazing_markers\\icons\\plp_mark_obj_question.paa"
+  },
+  "plp_mark_obj_exclamation": {
+    "class": "plp_mark_obj_exclamation",
+    "name": "plp_mark_obj_exclamation",
+    "icon": "\\amazing_markers\\icons\\plp_mark_obj_exclamation.paa"
+  },
+  "plp_mark_civ_watertower": {
+    "class": "plp_mark_civ_watertower",
+    "name": "plp_mark_civ_watertower",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_watertower.paa"
+  },
+  "plp_mark_civ_oildrop": {
+    "class": "plp_mark_civ_oildrop",
+    "name": "plp_mark_civ_oildrop",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_oildrop.paa"
+  },
+  "plp_mark_civ_farm": {
+    "class": "plp_mark_civ_farm",
+    "name": "plp_mark_civ_farm",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_farm.paa"
+  },
+  "plp_mark_civ_dollar": {
+    "class": "plp_mark_civ_dollar",
+    "name": "plp_mark_civ_dollar",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_dollar.paa"
+  },
+  "plp_mark_civ_cemetery": {
+    "class": "plp_mark_civ_cemetery",
+    "name": "plp_mark_civ_cemetery",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_cemetery.paa"
+  },
+  "plp_mark_civ_barn": {
+    "class": "plp_mark_civ_barn",
+    "name": "plp_mark_civ_barn",
+    "icon": "\\amazing_markers\\icons\\plp_mark_civ_barn.paa"
+  },
+  "plp_mark_as_oildrop": {
+    "class": "plp_mark_as_oildrop",
+    "name": "plp_mark_as_oildrop",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_oildrop.paa"
+  },
+  "plp_mark_as_dollar": {
+    "class": "plp_mark_as_dollar",
+    "name": "plp_mark_as_dollar",
+    "icon": "\\amazing_markers\\icons\\plp_mark_as_dollar.paa"
+  },
+  "amazing_group_gss": {
+    "class": "amazing_group_gss",
+    "name": "GSS",
+    "icon": "\\amazing_markers\\groupMap\\gss_map.paa"
+  },
+  "amazing_group_pcc": {
+    "class": "amazing_group_pcc",
+    "name": "PCC",
+    "icon": "\\amazing_markers\\groupMap\\pcc_map.paa"
+  },
+  "amazing_group_ms": {
+    "class": "amazing_group_ms",
+    "name": "MS",
+    "icon": "\\amazing_markers\\groupMap\\ms_map.paa"
+  },
+  "amazing_group_cds": {
+    "class": "amazing_group_cds",
+    "name": "CDS",
+    "icon": "\\amazing_markers\\groupMap\\cds_map.paa"
+  },
+  "amazing_group_gss_2": {
+    "class": "amazing_group_gss_2",
+    "name": "GSS v2",
+    "icon": "\\amazing_markers\\groupMap\\gss_new.paa"
+  },
+  "amazing_group_gss_3": {
+    "class": "amazing_group_gss_3",
+    "name": "GSS v3",
+    "icon": "\\amazing_markers\\groupMap\\gss_map_v2.paa"
+  },
+  "amazing_group_yak": {
+    "class": "amazing_group_yak",
+    "name": "Yamaguchi-Gumi",
+    "icon": "\\amazing_markers\\groupMap\\yak_map.paa"
+  },
+  "amazing_group_delta": {
+    "class": "amazing_group_delta",
+    "name": "Delta",
+    "icon": "\\amazing_markers\\groupMap\\delta_map.paa"
+  },
+  "amazing_group_oon": {
+    "class": "amazing_group_oon",
+    "name": "OON",
+    "icon": "\\amazing_markers\\groupMap\\oon_map.paa"
+  },
+  "amazing_group_atlas": {
+    "class": "amazing_group_atlas",
+    "name": "ATLAS",
+    "icon": "\\amazing_markers\\groupMap\\atlas_map.paa"
+  },
+  "amazing_group_atlas_v2": {
+    "class": "amazing_group_atlas_v2",
+    "name": "ATLAS v2",
+    "icon": "\\amazing_markers\\groupMap\\atlas_map_v2.paa"
+  },
+  "amazing_group_blackwater": {
+    "class": "amazing_group_blackwater",
+    "name": "blackwater",
+    "icon": "\\amazing_markers\\groupMap\\bw_map.paa"
+  },
+  "amazing_group_shd": {
+    "class": "amazing_group_shd",
+    "name": "SHD",
+    "icon": "\\amazing_markers\\groupMap\\shd_map.paa"
+  },
+  "amazing_group_731": {
+    "class": "amazing_group_731",
+    "name": "731",
+    "icon": "\\amazing_markers\\groupMap\\731_map.paa"
+  },
+  "amazing_group_dragon": {
+    "class": "amazing_group_dragon",
+    "name": "Dragons",
+    "icon": "\\amazing_markers\\groupMap\\dragon_map.paa"
+  },
+  "amazing_group_fara": {
+    "class": "amazing_group_fara",
+    "name": "fara",
+    "icon": "\\amazing_markers\\groupMap\\fara_map.paa"
+  },
+  "amazing_group_azt": {
+    "class": "amazing_group_azt",
+    "name": "azt",
+    "icon": "\\amazing_markers\\groupMap\\azt_map.paa"
+  },
+  "amazing_group_uck": {
+    "class": "amazing_group_uck",
+    "name": "uck",
+    "icon": "\\amazing_markers\\groupMap\\uck_map.paa"
+  },
+  "amazing_group_dam": {
+    "class": "amazing_group_dam",
+    "name": "dam",
+    "icon": "\\amazing_markers\\groupMap\\dam_map.paa"
+  },
+  "amazing_group_muj": {
+    "class": "amazing_group_muj",
+    "name": "muj",
+    "icon": "\\amazing_markers\\groupMap\\muj_map.paa"
+  },
+  "amazing_group_merc": {
+    "class": "amazing_group_merc",
+    "name": "merc",
+    "icon": "\\amazing_markers\\groupMap\\merc_map.paa"
+  },
+  "amazing_group_ec": {
+    "class": "amazing_group_ec",
+    "name": "ec",
+    "icon": "\\amazing_markers\\groupMap\\ec_map.paa"
+  },
+  "amazing_group_nod": {
+    "class": "amazing_group_nod",
+    "name": "NOD",
+    "icon": "\\amazing_markers\\groupMap\\nod_map.paa"
+  },
+  "amazing_group_f": {
+    "class": "amazing_group_f",
+    "name": "F",
+    "icon": "\\amazing_markers\\groupMap\\f_map.paa"
+  },
+  "amazing_group_sb": {
+    "class": "amazing_group_sb",
+    "name": "SB",
+    "icon": "\\amazing_markers\\groupMap\\sb_map.paa"
+  },
+  "amazing_group_mzc": {
+    "class": "amazing_group_mzc",
+    "name": "MZC",
+    "icon": "\\amazing_markers\\groupMap\\mzc_map.paa"
+  },
+  "amazing_group_fs": {
+    "class": "amazing_group_fs",
+    "name": "FS",
+    "icon": "\\amazing_markers\\groupMap\\fs_map.paa"
+  },
+  "amazing_group_north": {
+    "class": "amazing_group_north",
+    "name": "NORTH",
+    "icon": "\\amazing_markers\\groupMap\\north_map.paa"
+  },
+  "amazing_group_fra": {
+    "class": "amazing_group_fra",
+    "name": "FRA",
+    "icon": "\\amazing_markers\\groupMap\\fra_map.paa"
+  },
+  "amazing_group_fsk": {
+    "class": "amazing_group_fsk",
+    "name": "FSK",
+    "icon": "\\amazing_markers\\groupMap\\fsk_map.paa"
+  },
+  "amazing_group_bng": {
+    "class": "amazing_group_bng",
+    "name": "BNG",
+    "icon": "\\amazing_markers\\groupMap\\bng_logo.paa"
+  },
+  "amazing_group_asg": {
+    "class": "amazing_group_asg",
+    "name": "ASG",
+    "icon": "\\amazing_markers\\groupMap\\asg_map.paa"
+  },
+  "amazing_group_fed": {
+    "class": "amazing_group_fed",
+    "name": "FED",
+    "icon": "\\amazing_markers\\groupMap\\fed_map.paa"
+  },
+  "amazing_waypoint_1": {
+    "class": "amazing_waypoint_1",
+    "name": "wp1",
+    "icon": "\\amazing_markers\\waypoint\\wp1.paa"
+  },
+  "amazing_waypoint_2": {
+    "class": "amazing_waypoint_2",
+    "name": "wp2",
+    "icon": "\\amazing_markers\\waypoint\\wp2.paa"
+  },
+  "amazing_waypoint_3": {
+    "class": "amazing_waypoint_3",
+    "name": "wp3",
+    "icon": "\\amazing_markers\\waypoint\\wp3.paa"
+  },
+  "amazing_waypoint_4": {
+    "class": "amazing_waypoint_4",
+    "name": "wp4",
+    "icon": "\\amazing_markers\\waypoint\\wp4.paa"
+  },
+  "amazing_waypoint_5": {
+    "class": "amazing_waypoint_5",
+    "name": "wp5",
+    "icon": "\\amazing_markers\\waypoint\\wp5.paa"
+  },
+  "amazing_waypoint_6": {
+    "class": "amazing_waypoint_6",
+    "name": "wp6",
+    "icon": "\\amazing_markers\\waypoint\\wp6.paa"
+  },
+  "amazing_waypoint_7": {
+    "class": "amazing_waypoint_7",
+    "name": "wp7",
+    "icon": "\\amazing_markers\\waypoint\\wp7.paa"
+  },
+  "amazing_group_hez": {
+    "class": "amazing_group_hez",
+    "name": "HEZ",
+    "icon": "\\amazing_markers\\groupMap\\hez_map.paa"
+  },
+  "amazing_group_sci": {
+    "class": "amazing_group_sci",
+    "name": "SCI",
+    "icon": "\\amazing_markers\\groupMap\\sci_map.paa"
+  },
+  "amazing_group_ag": {
+    "class": "amazing_group_ag",
+    "name": "AG",
+    "icon": "\\amazing_markers\\groupMap\\ag_map.paa"
+  },
+  "amazing_group_cdj": {
+    "class": "amazing_group_cdj",
+    "name": "CDJ",
+    "icon": "\\amazing_markers\\groupMap\\cdj_map.paa"
+  },
+  "amazing_group_fd": {
+    "class": "amazing_group_fd",
+    "name": "FD",
+    "icon": "\\amazing_markers\\groupMap\\fd_map.paa"
+  },
+  "amazing_group_maa": {
+    "class": "amazing_group_maa",
+    "name": "MAA",
+    "icon": "\\amazing_markers\\groupMap\\maa_map.paa"
+  },
+  "amazing_group_opg": {
+    "class": "amazing_group_opg",
+    "name": "OPG",
+    "icon": "\\amazing_markers\\groupMap\\opg_map.paa"
+  },
+  "amazing_group_src": {
+    "class": "amazing_group_src",
+    "name": "SRC",
+    "icon": "\\amazing_markers\\groupMap\\src_map.paa"
+  },
+  "amazing_group_415": {
+    "class": "amazing_group_415",
+    "name": "415",
+    "icon": "\\amazing_markers\\groupMap\\415_map.paa"
+  },
+  "amazing_group_mil": {
+    "class": "amazing_group_mil",
+    "name": "mil",
+    "icon": "\\amazing_markers\\groupMap\\mil_map.paa"
+  },
+  "amazing_group_fox": {
+    "class": "amazing_group_fox",
+    "name": "fox",
+    "icon": "\\amazing_markers\\groupMap\\fox_map.paa"
+  },
+  "amazing_group_vh": {
+    "class": "amazing_group_vh",
+    "name": "vh",
+    "icon": "\\amazing_markers\\groupMap\\vh_map.paa"
+  },
+  "amazing_group_18th": {
+    "class": "amazing_group_18th",
+    "name": "18th",
+    "icon": "\\amazing_markers\\groupMap\\18th_map.paa"
+  },
+  "amazing_group_eta": {
+    "class": "amazing_group_eta",
+    "name": "ETA",
+    "icon": "\\amazing_markers\\groupMap\\eta_map.paa"
+  },
+  "amazing_group_yp": {
+    "class": "amazing_group_yp",
+    "name": "YP",
+    "icon": "\\amazing_markers\\groupMap\\yp_map.paa"
+  },
+  "amazing_group_lz": {
+    "class": "amazing_group_lz",
+    "name": "LZ",
+    "icon": "\\amazing_markers\\groupMap\\lz_map.paa"
+  },
+  "amazing_group_f13": {
+    "class": "amazing_group_f13",
+    "name": "F13",
+    "icon": "\\amazing_markers\\groupMap\\f13_map.paa"
+  },
+  "amazing_group_gsg": {
+    "class": "amazing_group_gsg",
+    "name": "GSG",
+    "icon": "\\amazing_markers\\groupMap\\gsg_map.paa"
+  },
+  "amazing_group_leg": {
+    "class": "amazing_group_leg",
+    "name": "LEGION",
+    "icon": "\\amazing_markers\\groupMap\\leg_map.paa"
+  },
+  "amazing_group_aboy": {
+    "class": "amazing_group_aboy",
+    "name": "ABOY",
+    "icon": "\\amazing_markers\\groupMap\\aboy_map.paa"
+  },
+  "amazing_group_eg": {
+    "class": "amazing_group_eg",
+    "name": "EG",
+    "icon": "\\amazing_markers\\groupMap\\eg_map.paa"
+  },
+  "amazing_group_kifo": {
+    "class": "amazing_group_kifo",
+    "name": "KIFO",
+    "icon": "\\amazing_markers\\groupMap\\kifo_map.paa"
+  },
+  "amazing_group_gym": {
+    "class": "amazing_group_gym",
+    "name": "GYM",
+    "icon": "\\amazing_markers\\groupMap\\gym_map.paa"
+  },
+  "amazing_group_bc": {
+    "class": "amazing_group_bc",
+    "name": "BC",
+    "icon": "\\amazing_markers\\groupMap\\bc_map.paa"
+  },
+  "amazing_group_cmr": {
+    "class": "amazing_group_cmr",
+    "name": "CMR",
+    "icon": "\\amazing_markers\\groupMap\\cmr_map.paa"
+  },
+  "amazing_group_mos": {
+    "class": "amazing_group_mos",
+    "name": "MOS",
+    "icon": "\\amazing_markers\\groupMap\\mos_map.paa"
+  },
+  "amazing_group_bear": {
+    "class": "amazing_group_bear",
+    "name": "BEAR",
+    "icon": "\\amazing_markers\\groupMap\\bear_map.paa"
+  },
+  "amazing_group_valk": {
+    "class": "amazing_group_valk",
+    "name": "VALK",
+    "icon": "\\amazing_markers\\groupMap\\valk_map.paa"
+  },
+  "amazing_group_cdt": {
+    "class": "amazing_group_cdt",
+    "name": "CDT",
+    "icon": "\\amazing_markers\\groupMap\\cdt_map.paa"
+  },
+  "amazing_group_phm": {
+    "class": "amazing_group_phm",
+    "name": "PHM",
+    "icon": "\\amazing_markers\\groupMap\\phm_map.paa"
+  },
+  "amazing_group_meme": {
+    "class": "amazing_group_meme",
+    "name": "MM",
+    "icon": "\\amazing_markers\\groupMap\\meme_map.paa"
+  },
+  "amazing_group_fsd": {
+    "class": "amazing_group_fsd",
+    "name": "FSD",
+    "icon": "\\amazing_markers\\groupMap\\fsd_map.paa"
+  },
+  "amazing_group_var": {
+    "class": "amazing_group_var",
+    "name": "V",
+    "icon": "\\amazing_markers\\groupMap\\var_map.paa"
+  },
+  "amazing_group_13": {
+    "class": "amazing_group_13",
+    "name": "13",
+    "icon": "\\amazing_markers\\groupMap\\13_map.paa"
+  },
+  "amazing_group_qac": {
+    "class": "amazing_group_qac",
+    "name": "QC",
+    "icon": "\\amazing_markers\\groupMap\\qac_map.paa"
+  },
+  "amazing_group_mon": {
+    "class": "amazing_group_mon",
+    "name": "MON",
+    "icon": "\\amazing_markers\\groupMap\\mon_map.paa"
+  },
+  "amazing_group_mmm": {
+    "class": "amazing_group_mmm",
+    "name": "MMM",
+    "icon": "\\amazing_markers\\groupMap\\mmm_map.paa"
+  },
+  "amazing_group_bl": {
+    "class": "amazing_group_bl",
+    "name": "BL",
+    "icon": "\\amazing_markers\\groupMap\\bl_map.paa"
+  },
+  "amazing_group_uc": {
+    "class": "amazing_group_uc",
+    "name": "UC",
+    "icon": "\\amazing_markers\\groupMap\\uc_map.paa"
+  },
+  "amazing_group_miners": {
+    "class": "amazing_group_miners",
+    "name": "MINERS",
+    "icon": "\\amazing_markers\\groupMap\\min_map.paa"
+  },
+  "amazing_group_hel": {
+    "class": "amazing_group_hel",
+    "name": "HEL",
+    "icon": "\\amazing_markers\\groupMap\\hel_map.paa"
+  },
+  "amazing_group_ac": {
+    "class": "amazing_group_ac",
+    "name": "AC",
+    "icon": "\\amazing_markers\\groupMap\\ac_map.paa"
+  },
+  "amazing_group_bd": {
+    "class": "amazing_group_bd",
+    "name": "BD",
+    "icon": "\\amazing_markers\\groupMap\\bd_map.paa"
+  },
+  "amazing_group_awr": {
+    "class": "amazing_group_awr",
+    "name": "AWR",
+    "icon": "\\amazing_markers\\groupMap\\awr_map.paa"
+  },
+  "amazing_group_sec7": {
+    "class": "amazing_group_sec7",
+    "name": "S7",
+    "icon": "\\amazing_markers\\groupMap\\sec7_map.paa"
+  },
+  "amazing_group_k5": {
+    "class": "amazing_group_k5",
+    "name": "K5",
+    "icon": "\\amazing_markers\\groupMap\\k5_map.paa"
+  },
+  "amazing_group_popg": {
+    "class": "amazing_group_popg",
+    "name": "РџРёС‚РµСЂСЃРєР°СЏ РћРџР“",
+    "icon": "\\amazing_markers\\groupMap\\popg_map.paa"
+  },
+  "amazing_group_popg_empty": {
+    "class": "amazing_group_popg_empty",
+    "name": "РџРёС‚РµСЂСЃРєР°СЏ РћРџР“ (РЎРІРѕР±РѕРґРЅР°)",
+    "icon": "\\amazing_markers\\groupMap\\pogp_map_empty.paa"
+  },
+  "amazing_group_sof": {
+    "class": "amazing_group_sof",
+    "name": "Syndicate of Fate",
+    "icon": "\\amazing_markers\\groupMap\\sof_map.paa"
+  },
+  "amazing_group_sof_empty": {
+    "class": "amazing_group_sof_empty",
+    "name": "Syndicate of Fate (РЎРІРѕР±РѕРґРЅР°)",
+    "icon": "\\amazing_markers\\groupMap\\sof_map_empty.paa"
+  },
+  "amazing_group_shield": {
+    "class": "amazing_group_shield",
+    "name": "SHIELD",
+    "icon": "\\amazing_markers\\groupMap\\sheald_map.paa"
+  },
+  "amazing_group_shield_empty": {
+    "class": "amazing_group_shield_empty",
+    "name": "SHIELD (РЎРІРѕР±РѕРґРЅР°)",
+    "icon": "\\amazing_markers\\groupMap\\sheald_map_empty.paa"
+  },
+  "amazing_group_gl": {
+    "class": "amazing_group_gl",
+    "name": "GREYLINE",
+    "icon": "\\amazing_markers\\groupMap\\gl_map.paa"
+  },
+  "amazing_group_gl_empty": {
+    "class": "amazing_group_gl_empty",
+    "name": "GREYLINE (РЎРІРѕР±РѕРґРЅР°)",
+    "icon": "\\amazing_markers\\groupMap\\gl_map_empty.paa"
+  },
+  "amazing_group_cttc": {
+    "class": "amazing_group_cttc",
+    "name": "CTTC",
+    "icon": "\\amazing_markers\\groupMap\\cttc_map.paa"
+  },
+  "amazing_group_darkside": {
+    "class": "amazing_group_darkside",
+    "name": "DARKSIDE",
+    "icon": "\\amazing_markers\\groupMap\\darkside_map.paa"
+  },
+  "amazing_group_ward": {
+    "class": "amazing_group_ward",
+    "name": "ANR",
+    "icon": "\\amazing_markers\\groupMap\\ward_map.paa"
+  },
+  "amazing_group_army": {
+    "class": "amazing_group_army",
+    "name": "Army",
+    "icon": "\\amazing_markers\\groupMap\\army_map.paa"
+  },
+  "amazing_group_st": {
+    "class": "amazing_group_st",
+    "name": "ST",
+    "icon": "\\amazing_markers\\groupMap\\st_map.paa"
+  },
+  "amazing_group_phoenix": {
+    "class": "amazing_group_phoenix",
+    "name": "Phoenix",
+    "icon": "\\amazing_markers\\groupMap\\phoenix_map.paa"
+  },
+  "amazing_group_phoenix_empty": {
+    "class": "amazing_group_phoenix_empty",
+    "name": "Phoenix (РЎРІРѕР±РѕРґРЅР°)",
+    "icon": "\\amazing_markers\\groupMap\\phoenix_map_empty.paa"
+  },
+  "amazing_group_aquaunion": {
+    "class": "amazing_group_aquaunion",
+    "name": "AquaUnion",
+    "icon": "\\amazing_markers\\groupMap\\aquaunion_map.paa"
+  },
+  "amazing_group_aquaunion_empty": {
+    "class": "amazing_group_aquaunion_empty",
+    "name": "AquaUnion (РЎРІРѕР±РѕРґРЅР°)",
+    "icon": "\\amazing_markers\\groupMap\\aquaunion_map_empty.paa"
+  },
+  "amazing_group_reb": {
+    "class": "amazing_group_reb",
+    "name": "Reb",
+    "icon": "\\amazing_markers\\groupMap\\reb_map.paa"
+  },
+  "amazing_group_reb_empty": {
+    "class": "amazing_group_reb_empty",
+    "name": "Reb (РЎРІРѕР±РѕРґРЅР°)",
+    "icon": "\\amazing_markers\\groupMap\\reb_map_empty.paa"
+  },
+  "amazing_pubg_hold": {
+    "class": "amazing_pubg_hold",
+    "name": "WZ_HOLD",
+    "icon": "\\amazing_markers\\warzone\\quest_hold_black.paa"
+  },
+  "amazing_pubg_kill": {
+    "class": "amazing_pubg_kill",
+    "name": "WZ_KILL",
+    "icon": "\\amazing_markers\\warzone\\quest_kill_black.paa"
+  },
+  "amazing_pubg_mountain": {
+    "class": "amazing_pubg_mountain",
+    "name": "WZ_MOUNTAIN",
+    "icon": "\\amazing_markers\\warzone\\quest_mountain_black.paa"
+  },
+  "amazing_pubg_jet": {
+    "class": "amazing_pubg_jet",
+    "name": "WZ_JET",
+    "icon": "\\amazing_markers\\warzone\\jet.paa"
+  }
+}

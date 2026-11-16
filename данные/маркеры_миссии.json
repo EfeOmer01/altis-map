@@ -1,0 +1,3252 @@
+[
+  {
+    "name": "atm_marker",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 3661.4,
+    "y": 13106.1,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_1",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 3505.4,
+    "y": 13153.5,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_3",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 9024.7,
+    "y": 12121.5,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_2",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 14031.7,
+    "y": 18743.4,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_4",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 14625.2,
+    "y": 16790.8,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_5",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 16883.8,
+    "y": 12637.2,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_4_1",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 25694.9,
+    "y": 21387.4,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_2_1",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 27032.1,
+    "y": 23230.6,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_2_2",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 20477.6,
+    "y": 8837.0,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_2_3",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 5102.7,
+    "y": 11237.7,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_2_4",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 9187.3,
+    "y": 15841.0,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_2_5",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 8648.0,
+    "y": 18256.3,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_2_6",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 20782.4,
+    "y": 16680.1,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_2_7",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 12613.0,
+    "y": 14381.1,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_2_8",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 16287.4,
+    "y": 17291.9,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_2_9",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 6185.7,
+    "y": 15077.2,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_1_1",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 3759.5,
+    "y": 13008.9,
+    "category": "infra"
+  },
+  {
+    "name": "marker_271",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 20772.6,
+    "y": 7181.0,
+    "category": "infra"
+  },
+  {
+    "name": "marker_272",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 20826.0,
+    "y": 6833.7,
+    "category": "infra"
+  },
+  {
+    "name": "marker_273",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 21705.4,
+    "y": 7519.1,
+    "category": "infra"
+  },
+  {
+    "name": "marker_274",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 20521.9,
+    "y": 8895.2,
+    "category": "infra"
+  },
+  {
+    "name": "marker_275",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 20210.5,
+    "y": 11641.2,
+    "category": "infra"
+  },
+  {
+    "name": "marker_277",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 16779.1,
+    "y": 12726.1,
+    "category": "infra"
+  },
+  {
+    "name": "marker_279",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 18783.4,
+    "y": 16614.9,
+    "category": "infra"
+  },
+  {
+    "name": "marker_280",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 20960.6,
+    "y": 16901.8,
+    "category": "infra"
+  },
+  {
+    "name": "marker_281",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 25763.7,
+    "y": 21372.9,
+    "category": "infra"
+  },
+  {
+    "name": "marker_282",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 26946.1,
+    "y": 23186.4,
+    "category": "infra"
+  },
+  {
+    "name": "marker_283",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 14080.7,
+    "y": 18741.1,
+    "category": "infra"
+  },
+  {
+    "name": "marker_284",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 10345.0,
+    "y": 19086.8,
+    "category": "infra"
+  },
+  {
+    "name": "marker_285",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 12324.8,
+    "y": 15593.9,
+    "category": "infra"
+  },
+  {
+    "name": "marker_286",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 9086.0,
+    "y": 15851.2,
+    "category": "infra"
+  },
+  {
+    "name": "marker_287",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorBlack",
+    "x": 7211.6,
+    "y": 16450.6,
+    "category": "infra"
+  },
+  {
+    "name": "marker_288",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 3766.0,
+    "y": 13557.9,
+    "category": "infra"
+  },
+  {
+    "name": "marker_289",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 3596.7,
+    "y": 12970.5,
+    "category": "infra"
+  },
+  {
+    "name": "marker_290",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 4129.1,
+    "y": 11752.6,
+    "category": "infra"
+  },
+  {
+    "name": "marker_291",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 5105.0,
+    "y": 11222.7,
+    "category": "infra"
+  },
+  {
+    "name": "marker_292",
+    "text": "Родник",
+    "type": "loc_Fountain",
+    "icon": "/icons/loc_Fountain.png",
+    "color": "ColorYellow",
+    "x": 9011.5,
+    "y": 11946.5,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_4_2",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 15129.4,
+    "y": 17249.6,
+    "category": "infra"
+  },
+  {
+    "name": "atm_marker_2_10",
+    "text": "Банкомат",
+    "type": "loc_Tourism",
+    "icon": "/icons/atm.png",
+    "color": "ColorGreen",
+    "x": 25704.9,
+    "y": 21400.7,
+    "category": "infra"
+  },
+  {
+    "name": "ecstazi_proc",
+    "text": "amazingrp.ru | Narco Lab",
+    "type": "amazing_marker_narkolab",
+    "icon": "/icons/amazing_marker_narkolab.png",
+    "color": "ColorYellow",
+    "x": 20385.5,
+    "y": 6101.6,
+    "category": "illegal"
+  },
+  {
+    "name": "dp_25",
+    "text": "DP 25",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 20785.3,
+    "y": 6770.0,
+    "category": "dp"
+  },
+  {
+    "name": "dp_24",
+    "text": "DP 24",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 21653.0,
+    "y": 7537.4,
+    "category": "dp"
+  },
+  {
+    "name": "depo_molos",
+    "text": "amazingrp.ru | Depot",
+    "type": "amazing_marker_depot",
+    "icon": "/icons/amazing_marker_depot.png",
+    "color": "ColorYellow",
+    "x": 21662.0,
+    "y": 7779.7,
+    "category": "routes"
+  },
+  {
+    "name": "dp_23",
+    "text": "DP 23",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 20489.6,
+    "y": 8806.8,
+    "category": "dp"
+  },
+  {
+    "name": "fasol_proc",
+    "text": "amazingrp.ru | Beans Factory",
+    "type": "amazing_marker_beansfactory",
+    "icon": "/icons/amazing_marker_beansfactory.png",
+    "color": "ColorYellow",
+    "x": 20231.1,
+    "y": 8851.8,
+    "category": "routes"
+  },
+  {
+    "name": "dp_22",
+    "text": "DP 22",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 19970.3,
+    "y": 11422.2,
+    "category": "dp"
+  },
+  {
+    "name": "fasol_add",
+    "text": "amazingrp.ru | Beans",
+    "type": "amazing_marker_beans",
+    "icon": "/icons/amazing_marker_beans.png",
+    "color": "ColorYellow",
+    "x": 15774.8,
+    "y": 10614.9,
+    "category": "resources"
+  },
+  {
+    "name": "miniral_add",
+    "text": "amazingrp.ru | Minerals",
+    "type": "amazing_marker_minerals",
+    "icon": "/icons/amazing_marker_minerals.png",
+    "color": "ColorYellow",
+    "x": 17066.5,
+    "y": 11354.4,
+    "category": "resources"
+  },
+  {
+    "name": "dp_21",
+    "text": "DP 21",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 19409.4,
+    "y": 13219.4,
+    "category": "dp"
+  },
+  {
+    "name": "marker_123",
+    "text": "amazingrp.ru | Truck Shop",
+    "type": "amazing_marker_truck",
+    "icon": "/icons/amazing_marker_truck.png",
+    "color": "ColorYellow",
+    "x": 18159.2,
+    "y": 12838.8,
+    "category": "shops"
+  },
+  {
+    "name": "police_pyrgos",
+    "text": "amazingrp.ru | Policestation",
+    "type": "amazing_marker_policestation",
+    "icon": "/icons/amazing_marker_policestation.png",
+    "color": "ColorWEST",
+    "x": 16665.9,
+    "y": 12293.9,
+    "category": "infra"
+  },
+  {
+    "name": "marker_125",
+    "text": "amazingrp.ru | Pharmacy",
+    "type": "amazing_marker_pharmacy",
+    "icon": "/icons/amazing_marker_pharmacy.png",
+    "color": "ColorYellow",
+    "x": 16706.5,
+    "y": 12514.4,
+    "category": "shops"
+  },
+  {
+    "name": "marker_126",
+    "text": "amazingrp.ru | Clothes Shop",
+    "type": "amazing_marker_clothes",
+    "icon": "/icons/amazing_marker_clothes.png",
+    "color": "ColorYellow",
+    "x": 16799.1,
+    "y": 12540.6,
+    "category": "shops"
+  },
+  {
+    "name": "marker_127",
+    "text": "amazingrp.ru | Clothes Shop",
+    "type": "amazing_marker_clothes",
+    "icon": "/icons/amazing_marker_clothes.png",
+    "color": "ColorYellow",
+    "x": 16924.4,
+    "y": 12594.4,
+    "category": "shops"
+  },
+  {
+    "name": "marker_128",
+    "text": "amazingrp.ru | Clothes Shop",
+    "type": "amazing_marker_clothes",
+    "icon": "/icons/amazing_marker_clothes.png",
+    "color": "ColorYellow",
+    "x": 16914.5,
+    "y": 12752.2,
+    "category": "shops"
+  },
+  {
+    "name": "kpp_army_pirgos",
+    "text": "amazingrp.ru | Bridge",
+    "type": "amazing_marker_bridge",
+    "icon": "/icons/amazing_marker_bridge.png",
+    "color": "ColorYellow",
+    "x": 15389.8,
+    "y": 12999.4,
+    "category": "infra"
+  },
+  {
+    "name": "marker_133",
+    "text": "amazingrp.ru | Marketplace",
+    "type": "amazing_marker_marketplace",
+    "icon": "/icons/amazing_marker_marketplace.png",
+    "color": "ColorYellow",
+    "x": 16812.4,
+    "y": 12573.5,
+    "category": "shops"
+  },
+  {
+    "name": "marker_134",
+    "text": "amazingrp.ru | Gun Store",
+    "type": "amazing_marker_gunstore",
+    "icon": "/icons/amazing_marker_gunstore.png",
+    "color": "ColorYellow",
+    "x": 16962.1,
+    "y": 12567.7,
+    "category": "shops"
+  },
+  {
+    "name": "marker_135",
+    "text": "amazingrp.ru | License Store",
+    "type": "amazing_marker_license",
+    "icon": "/icons/amazing_marker_license.png",
+    "color": "ColorYellow",
+    "x": 16995.2,
+    "y": 12660.7,
+    "category": "routes"
+  },
+  {
+    "name": "marker_137",
+    "text": "amazingrp.ru | Univermag",
+    "type": "amazing_marker_univermag",
+    "icon": "/icons/amazing_marker_univermag.png",
+    "color": "ColorYellow",
+    "x": 16720.4,
+    "y": 12703.7,
+    "category": "shops"
+  },
+  {
+    "name": "marker_138",
+    "text": "amazingrp.ru | Piercing",
+    "type": "amazing_marker_piercing",
+    "icon": "/icons/amazing_marker_piercing.png",
+    "color": "ColorYellow",
+    "x": 16774.0,
+    "y": 12632.7,
+    "category": "shops"
+  },
+  {
+    "name": "marker_140",
+    "text": "amazingrp.ru | Grocery Store",
+    "type": "amazing_marker_grocery",
+    "icon": "/icons/amazing_marker_grocery.png",
+    "color": "ColorYellow",
+    "x": 17021.2,
+    "y": 12626.8,
+    "category": "shops"
+  },
+  {
+    "name": "marker_141",
+    "text": "amazingrp.ru | Beauty Saloon",
+    "type": "amazing_marker_beautysaloon",
+    "icon": "/icons/amazing_marker_beautysaloon.png",
+    "color": "ColorYellow",
+    "x": 16855.9,
+    "y": 12564.3,
+    "category": "shops"
+  },
+  {
+    "name": "marker_142",
+    "text": "amazingrp.ru | Garage",
+    "type": "amazing_marker_garage",
+    "icon": "/icons/amazing_marker_garage.png",
+    "color": "ColorYellow",
+    "x": 17011.7,
+    "y": 12838.8,
+    "category": "realestate"
+  },
+  {
+    "name": "marker_143",
+    "text": "amazingrp.ru | Car Shop",
+    "type": "amazing_marker_car",
+    "icon": "/icons/amazing_marker_car.png",
+    "color": "ColorYellow",
+    "x": 16992.9,
+    "y": 12867.7,
+    "category": "shops"
+  },
+  {
+    "name": "dp_18",
+    "text": "DP 18",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 16805.4,
+    "y": 12664.2,
+    "category": "dp"
+  },
+  {
+    "name": "marker_146",
+    "text": "amazingrp.ru | Expensive Car Shop",
+    "type": "amazing_marker_richcar",
+    "icon": "/icons/amazing_marker_richcar.png",
+    "color": "ColorYellow",
+    "x": 16926.2,
+    "y": 12518.7,
+    "category": "shops"
+  },
+  {
+    "name": "marker_147",
+    "text": "amazingrp.ru | Aircraft Garage",
+    "type": "amazing_marker_aircraftgarage",
+    "icon": "/icons/amazing_marker_aircraftgarage.png",
+    "color": "ColorYellow",
+    "x": 17189.1,
+    "y": 13278.2,
+    "category": "realestate"
+  },
+  {
+    "name": "marker_149",
+    "text": "amazingrp.ru | Hospital",
+    "type": "amazing_marker_hospital",
+    "icon": "/icons/amazing_marker_hospital.png",
+    "color": "ColorYellow",
+    "x": 17410.0,
+    "y": 13334.6,
+    "category": "infra"
+  },
+  {
+    "name": "marker_150",
+    "text": "amazingrp.ru | Perebivka",
+    "type": "amazing_marker_perebivka_illegal",
+    "icon": "/icons/amazing_marker_perebivka_illegal.png",
+    "color": "ColorYellow",
+    "x": 19028.7,
+    "y": 14554.7,
+    "category": "illegal"
+  },
+  {
+    "name": "marker_151",
+    "text": "amazingrp.ru | Mask Shop",
+    "type": "amazing_marker_mask",
+    "icon": "/icons/amazing_marker_mask.png",
+    "color": "ColorYellow",
+    "x": 18784.4,
+    "y": 16624.5,
+    "category": "shops"
+  },
+  {
+    "name": "dp_19",
+    "text": "DP 19",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 18067.4,
+    "y": 15194.9,
+    "category": "dp"
+  },
+  {
+    "name": "dp_15",
+    "text": "DP 15",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 21383.5,
+    "y": 16413.1,
+    "category": "dp"
+  },
+  {
+    "name": "dp_14",
+    "text": "DP 14",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 20947.6,
+    "y": 16965.3,
+    "category": "dp"
+  },
+  {
+    "name": "salt_add",
+    "text": "amazingrp.ru | Salt",
+    "type": "amazing_marker_salt",
+    "icon": "/icons/amazing_marker_salt.png",
+    "color": "ColorYellow",
+    "x": 23825.1,
+    "y": 18603.2,
+    "category": "resources"
+  },
+  {
+    "name": "ecstazi_add",
+    "text": "amazingrp.ru | Wastes",
+    "type": "amazing_marker_wastes",
+    "icon": "/icons/amazing_marker_wastes.png",
+    "color": "ColorYellow",
+    "x": 19932.0,
+    "y": 14769.1,
+    "category": "resources"
+  },
+  {
+    "name": "police_sophia",
+    "text": "amazingrp.ru | Policestation",
+    "type": "amazing_marker_policestation",
+    "icon": "/icons/amazing_marker_policestation.png",
+    "color": "ColorWEST",
+    "x": 22541.3,
+    "y": 18792.6,
+    "category": "infra"
+  },
+  {
+    "name": "heroin_proc",
+    "text": "amazingrp.ru | Heroine Factory",
+    "type": "amazing_marker_heroinefactory",
+    "icon": "/icons/amazing_marker_heroinefactory.png",
+    "color": "ColorYellow",
+    "x": 23639.7,
+    "y": 21800.4,
+    "category": "illegal"
+  },
+  {
+    "name": "heroin_add",
+    "text": "amazingrp.ru | Geroine Plantation",
+    "type": "amazing_marker_geraplant",
+    "icon": "/icons/amazing_marker_geraplant.png",
+    "color": "ColorYellow",
+    "x": 19878.7,
+    "y": 17007.1,
+    "category": "illegal"
+  },
+  {
+    "name": "marker_152",
+    "text": "amazingrp.ru | Perebivka",
+    "type": "amazing_marker_perebivka_illegal",
+    "icon": "/icons/amazing_marker_perebivka_illegal.png",
+    "color": "ColorYellow",
+    "x": 24655.5,
+    "y": 23161.9,
+    "category": "illegal"
+  },
+  {
+    "name": "uran_proc_2",
+    "text": "amazingrp.ru | Uran 236 Factory",
+    "type": "amazing_marker_uran236_illegal",
+    "icon": "/icons/amazing_marker_uran236_illegal.png",
+    "color": "ColorYellow",
+    "x": 20898.4,
+    "y": 19227.9,
+    "category": "illegal"
+  },
+  {
+    "name": "uran_sell",
+    "text": "amazingrp.ru | Uran Sell",
+    "type": "amazing_marker_uransell_illegal",
+    "icon": "/icons/amazing_marker_uransell_illegal.png",
+    "color": "ColorYellow",
+    "x": 17474.5,
+    "y": 16469.8,
+    "category": "illegal"
+  },
+  {
+    "name": "turtle_sell",
+    "text": "amazingrp.ru | Turtle Sell",
+    "type": "amazing_marker_turtlesell_illegal",
+    "icon": "/icons/amazing_marker_turtlesell_illegal.png",
+    "color": "ColorYellow",
+    "x": 16556.3,
+    "y": 15549.4,
+    "category": "illegal"
+  },
+  {
+    "name": "marker_170",
+    "text": "amazingrp.ru | Hospital",
+    "type": "amazing_marker_hospital",
+    "icon": "/icons/amazing_marker_hospital.png",
+    "color": "ColorYellow",
+    "x": 24260.0,
+    "y": 20482.7,
+    "category": "infra"
+  },
+  {
+    "name": "salt_sell",
+    "text": "amazingrp.ru | Salt Sell",
+    "type": "amazing_marker_saltsell",
+    "icon": "/icons/amazing_marker_saltsell.png",
+    "color": "ColorYellow",
+    "x": 23138.3,
+    "y": 19971.1,
+    "category": "routes"
+  },
+  {
+    "name": "salt_proc",
+    "text": "amazingrp.ru | Salt Factory",
+    "type": "amazing_marker_saltfactory",
+    "icon": "/icons/amazing_marker_saltfactory.png",
+    "color": "ColorYellow",
+    "x": 27364.9,
+    "y": 24469.4,
+    "category": "routes"
+  },
+  {
+    "name": "depo_molos_1",
+    "text": "amazingrp.ru | Depot",
+    "type": "amazing_marker_depot",
+    "icon": "/icons/amazing_marker_depot.png",
+    "color": "ColorYellow",
+    "x": 27651.6,
+    "y": 24583.9,
+    "category": "routes"
+  },
+  {
+    "name": "marker_173",
+    "text": "amazingrp.ru | Aircraft Garage",
+    "type": "amazing_marker_aircraftgarage",
+    "icon": "/icons/amazing_marker_aircraftgarage.png",
+    "color": "ColorYellow",
+    "x": 26768.6,
+    "y": 24630.6,
+    "category": "realestate"
+  },
+  {
+    "name": "dp_17",
+    "text": "DP 17",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 26975.3,
+    "y": 23263.8,
+    "category": "dp"
+  },
+  {
+    "name": "marker_130",
+    "text": "amazingrp.ru | Clothes Shop",
+    "type": "amazing_marker_clothes",
+    "icon": "/icons/amazing_marker_clothes.png",
+    "color": "ColorYellow",
+    "x": 25621.0,
+    "y": 21297.1,
+    "category": "shops"
+  },
+  {
+    "name": "marker_145",
+    "text": "amazingrp.ru | Garage",
+    "type": "amazing_marker_garage",
+    "icon": "/icons/amazing_marker_garage.png",
+    "color": "ColorYellow",
+    "x": 25716.9,
+    "y": 21283.2,
+    "category": "realestate"
+  },
+  {
+    "name": "marker_139",
+    "text": "amazingrp.ru | Univermag",
+    "type": "amazing_marker_univermag",
+    "icon": "/icons/amazing_marker_univermag.png",
+    "color": "ColorYellow",
+    "x": 25781.0,
+    "y": 21354.4,
+    "category": "shops"
+  },
+  {
+    "name": "marker_136",
+    "text": "amazingrp.ru | License Store",
+    "type": "amazing_marker_license",
+    "icon": "/icons/amazing_marker_license.png",
+    "color": "ColorYellow",
+    "x": 25801.9,
+    "y": 21408.8,
+    "category": "routes"
+  },
+  {
+    "name": "marker_131",
+    "text": "amazingrp.ru | Clothes Shop",
+    "type": "amazing_marker_clothes",
+    "icon": "/icons/amazing_marker_clothes.png",
+    "color": "ColorYellow",
+    "x": 25765.9,
+    "y": 21463.8,
+    "category": "shops"
+  },
+  {
+    "name": "dp_16",
+    "text": "DP 16",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 25705.7,
+    "y": 21390.6,
+    "category": "dp"
+  },
+  {
+    "name": "uran_proc_3",
+    "text": "amazingrp.ru | Uran 235 Factory",
+    "type": "amazing_marker_uran235_illegal",
+    "icon": "/icons/amazing_marker_uran235_illegal.png",
+    "color": "ColorYellow",
+    "x": 27064.8,
+    "y": 21458.7,
+    "category": "illegal"
+  },
+  {
+    "name": "gold_bar_dealer",
+    "text": "amazingrp.ru | Gold Sell",
+    "type": "amazing_marker_goldsell",
+    "icon": "/icons/amazing_marker_goldsell.png",
+    "color": "ColorYellow",
+    "x": 22292.7,
+    "y": 5091.7,
+    "category": "routes"
+  },
+  {
+    "name": "dp_20",
+    "text": "DP 20",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 28308.2,
+    "y": 25770.5,
+    "category": "dp"
+  },
+  {
+    "name": "fed_reserve",
+    "text": "amazingrp.ru | Federal Reserve",
+    "type": "amazing_marker_federalreserve",
+    "icon": "/icons/amazing_marker_federalreserve.png",
+    "color": "ColorWEST",
+    "x": 16014.4,
+    "y": 16959.6,
+    "category": "other"
+  },
+  {
+    "name": "fish_sell",
+    "text": "amazingrp.ru | Fish Sell",
+    "type": "amazing_marker_fishsell",
+    "icon": "/icons/amazing_marker_fishsell.png",
+    "color": "ColorYellow",
+    "x": 15402.8,
+    "y": 15839.9,
+    "category": "routes"
+  },
+  {
+    "name": "marker_181",
+    "text": "amazingrp.ru | Hospital",
+    "type": "amazing_marker_hospital",
+    "icon": "/icons/amazing_marker_hospital.png",
+    "color": "ColorYellow",
+    "x": 15570.7,
+    "y": 17193.8,
+    "category": "infra"
+  },
+  {
+    "name": "cop_spawn_4",
+    "text": "amazingrp.ru | Policestation",
+    "type": "amazing_marker_policestation",
+    "icon": "/icons/amazing_marker_policestation.png",
+    "color": "ColorWEST",
+    "x": 15116.5,
+    "y": 17235.5,
+    "category": "infra"
+  },
+  {
+    "name": "marker_182",
+    "text": "amazingrp.ru | Helicopter Store",
+    "type": "amazing_marker_helicopter",
+    "icon": "/icons/amazing_marker_helicopter.png",
+    "color": "ColorYellow",
+    "x": 14677.8,
+    "y": 16771.2,
+    "category": "infra"
+  },
+  {
+    "name": "marker_183",
+    "text": "amazingrp.ru | Airplane Shop",
+    "type": "amazing_marker_airplane",
+    "icon": "/icons/amazing_marker_airplane.png",
+    "color": "ColorYellow",
+    "x": 14599.3,
+    "y": 16663.5,
+    "category": "infra"
+  },
+  {
+    "name": "marker_184",
+    "text": "amazingrp.ru | Karting Shop",
+    "type": "amazing_marker_karting",
+    "icon": "/icons/amazing_marker_karting.png",
+    "color": "ColorYellow",
+    "x": 14167.7,
+    "y": 16519.6,
+    "category": "other"
+  },
+  {
+    "name": "marker_185",
+    "text": "amazingrp.ru | Aircraft Garage",
+    "type": "amazing_marker_aircraftgarage",
+    "icon": "/icons/amazing_marker_aircraftgarage.png",
+    "color": "ColorYellow",
+    "x": 14260.0,
+    "y": 16304.1,
+    "category": "realestate"
+  },
+  {
+    "name": "fish_add",
+    "text": "amazingrp.ru | Fish",
+    "type": "amazing_marker_fish",
+    "icon": "/icons/amazing_marker_fish.png",
+    "color": "ColorYellow",
+    "x": 15506.1,
+    "y": 13891.3,
+    "category": "resources"
+  },
+  {
+    "name": "turtle_add",
+    "text": "amazingrp.ru | Turtle",
+    "type": "amazing_marker_turtle_illegal",
+    "icon": "/icons/amazing_marker_turtle_illegal.png",
+    "color": "ColorYellow",
+    "x": 15272.2,
+    "y": 14132.9,
+    "category": "illegal"
+  },
+  {
+    "name": "marker_132",
+    "text": "amazingrp.ru | Clothes Shop",
+    "type": "amazing_marker_clothes",
+    "icon": "/icons/amazing_marker_clothes.png",
+    "color": "ColorYellow",
+    "x": 14138.6,
+    "y": 18475.9,
+    "category": "shops"
+  },
+  {
+    "name": "marker_157",
+    "text": "amazingrp.ru | Clothes Shop",
+    "type": "amazing_marker_clothes",
+    "icon": "/icons/amazing_marker_clothes.png",
+    "color": "ColorYellow",
+    "x": 14075.3,
+    "y": 18559.2,
+    "category": "shops"
+  },
+  {
+    "name": "marker_158",
+    "text": "amazingrp.ru | Univermag",
+    "type": "amazing_marker_univermag",
+    "icon": "/icons/amazing_marker_univermag.png",
+    "color": "ColorYellow",
+    "x": 13950.2,
+    "y": 18665.0,
+    "category": "shops"
+  },
+  {
+    "name": "marker_189",
+    "text": "amazingrp.ru | Motorcycle Shop",
+    "type": "amazing_marker_motorcycle",
+    "icon": "/icons/amazing_marker_motorcycle.png",
+    "color": "ColorYellow",
+    "x": 14027.6,
+    "y": 18703.6,
+    "category": "shops"
+  },
+  {
+    "name": "marker_159",
+    "text": "amazingrp.ru | Car Shop",
+    "type": "amazing_marker_car",
+    "icon": "/icons/amazing_marker_car.png",
+    "color": "ColorYellow",
+    "x": 14032.1,
+    "y": 18759.0,
+    "category": "shops"
+  },
+  {
+    "name": "marker_160",
+    "text": "amazingrp.ru | License Store",
+    "type": "amazing_marker_license",
+    "icon": "/icons/amazing_marker_license.png",
+    "color": "ColorYellow",
+    "x": 14028.2,
+    "y": 18799.9,
+    "category": "routes"
+  },
+  {
+    "name": "marker_190",
+    "text": "amazingrp.ru | Garage",
+    "type": "amazing_marker_garage",
+    "icon": "/icons/amazing_marker_garage.png",
+    "color": "ColorYellow",
+    "x": 14053.9,
+    "y": 18828.4,
+    "category": "realestate"
+  },
+  {
+    "name": "marker_161",
+    "text": "amazingrp.ru | Pharmacy",
+    "type": "amazing_marker_pharmacy",
+    "icon": "/icons/amazing_marker_pharmacy.png",
+    "color": "ColorYellow",
+    "x": 14048.6,
+    "y": 18851.7,
+    "category": "shops"
+  },
+  {
+    "name": "marker_162",
+    "text": "amazingrp.ru | Grocery Store",
+    "type": "amazing_marker_grocery",
+    "icon": "/icons/amazing_marker_grocery.png",
+    "color": "ColorYellow",
+    "x": 14055.4,
+    "y": 18857.4,
+    "category": "shops"
+  },
+  {
+    "name": "marker_163",
+    "text": "amazingrp.ru | Gun Store",
+    "type": "amazing_marker_gunstore",
+    "icon": "/icons/amazing_marker_gunstore.png",
+    "color": "ColorYellow",
+    "x": 14135.4,
+    "y": 18827.7,
+    "category": "shops"
+  },
+  {
+    "name": "police_athira",
+    "text": "amazingrp.ru | Policestation",
+    "type": "amazing_marker_policestation",
+    "icon": "/icons/amazing_marker_policestation.png",
+    "color": "ColorWEST",
+    "x": 14125.9,
+    "y": 19029.9,
+    "category": "infra"
+  },
+  {
+    "name": "dp_7",
+    "text": "DP 7",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 14195.8,
+    "y": 18715.2,
+    "category": "dp"
+  },
+  {
+    "name": "dp_6",
+    "text": "DP 6",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 14566.0,
+    "y": 20775.3,
+    "category": "dp"
+  },
+  {
+    "name": "marker_192",
+    "text": "amazingrp.ru | Hunt Area",
+    "type": "amazing_marker_huntarea",
+    "icon": "/icons/amazing_marker_huntarea.png",
+    "color": "ColorYellow",
+    "x": 14270.9,
+    "y": 21916.0,
+    "category": "resources"
+  },
+  {
+    "name": "dp_12",
+    "text": "DP 12",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 12311.2,
+    "y": 15692.7,
+    "category": "dp"
+  },
+  {
+    "name": "dp_10",
+    "text": "DP 10",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 12583.7,
+    "y": 14371.4,
+    "category": "dp"
+  },
+  {
+    "name": "dp_5",
+    "text": "DP 5",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 9518.7,
+    "y": 20335.2,
+    "category": "dp"
+  },
+  {
+    "name": "dp_3",
+    "text": "DP 3",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 8640.8,
+    "y": 18280.7,
+    "category": "dp"
+  },
+  {
+    "name": "dp_4",
+    "text": "DP 4",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 4659.8,
+    "y": 21403.9,
+    "category": "dp"
+  },
+  {
+    "name": "dp_9",
+    "text": "DP 9",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 9029.3,
+    "y": 11971.6,
+    "category": "dp"
+  },
+  {
+    "name": "dp_8",
+    "text": "DP 8",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 5096.8,
+    "y": 11267.6,
+    "category": "dp"
+  },
+  {
+    "name": "dp_1",
+    "text": "DP 1",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 4140.6,
+    "y": 11767.0,
+    "category": "dp"
+  },
+  {
+    "name": "dp_2",
+    "text": "DP 2",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 4935.1,
+    "y": 16147.5,
+    "category": "dp"
+  },
+  {
+    "name": "dp_13",
+    "text": "DP 13",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 18814.6,
+    "y": 16642.6,
+    "category": "dp"
+  },
+  {
+    "name": "marker_164",
+    "text": "amazingrp.ru | Boat Shop",
+    "type": "amazing_marker_boat",
+    "icon": "/icons/amazing_marker_boat.png",
+    "color": "ColorYellow",
+    "x": 12745.2,
+    "y": 14176.5,
+    "category": "infra"
+  },
+  {
+    "name": "alcho_add",
+    "text": "amazingrp.ru | Botanica",
+    "type": "amazing_marker_botanica",
+    "icon": "/icons/amazing_marker_botanica.png",
+    "color": "ColorYellow",
+    "x": 10545.2,
+    "y": 21526.5,
+    "category": "other"
+  },
+  {
+    "name": "army_main_base_marker",
+    "text": "Army",
+    "type": "amazing_group_army",
+    "icon": "/icons/amazing_group_army.png",
+    "color": "ColorWhite",
+    "x": 12842.1,
+    "y": 16672.9,
+    "category": "bases"
+  },
+  {
+    "name": "sand_add",
+    "text": "amazingrp.ru | Sand",
+    "type": "amazing_marker_sand",
+    "icon": "/icons/amazing_marker_sand.png",
+    "color": "ColorYellow",
+    "x": 8088.1,
+    "y": 22619.3,
+    "category": "resources"
+  },
+  {
+    "name": "cocaine_add",
+    "text": "amazingrp.ru | Cocaine Plantation",
+    "type": "amazing_marker_cocaineplant",
+    "icon": "/icons/amazing_marker_cocaineplant.png",
+    "color": "ColorYellow",
+    "x": 5188.0,
+    "y": 20871.4,
+    "category": "illegal"
+  },
+  {
+    "name": "sand_proc",
+    "text": "amazingrp.ru | Glass Factory",
+    "type": "amazing_marker_glassfactory",
+    "icon": "/icons/amazing_marker_glassfactory.png",
+    "color": "ColorYellow",
+    "x": 5378.0,
+    "y": 17922.6,
+    "category": "routes"
+  },
+  {
+    "name": "mining_proc_2",
+    "text": "amazingrp.ru | Cement Factory",
+    "type": "amazing_marker_cementfactory",
+    "icon": "/icons/amazing_marker_cementfactory.png",
+    "color": "ColorYellow",
+    "x": 3986.9,
+    "y": 17543.6,
+    "category": "routes"
+  },
+  {
+    "name": "dp_11",
+    "text": "DP 11",
+    "type": "amazing_marker_DP",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 9193.7,
+    "y": 15831.4,
+    "category": "dp"
+  },
+  {
+    "name": "marker_165",
+    "text": "amazingrp.ru | Perebivka",
+    "type": "amazing_marker_perebivka_illegal",
+    "icon": "/icons/amazing_marker_perebivka_illegal.png",
+    "color": "ColorYellow",
+    "x": 11882.7,
+    "y": 19093.4,
+    "category": "illegal"
+  },
+  {
+    "name": "uran_add",
+    "text": "amazingrp.ru | Uran Quarry",
+    "type": "amazing_marker_uranquarry_illegal",
+    "icon": "/icons/amazing_marker_uranquarry_illegal.png",
+    "color": "ColorYellow",
+    "x": 2406.6,
+    "y": 22388.2,
+    "category": "illegal"
+  },
+  {
+    "name": "marker_206",
+    "text": "amazingrp.ru | Storage",
+    "type": "amazing_marker_storage",
+    "icon": "/icons/amazing_marker_storage.png",
+    "color": "ColorYellow",
+    "x": 11058.0,
+    "y": 15552.0,
+    "category": "routes"
+  },
+  {
+    "name": "oil_proc",
+    "text": "amazingrp.ru | Oil Factory",
+    "type": "amazing_marker_oilfactory",
+    "icon": "/icons/amazing_marker_oilfactory.png",
+    "color": "ColorYellow",
+    "x": 10230.5,
+    "y": 14839.2,
+    "category": "routes"
+  },
+  {
+    "name": "oil_proc_2",
+    "text": "amazingrp.ru | Plastic Factory",
+    "type": "amazing_marker_plasticfactory",
+    "icon": "/icons/amazing_marker_plasticfactory.png",
+    "color": "ColorYellow",
+    "x": 11277.3,
+    "y": 14450.5,
+    "category": "routes"
+  },
+  {
+    "name": "marker_166",
+    "text": "amazingrp.ru | Univermag",
+    "type": "amazing_marker_univermag",
+    "icon": "/icons/amazing_marker_univermag.png",
+    "color": "ColorYellow",
+    "x": 9421.6,
+    "y": 11926.1,
+    "category": "shops"
+  },
+  {
+    "name": "marker_167",
+    "text": "amazingrp.ru | Gun Store",
+    "type": "amazing_marker_gunstore",
+    "icon": "/icons/amazing_marker_gunstore.png",
+    "color": "ColorYellow",
+    "x": 9328.4,
+    "y": 11910.1,
+    "category": "shops"
+  },
+  {
+    "name": "bank_marker",
+    "text": "amazingrp.ru | Bank",
+    "type": "amazing_marker_bank",
+    "icon": "/icons/amazing_marker_bank.png",
+    "color": "ColorYellow",
+    "x": 3779.1,
+    "y": 11615.7,
+    "category": "infra"
+  },
+  {
+    "name": "Storage_3",
+    "text": "amazingrp.ru | Storage",
+    "type": "amazing_marker_storage",
+    "icon": "/icons/amazing_marker_storage.png",
+    "color": "ColorYellow",
+    "x": 4752.5,
+    "y": 11696.0,
+    "category": "routes"
+  },
+  {
+    "name": "marker_155",
+    "text": "amazingrp.ru | Aircraft Garage (Illegal)",
+    "type": "amazing_marker_aircraftgarage_illegal",
+    "icon": "/icons/amazing_marker_aircraftgarage_illegal.png",
+    "color": "ColorYellow",
+    "x": 25831.0,
+    "y": 21171.7,
+    "category": "illegal"
+  },
+  {
+    "name": "marker_153",
+    "text": "amazingrp.ru | Concept Car Shop",
+    "type": "amazing_marker_conceptcar",
+    "icon": "/icons/amazing_marker_conceptcar.png",
+    "color": "ColorYellow",
+    "x": 25574.6,
+    "y": 21203.9,
+    "category": "shops"
+  },
+  {
+    "name": "marker_154",
+    "text": "amazingrp.ru | Special Vehicle Shop",
+    "type": "amazing_marker_specvehicle",
+    "icon": "/icons/amazing_marker_specvehicle.png",
+    "color": "ColorYellow",
+    "x": 25777.0,
+    "y": 21172.2,
+    "category": "other"
+  },
+  {
+    "name": "marker_156",
+    "text": "amazingrp.ru | Special Vehicle Shop",
+    "type": "amazing_marker_specvehicle",
+    "icon": "/icons/amazing_marker_specvehicle.png",
+    "color": "ColorYellow",
+    "x": 14344.8,
+    "y": 16334.2,
+    "category": "other"
+  },
+  {
+    "name": "miniral_proc_1",
+    "text": "amazingrp.ru | Jasper & Quartz Factory",
+    "type": "amazing_marker_jasperquartz",
+    "icon": "/icons/amazing_marker_jasperquartz.png",
+    "color": "ColorYellow",
+    "x": 18382.2,
+    "y": 15495.9,
+    "category": "routes"
+  },
+  {
+    "name": "miniral_proc_2",
+    "text": "amazingrp.ru | Amber Factory",
+    "type": "amazing_marker_amberfactory",
+    "icon": "/icons/amazing_marker_amberfactory.png",
+    "color": "ColorYellow",
+    "x": 20796.4,
+    "y": 15782.3,
+    "category": "routes"
+  },
+  {
+    "name": "cocaine_proc",
+    "text": "amazingrp.ru | Cocaine Factory",
+    "type": "amazing_marker_cocainefactory",
+    "icon": "/icons/amazing_marker_cocainefactory.png",
+    "color": "ColorYellow",
+    "x": 8440.4,
+    "y": 12760.6,
+    "category": "illegal"
+  },
+  {
+    "name": "air_serv_1",
+    "text": "amazingrp.ru | Gas Station",
+    "type": "amazing_marker_gasstation",
+    "icon": "/icons/amazing_marker_gasstation.png",
+    "color": "ColorYellow",
+    "x": 14415.1,
+    "y": 16239.9,
+    "category": "infra"
+  },
+  {
+    "name": "cannabis_add",
+    "text": "amazingrp.ru | Canabis Plantation",
+    "type": "amazing_marker_canabisplant_illegal",
+    "icon": "/icons/amazing_marker_canabisplant_illegal.png",
+    "color": "ColorYellow",
+    "x": 12313.9,
+    "y": 14692.4,
+    "category": "illegal"
+  },
+  {
+    "name": "mining_proc_1",
+    "text": "amazingrp.ru | Coal & Sulfur Sell",
+    "type": "amazing_marker_coalsulfursell",
+    "icon": "/icons/amazing_marker_coalsulfursell.png",
+    "color": "ColorYellow",
+    "x": 6271.3,
+    "y": 16261.6,
+    "category": "routes"
+  },
+  {
+    "name": "mining_sell_2",
+    "text": "amazingrp.ru | Cement Sell",
+    "type": "amazing_marker_cementsell",
+    "icon": "/icons/amazing_marker_cementsell.png",
+    "color": "ColorYellow",
+    "x": 6220.0,
+    "y": 15040.0,
+    "category": "routes"
+  },
+  {
+    "name": "marker_27",
+    "text": "amazingrp.ru | No-Fly Zone",
+    "type": "amazing_marker_noflyzone",
+    "icon": "/icons/amazing_marker_noflyzone.png",
+    "color": "ColorYellow",
+    "x": 5473.1,
+    "y": 14992.0,
+    "category": "other"
+  },
+  {
+    "name": "ticket_veh_marker",
+    "text": "amazingrp.ru | Parking Fine",
+    "type": "amazing_marker_parkingfine",
+    "icon": "/icons/amazing_marker_parkingfine.png",
+    "color": "ColorYellow",
+    "x": 5876.0,
+    "y": 14773.2,
+    "category": "infra"
+  },
+  {
+    "name": "sand_sell",
+    "text": "amazingrp.ru | Glass Sell",
+    "type": "amazing_marker_glasssell",
+    "icon": "/icons/amazing_marker_glasssell.png",
+    "color": "ColorYellow",
+    "x": 4955.0,
+    "y": 14591.6,
+    "category": "routes"
+  },
+  {
+    "name": "mining_sell_1",
+    "text": "amazingrp.ru | Coal & Sulfur Sell",
+    "type": "amazing_marker_coalsulfursell",
+    "icon": "/icons/amazing_marker_coalsulfursell.png",
+    "color": "ColorYellow",
+    "x": 4333.1,
+    "y": 14485.4,
+    "category": "routes"
+  },
+  {
+    "name": "oil_sell",
+    "text": "amazingrp.ru | Fuel Sell",
+    "type": "amazing_marker_fuelsell",
+    "icon": "/icons/amazing_marker_fuelsell.png",
+    "color": "ColorYellow",
+    "x": 4239.9,
+    "y": 15049.4,
+    "category": "routes"
+  },
+  {
+    "name": "marker_49",
+    "text": "amazingrp.ru | Jail",
+    "type": "amazing_marker_jail",
+    "icon": "/icons/amazing_marker_jail.png",
+    "color": "ColorYellow",
+    "x": 5084.0,
+    "y": 9944.3,
+    "category": "infra"
+  },
+  {
+    "name": "mining_add",
+    "text": "amazingrp.ru | Gornorudka",
+    "type": "amazing_marker_gornorudka",
+    "icon": "/icons/amazing_marker_gornorudka.png",
+    "color": "ColorYellow",
+    "x": 4403.8,
+    "y": 12620.0,
+    "category": "resources"
+  },
+  {
+    "name": "Storage_2",
+    "text": "amazingrp.ru | Storage",
+    "type": "amazing_marker_storage",
+    "icon": "/icons/amazing_marker_storage.png",
+    "color": "ColorYellow",
+    "x": 3954.9,
+    "y": 12593.3,
+    "category": "routes"
+  },
+  {
+    "name": "marker_169",
+    "text": "amazingrp.ru | Piercing",
+    "type": "amazing_marker_piercing",
+    "icon": "/icons/amazing_marker_piercing.png",
+    "color": "ColorYellow",
+    "x": 3754.4,
+    "y": 12712.4,
+    "category": "shops"
+  },
+  {
+    "name": "marker_172",
+    "text": "amazingrp.ru | Concept Car Shop",
+    "type": "amazing_marker_conceptcar",
+    "icon": "/icons/amazing_marker_conceptcar.png",
+    "color": "ColorYellow",
+    "x": 3665.2,
+    "y": 12814.1,
+    "category": "shops"
+  },
+  {
+    "name": "marker_124",
+    "text": "amazingrp.ru | Truck Shop",
+    "type": "amazing_marker_truck",
+    "icon": "/icons/amazing_marker_truck.png",
+    "color": "ColorYellow",
+    "x": 3760.1,
+    "y": 12373.2,
+    "category": "shops"
+  },
+  {
+    "name": "marker_174",
+    "text": "amazingrp.ru | Beauty Saloon",
+    "type": "amazing_marker_beautysaloon",
+    "icon": "/icons/amazing_marker_beautysaloon.png",
+    "color": "ColorYellow",
+    "x": 3491.2,
+    "y": 12891.1,
+    "category": "shops"
+  },
+  {
+    "name": "fish_sell_2",
+    "text": "amazingrp.ru | Fish Sell",
+    "type": "amazing_marker_fishsell",
+    "icon": "/icons/amazing_marker_fishsell.png",
+    "color": "ColorYellow",
+    "x": 3406.0,
+    "y": 12895.2,
+    "category": "routes"
+  },
+  {
+    "name": "marker_230",
+    "text": "amazingrp.ru | Driving School",
+    "type": "amazing_marker_drivingschool",
+    "icon": "/icons/amazing_marker_drivingschool.png",
+    "color": "ColorYellow",
+    "x": 3533.4,
+    "y": 12995.3,
+    "category": "shops"
+  },
+  {
+    "name": "marker_175",
+    "text": "amazingrp.ru | Clothes Shop",
+    "type": "amazing_marker_clothes",
+    "icon": "/icons/amazing_marker_clothes.png",
+    "color": "ColorYellow",
+    "x": 3417.1,
+    "y": 13128.9,
+    "category": "shops"
+  },
+  {
+    "name": "marker_176",
+    "text": "amazingrp.ru | Clothes Shop",
+    "type": "amazing_marker_clothes",
+    "icon": "/icons/amazing_marker_clothes.png",
+    "color": "ColorYellow",
+    "x": 3545.8,
+    "y": 13167.6,
+    "category": "shops"
+  },
+  {
+    "name": "marker_177",
+    "text": "amazingrp.ru | Univermag",
+    "type": "amazing_marker_univermag",
+    "icon": "/icons/amazing_marker_univermag.png",
+    "color": "ColorYellow",
+    "x": 3480.5,
+    "y": 13231.1,
+    "category": "shops"
+  },
+  {
+    "name": "fbi_base_marker",
+    "text": "amazingrp.ru | Policestation",
+    "type": "amazing_marker_policestation",
+    "icon": "/icons/amazing_marker_policestation.png",
+    "color": "ColorWEST",
+    "x": 3011.3,
+    "y": 12528.8,
+    "category": "infra"
+  },
+  {
+    "name": "oil_add",
+    "text": "amazingrp.ru | Oil",
+    "type": "amazing_marker_oil",
+    "icon": "/icons/amazing_marker_oil.png",
+    "color": "ColorYellow",
+    "x": 3280.3,
+    "y": 12460.0,
+    "category": "resources"
+  },
+  {
+    "name": "marker_178",
+    "text": "amazingrp.ru | Gun Store",
+    "type": "amazing_marker_gunstore",
+    "icon": "/icons/amazing_marker_gunstore.png",
+    "color": "ColorYellow",
+    "x": 3241.1,
+    "y": 13013.5,
+    "category": "shops"
+  },
+  {
+    "name": "marker_179",
+    "text": "amazingrp.ru | Marketplace",
+    "type": "amazing_marker_marketplace",
+    "icon": "/icons/amazing_marker_marketplace.png",
+    "color": "ColorYellow",
+    "x": 3622.8,
+    "y": 13099.5,
+    "category": "shops"
+  },
+  {
+    "name": "marker_180",
+    "text": "amazingrp.ru | License Store",
+    "type": "amazing_marker_license",
+    "icon": "/icons/amazing_marker_license.png",
+    "color": "ColorYellow",
+    "x": 3632.0,
+    "y": 13122.0,
+    "category": "routes"
+  },
+  {
+    "name": "marker_186",
+    "text": "amazingrp.ru | Grocery Store",
+    "type": "amazing_marker_grocery",
+    "icon": "/icons/amazing_marker_grocery.png",
+    "color": "ColorYellow",
+    "x": 3666.4,
+    "y": 13127.0,
+    "category": "shops"
+  },
+  {
+    "name": "marker_187",
+    "text": "amazingrp.ru | Clothes Shop",
+    "type": "amazing_marker_clothes",
+    "icon": "/icons/amazing_marker_clothes.png",
+    "color": "ColorYellow",
+    "x": 3688.2,
+    "y": 13105.2,
+    "category": "shops"
+  },
+  {
+    "name": "marker_188",
+    "text": "amazingrp.ru | Car Shop",
+    "type": "amazing_marker_car",
+    "icon": "/icons/amazing_marker_car.png",
+    "color": "ColorYellow",
+    "x": 3686.6,
+    "y": 13156.1,
+    "category": "shops"
+  },
+  {
+    "name": "marker_193",
+    "text": "amazingrp.ru | Pharmacy",
+    "type": "amazing_marker_pharmacy",
+    "icon": "/icons/amazing_marker_pharmacy.png",
+    "color": "ColorYellow",
+    "x": 3686.0,
+    "y": 13120.9,
+    "category": "shops"
+  },
+  {
+    "name": "marker_194",
+    "text": "amazingrp.ru | Garage",
+    "type": "amazing_marker_garage",
+    "icon": "/icons/amazing_marker_garage.png",
+    "color": "ColorYellow",
+    "x": 3739.3,
+    "y": 13267.3,
+    "category": "realestate"
+  },
+  {
+    "name": "gov_base_marker",
+    "text": "amazingrp.ru | Government",
+    "type": "amazing_marker_government",
+    "icon": "/icons/amazing_marker_government.png",
+    "color": "ColorYellow",
+    "x": 3760.2,
+    "y": 13342.9,
+    "category": "infra"
+  },
+  {
+    "name": "marker_195",
+    "text": "amazingrp.ru | Expensive Car Shop",
+    "type": "amazing_marker_richcar",
+    "icon": "/icons/amazing_marker_richcar.png",
+    "color": "ColorYellow",
+    "x": 3718.2,
+    "y": 13397.3,
+    "category": "shops"
+  },
+  {
+    "name": "marker_196",
+    "text": "amazingrp.ru | Aircraft Garage",
+    "type": "amazing_marker_aircraftgarage",
+    "icon": "/icons/amazing_marker_aircraftgarage.png",
+    "color": "ColorYellow",
+    "x": 3627.5,
+    "y": 13389.2,
+    "category": "realestate"
+  },
+  {
+    "name": "marker_197",
+    "text": "Carsburg Inc.",
+    "type": "amazing_marker_richcar",
+    "icon": "/icons/amazing_marker_richcar.png",
+    "color": "ColorYellow",
+    "x": 3577.0,
+    "y": 13378.0,
+    "category": "shops"
+  },
+  {
+    "name": "dp_missions",
+    "text": "DP_MISSIONS",
+    "type": "amazing_marker_delivery",
+    "icon": "/icons/amazing_marker_DP.png",
+    "color": "ColorYellow",
+    "x": 3914.7,
+    "y": 13586.2,
+    "category": "dp"
+  },
+  {
+    "name": "Storage_1",
+    "text": "amazingrp.ru | Storage",
+    "type": "amazing_marker_storage",
+    "icon": "/icons/amazing_marker_storage.png",
+    "color": "ColorYellow",
+    "x": 3930.3,
+    "y": 13602.8,
+    "category": "routes"
+  },
+  {
+    "name": "police_kavala",
+    "text": "amazingrp.ru | Policestation",
+    "type": "amazing_marker_policestation",
+    "icon": "/icons/amazing_marker_policestation.png",
+    "color": "ColorWEST",
+    "x": 3301.9,
+    "y": 12944.8,
+    "category": "infra"
+  },
+  {
+    "name": "marker_50",
+    "text": "amazingrp.ru | Jail",
+    "type": "amazing_marker_jail",
+    "icon": "/icons/amazing_marker_jail.png",
+    "color": "ColorYellow",
+    "x": 3196.2,
+    "y": 12902.6,
+    "category": "infra"
+  },
+  {
+    "name": "marker_198",
+    "text": "amazingrp.ru | Hospital",
+    "type": "amazing_marker_hospital",
+    "icon": "/icons/amazing_marker_hospital.png",
+    "color": "ColorYellow",
+    "x": 3762.2,
+    "y": 12990.1,
+    "category": "infra"
+  },
+  {
+    "name": "molos_3",
+    "text": "amazingrp.ru | Depot",
+    "type": "amazing_marker_depot",
+    "icon": "/icons/amazing_marker_depot.png",
+    "color": "ColorYellow",
+    "x": 15301.9,
+    "y": 17451.5,
+    "category": "routes"
+  },
+  {
+    "name": "kpp_onn_sector",
+    "text": "amazingrp.ru | Checkpoint",
+    "type": "amazing_marker_checkpoing",
+    "icon": "/icons/amazing_marker_checkpoing.png",
+    "color": "ColorYellow",
+    "x": 10800.6,
+    "y": 10471.1,
+    "category": "infra"
+  },
+  {
+    "name": "marker_144",
+    "text": "amazingrp.ru | Harbor",
+    "type": "amazing_marker_harbor",
+    "icon": "/icons/amazing_marker_harbor.png",
+    "color": "ColorYellow",
+    "x": 16328.6,
+    "y": 12878.1,
+    "category": "infra"
+  },
+  {
+    "name": "rab_seller_1",
+    "text": "amazingrp.ru | Slaver",
+    "type": "amazing_marker_slaver",
+    "icon": "/icons/amazing_marker_slaver.png",
+    "color": "ColorYellow",
+    "x": 13575.8,
+    "y": 12192.2,
+    "category": "illegal"
+  },
+  {
+    "name": "zpm_meteorit",
+    "text": "amazingrp.ru | Meteorite",
+    "type": "amazing_marker_meteorite",
+    "icon": "/icons/amazing_marker_meteorite.png",
+    "color": "ColorYellow",
+    "x": 11400.2,
+    "y": 8026.0,
+    "category": "resources"
+  },
+  {
+    "name": "marker_232",
+    "text": "amazingrp.ru | Harbor",
+    "type": "amazing_marker_harbor",
+    "icon": "/icons/amazing_marker_harbor.png",
+    "color": "ColorYellow",
+    "x": 2995.1,
+    "y": 12622.9,
+    "category": "infra"
+  },
+  {
+    "name": "sub_mar_base_marker",
+    "text": "amazingrp.ru | Rebel Camp",
+    "type": "amazing_marker_rebelcamp",
+    "icon": "/icons/amazing_marker_rebelcamp.png",
+    "color": "ColorYellow",
+    "x": 8950.4,
+    "y": 8068.0,
+    "category": "bases"
+  },
+  {
+    "name": "zpm_rad_1",
+    "text": "zpm_rad_1",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 12294.9,
+    "y": 8886.3,
+    "category": "other"
+  },
+  {
+    "name": "zpm_rad_2",
+    "text": "zpm_rad_2",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 10391.3,
+    "y": 8084.4,
+    "category": "other"
+  },
+  {
+    "name": "zpm_rad_3",
+    "text": "zpm_rad_3",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 11051.6,
+    "y": 7333.7,
+    "category": "other"
+  },
+  {
+    "name": "zpm_rad_4",
+    "text": "zpm_rad_4",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 9432.3,
+    "y": 8225.2,
+    "category": "other"
+  },
+  {
+    "name": "zpm_rad_5",
+    "text": "zpm_rad_5",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 9503.4,
+    "y": 8366.0,
+    "category": "other"
+  },
+  {
+    "name": "zpm_rad_6",
+    "text": "zpm_rad_6",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 9234.8,
+    "y": 8054.0,
+    "category": "other"
+  },
+  {
+    "name": "zpm_rad_7",
+    "text": "zpm_rad_7",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 10011.9,
+    "y": 8519.9,
+    "category": "other"
+  },
+  {
+    "name": "zpm_rad_8",
+    "text": "zpm_rad_8",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 10703.5,
+    "y": 8877.9,
+    "category": "other"
+  },
+  {
+    "name": "zpm_rad_9",
+    "text": "zpm_rad_9",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 13831.8,
+    "y": 6879.2,
+    "category": "other"
+  },
+  {
+    "name": "zpm_rad_10",
+    "text": "zpm_rad_10",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 10396.8,
+    "y": 9414.7,
+    "category": "other"
+  },
+  {
+    "name": "zpm_rad_11",
+    "text": "zpm_rad_11",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 10436.7,
+    "y": 9461.7,
+    "category": "other"
+  },
+  {
+    "name": "zpm_rad_12",
+    "text": "zpm_rad_12",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 10195.7,
+    "y": 9678.9,
+    "category": "other"
+  },
+  {
+    "name": "zpm_rad_13",
+    "text": "zpm_rad_13",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 11540.6,
+    "y": 9415.3,
+    "category": "other"
+  },
+  {
+    "name": "zpm_rad_14",
+    "text": "zpm_rad_14",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 11751.1,
+    "y": 9309.8,
+    "category": "other"
+  },
+  {
+    "name": "zpm_rad_15",
+    "text": "zpm_rad_15",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 11870.8,
+    "y": 9453.6,
+    "category": "other"
+  },
+  {
+    "name": "news_base_marker",
+    "text": "amazingrp.ru | Rebel Camp",
+    "type": "amazing_marker_rebelcamp",
+    "icon": "/icons/amazing_marker_rebelcamp.png",
+    "color": "ColorYellow",
+    "x": 4581.6,
+    "y": 13802.1,
+    "category": "bases"
+  },
+  {
+    "name": "rb_2_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 4727.0,
+    "y": 12816.2,
+    "category": "bases"
+  },
+  {
+    "name": "valk_main_base_marker",
+    "text": "VALK",
+    "type": "amazing_group_valk",
+    "icon": "/icons/amazing_group_valk.png",
+    "color": "ColorYellow",
+    "x": 20604.3,
+    "y": 20110.5,
+    "category": "bases"
+  },
+  {
+    "name": "valk_sub_base_marker",
+    "text": "VALK",
+    "type": "amazing_group_valk",
+    "icon": "/icons/amazing_group_valk.png",
+    "color": "ColorYellow",
+    "x": 16611.8,
+    "y": 9159.1,
+    "category": "bases"
+  },
+  {
+    "name": "rb_3_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 8313.6,
+    "y": 10071.7,
+    "category": "bases"
+  },
+  {
+    "name": "rb_1_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 17612.6,
+    "y": 17281.6,
+    "category": "bases"
+  },
+  {
+    "name": "iCash_marker_dynamic_0",
+    "text": "amazingrp.ru | Money Laundering",
+    "type": "amazing_marker_moneylaundering",
+    "icon": "/icons/amazing_marker_moneylaundering.png",
+    "color": "ColorRed",
+    "x": 3049.7,
+    "y": 28951.4,
+    "category": "illegal"
+  },
+  {
+    "name": "iCash_marker_dynamic_1",
+    "text": "amazingrp.ru | Money Laundering",
+    "type": "amazing_marker_moneylaundering",
+    "icon": "/icons/amazing_marker_moneylaundering.png",
+    "color": "ColorRed",
+    "x": 3945.4,
+    "y": 28950.6,
+    "category": "illegal"
+  },
+  {
+    "name": "iCash_marker_dynamic_2",
+    "text": "amazingrp.ru | Money Laundering",
+    "type": "amazing_marker_moneylaundering",
+    "icon": "/icons/amazing_marker_moneylaundering.png",
+    "color": "ColorRed",
+    "x": 4949.2,
+    "y": 28949.0,
+    "category": "illegal"
+  },
+  {
+    "name": "illegal_marker_dynamic_0",
+    "text": "amazingrp.ru | Gun Store",
+    "type": "amazing_marker_gunstore",
+    "icon": "/icons/amazing_marker_gunstore.png",
+    "color": "ColorRed",
+    "x": 3047.4,
+    "y": 28047.5,
+    "category": "illegal"
+  },
+  {
+    "name": "illegal_marker_dynamic_1",
+    "text": "amazingrp.ru | Gun Store",
+    "type": "amazing_marker_gunstore",
+    "icon": "/icons/amazing_marker_gunstore.png",
+    "color": "ColorRed",
+    "x": 3948.9,
+    "y": 28045.8,
+    "category": "illegal"
+  },
+  {
+    "name": "illegal_marker_dynamic_2",
+    "text": "amazingrp.ru | Gun Store",
+    "type": "amazing_marker_gunstore",
+    "icon": "/icons/amazing_marker_gunstore.png",
+    "color": "ColorRed",
+    "x": 4949.9,
+    "y": 28045.6,
+    "category": "illegal"
+  },
+  {
+    "name": "drugDealer_marker_dynamic_1",
+    "text": "amazingrp.ru | Drug Sell",
+    "type": "amazing_marker_drugsell",
+    "icon": "/icons/amazing_marker_drugsell.png",
+    "color": "ColorRed",
+    "x": 3947.0,
+    "y": 27046.3,
+    "category": "illegal"
+  },
+  {
+    "name": "drugDealer_marker_dynamic_2",
+    "text": "amazingrp.ru | Drug Sell",
+    "type": "amazing_marker_drugsell",
+    "icon": "/icons/amazing_marker_drugsell.png",
+    "color": "ColorRed",
+    "x": 4948.3,
+    "y": 27042.7,
+    "category": "illegal"
+  },
+  {
+    "name": "zpm_rad_16",
+    "text": "zpm_rad_16",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 9975.5,
+    "y": 10225.7,
+    "category": "other"
+  },
+  {
+    "name": "zpm_rad_17",
+    "text": "zpm_rad_17",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 9690.1,
+    "y": 8751.7,
+    "category": "other"
+  },
+  {
+    "name": "rb_4_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 8618.0,
+    "y": 15464.3,
+    "category": "bases"
+  },
+  {
+    "name": "rb_5_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 5324.3,
+    "y": 11503.9,
+    "category": "bases"
+  },
+  {
+    "name": "rb_6_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 14207.2,
+    "y": 21213.6,
+    "category": "bases"
+  },
+  {
+    "name": "rb_7_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 9217.3,
+    "y": 15980.7,
+    "category": "bases"
+  },
+  {
+    "name": "rb_8_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 4896.5,
+    "y": 17054.9,
+    "category": "bases"
+  },
+  {
+    "name": "meme_main_base_marker",
+    "text": "V",
+    "type": "amazing_group_var",
+    "icon": "/icons/amazing_group_var.png",
+    "color": "ColorYellow",
+    "x": 5865.5,
+    "y": 13289.9,
+    "category": "bases"
+  },
+  {
+    "name": "phoenix_main_base_marker",
+    "text": "Phoenix",
+    "type": "amazing_group_phoenix",
+    "icon": "/icons/amazing_group_phoenix.png",
+    "color": "ColorYellow",
+    "x": 10264.2,
+    "y": 7390.9,
+    "category": "bases"
+  },
+  {
+    "name": "mon_sub_base_marker_1",
+    "text": "MON",
+    "type": "amazing_group_mon",
+    "icon": "/icons/amazing_group_mon.png",
+    "color": "ColorYellow",
+    "x": 6348.3,
+    "y": 18245.4,
+    "category": "bases"
+  },
+  {
+    "name": "marker_276",
+    "text": "amazingrp.ru | Pochtomat",
+    "type": "amazing_marker_pochtomat",
+    "icon": "/icons/amazing_marker_pochtomat.png",
+    "color": "ColorYellow",
+    "x": 3655.0,
+    "y": 13117.5,
+    "category": "infra"
+  },
+  {
+    "name": "marker_278",
+    "text": "amazingrp.ru | Pochtomat",
+    "type": "amazing_marker_pochtomat",
+    "icon": "/icons/amazing_marker_pochtomat.png",
+    "color": "ColorYellow",
+    "x": 14011.9,
+    "y": 18797.8,
+    "category": "infra"
+  },
+  {
+    "name": "marker_293",
+    "text": "amazingrp.ru | Pochtomat",
+    "type": "amazing_marker_pochtomat",
+    "icon": "/icons/amazing_marker_pochtomat.png",
+    "color": "ColorYellow",
+    "x": 25753.1,
+    "y": 21188.0,
+    "category": "infra"
+  },
+  {
+    "name": "marker_294",
+    "text": "amazingrp.ru | Pochtomat",
+    "type": "amazing_marker_pochtomat",
+    "icon": "/icons/amazing_marker_pochtomat.png",
+    "color": "ColorYellow",
+    "x": 16798.9,
+    "y": 12661.0,
+    "category": "infra"
+  },
+  {
+    "name": "marker_295",
+    "text": "amazingrp.ru | Pochtomat",
+    "type": "amazing_marker_pochtomat",
+    "icon": "/icons/amazing_marker_pochtomat.png",
+    "color": "ColorYellow",
+    "x": 9196.7,
+    "y": 21687.0,
+    "category": "infra"
+  },
+  {
+    "name": "marker_296",
+    "text": "amazingrp.ru | Pochtomat",
+    "type": "amazing_marker_pochtomat",
+    "icon": "/icons/amazing_marker_pochtomat.png",
+    "color": "ColorYellow",
+    "x": 20777.1,
+    "y": 7216.9,
+    "category": "infra"
+  },
+  {
+    "name": "marker_297",
+    "text": "amazingrp.ru | Pochtomat",
+    "type": "amazing_marker_pochtomat",
+    "icon": "/icons/amazing_marker_pochtomat.png",
+    "color": "ColorYellow",
+    "x": 11209.5,
+    "y": 8726.9,
+    "category": "infra"
+  },
+  {
+    "name": "marker_298",
+    "text": "amazingrp.ru | Pochtomat",
+    "type": "amazing_marker_pochtomat",
+    "icon": "/icons/amazing_marker_pochtomat.png",
+    "color": "ColorYellow",
+    "x": 10784.7,
+    "y": 10888.0,
+    "category": "infra"
+  },
+  {
+    "name": "marker_299",
+    "text": "amazingrp.ru | Pochtomat",
+    "type": "amazing_marker_pochtomat",
+    "icon": "/icons/amazing_marker_pochtomat.png",
+    "color": "ColorYellow",
+    "x": 4553.9,
+    "y": 15429.5,
+    "category": "infra"
+  },
+  {
+    "name": "fokey_base",
+    "text": "amazingrp.ru | Rebel Camp",
+    "type": "amazing_marker_rebelcamp",
+    "icon": "/icons/amazing_marker_rebelcamp.png",
+    "color": "ColorYellow",
+    "x": 9193.1,
+    "y": 21669.7,
+    "category": "bases"
+  },
+  {
+    "name": "mar_base_marker",
+    "text": "amazingrp.ru | Rebel Camp",
+    "type": "amazing_marker_rebelcamp",
+    "icon": "/icons/amazing_marker_rebelcamp.png",
+    "color": "ColorYellow",
+    "x": 11191.8,
+    "y": 8720.6,
+    "category": "bases"
+  },
+  {
+    "name": "mazi_base",
+    "text": "amazingrp.ru | Rebel Camp",
+    "type": "amazing_marker_rebelcamp",
+    "icon": "/icons/amazing_marker_rebelcamp.png",
+    "color": "ColorYellow",
+    "x": 20788.4,
+    "y": 7221.3,
+    "category": "bases"
+  },
+  {
+    "name": "sophia_base_1",
+    "text": "amazingrp.ru | Rebel Camp",
+    "type": "amazing_marker_rebelcamp",
+    "icon": "/icons/amazing_marker_rebelcamp.png",
+    "color": "ColorYellow",
+    "x": 25763.5,
+    "y": 21216.5,
+    "category": "bases"
+  },
+  {
+    "name": "rb_10_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 23625.7,
+    "y": 21070.9,
+    "category": "bases"
+  },
+  {
+    "name": "rb_9_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 16402.1,
+    "y": 9835.2,
+    "category": "bases"
+  },
+  {
+    "name": "rb_11_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 12756.7,
+    "y": 14905.8,
+    "category": "bases"
+  },
+  {
+    "name": "rb_12_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 11611.0,
+    "y": 18600.3,
+    "category": "bases"
+  },
+  {
+    "name": "bdig_main_base_marker",
+    "text": "BD",
+    "type": "amazing_group_bd",
+    "icon": "/icons/amazing_group_bd.png",
+    "color": "ColorYellow",
+    "x": 3109.7,
+    "y": 21601.9,
+    "category": "bases"
+  },
+  {
+    "name": "marker_312",
+    "text": "amazingrp.ru | antiq_tr1",
+    "type": "amazing_marker_antiq_tr1",
+    "icon": "/icons/amazing_marker_antiq_tr1.png",
+    "color": "ColorYellow",
+    "x": 5050.2,
+    "y": 11342.9,
+    "category": "other"
+  },
+  {
+    "name": "fish_rod_add_1",
+    "text": "amazingrp.ru | Fishing rod",
+    "type": "amazing_marker_fishing",
+    "icon": "/icons/amazing_marker_fishing.png",
+    "color": "ColorYellow",
+    "x": 3850.2,
+    "y": 17221.4,
+    "category": "resources"
+  },
+  {
+    "name": "fish_rod_zpm_add_1",
+    "text": "amazingrp.ru | Fishing rod",
+    "type": "amazing_marker_fishing",
+    "icon": "/icons/amazing_marker_fishing.png",
+    "color": "ColorYellow",
+    "x": 9882.9,
+    "y": 10031.2,
+    "category": "resources"
+  },
+  {
+    "name": "opgpiter_main_base_marker",
+    "text": "РџРёС‚РµСЂСЃРєР°СЏ РћРџР“",
+    "type": "amazing_group_popg",
+    "icon": "/icons/amazing_group_popg.png",
+    "color": "ColorYellow",
+    "x": 3731.4,
+    "y": 10481.8,
+    "category": "bases"
+  },
+  {
+    "name": "zpm_rad_18",
+    "text": "zpm_rad_18",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 9869.6,
+    "y": 10024.6,
+    "category": "other"
+  },
+  {
+    "name": "zpm_rad_19",
+    "text": "zpm_rad_19",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 9262.9,
+    "y": 7419.2,
+    "category": "other"
+  },
+  {
+    "name": "rb_13_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 6207.0,
+    "y": 19323.8,
+    "category": "bases"
+  },
+  {
+    "name": "rb_14_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 17175.9,
+    "y": 11981.8,
+    "category": "bases"
+  },
+  {
+    "name": "rb_15_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 13254.2,
+    "y": 19726.7,
+    "category": "bases"
+  },
+  {
+    "name": "rb_16_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 13904.7,
+    "y": 17399.8,
+    "category": "bases"
+  },
+  {
+    "name": "rb_17_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 17536.2,
+    "y": 15377.9,
+    "category": "bases"
+  },
+  {
+    "name": "bdig_sub_base_marker",
+    "text": "BD",
+    "type": "amazing_group_bd",
+    "icon": "/icons/amazing_group_bd.png",
+    "color": "ColorYellow",
+    "x": 19701.7,
+    "y": 18029.8,
+    "category": "bases"
+  },
+  {
+    "name": "sof_main_base_marker",
+    "text": "Syndicate of Fate",
+    "type": "amazing_group_sof",
+    "icon": "/icons/amazing_group_sof.png",
+    "color": "ColorYellow",
+    "x": 19383.9,
+    "y": 9734.3,
+    "category": "bases"
+  },
+  {
+    "name": "rb_18_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 6279.4,
+    "y": 14774.5,
+    "category": "bases"
+  },
+  {
+    "name": "sof_sub_base_marker",
+    "text": "Syndicate of Fate",
+    "type": "amazing_group_sof",
+    "icon": "/icons/amazing_group_sof.png",
+    "color": "ColorYellow",
+    "x": 7031.0,
+    "y": 16605.6,
+    "category": "bases"
+  },
+  {
+    "name": "rb_19_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 11161.9,
+    "y": 13209.1,
+    "category": "bases"
+  },
+  {
+    "name": "rb_20_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 24383.5,
+    "y": 19844.7,
+    "category": "bases"
+  },
+  {
+    "name": "marker_300",
+    "text": "amazingrp.ru | Meat Sell",
+    "type": "amazing_marker_meatsell",
+    "icon": "/icons/amazing_marker_meatsell.png",
+    "color": "ColorYellow",
+    "x": 13882.2,
+    "y": 21593.0,
+    "category": "routes"
+  },
+  {
+    "name": "cttc_main_base_marker",
+    "text": "CTTC",
+    "type": "amazing_group_cttc",
+    "icon": "/icons/amazing_group_cttc.png",
+    "color": "ColorYellow",
+    "x": 6905.4,
+    "y": 15441.2,
+    "category": "bases"
+  },
+  {
+    "name": "st_main_base_marker",
+    "text": "ST",
+    "type": "amazing_group_st",
+    "icon": "/icons/amazing_group_st.png",
+    "color": "ColorYellow",
+    "x": 20342.4,
+    "y": 13049.9,
+    "category": "bases"
+  },
+  {
+    "name": "st_sub_base_marker",
+    "text": "ST",
+    "type": "amazing_group_st",
+    "icon": "/icons/amazing_group_st.png",
+    "color": "ColorYellow",
+    "x": 10818.8,
+    "y": 20538.1,
+    "category": "bases"
+  },
+  {
+    "name": "shield_main_base_marker",
+    "text": "SHIELD",
+    "type": "amazing_group_shield",
+    "icon": "/icons/amazing_group_shield.png",
+    "color": "ColorYellow",
+    "x": 18111.0,
+    "y": 19180.6,
+    "category": "bases"
+  },
+  {
+    "name": "shield_sub_base_marker",
+    "text": "SHIELD",
+    "type": "amazing_group_shield",
+    "icon": "/icons/amazing_group_shield.png",
+    "color": "ColorYellow",
+    "x": 4084.6,
+    "y": 13409.5,
+    "category": "bases"
+  },
+  {
+    "name": "kpp_army_main",
+    "text": "amazingrp.ru | Checkpoint",
+    "type": "amazing_marker_checkpoing",
+    "icon": "/icons/amazing_marker_checkpoing.png",
+    "color": "ColorYellow",
+    "x": 13571.4,
+    "y": 16057.9,
+    "category": "infra"
+  },
+  {
+    "name": "kpp_army_athira",
+    "text": "amazingrp.ru | Bridge",
+    "type": "amazing_marker_bridge",
+    "icon": "/icons/amazing_marker_bridge.png",
+    "color": "ColorYellow",
+    "x": 13774.8,
+    "y": 18629.4,
+    "category": "infra"
+  },
+  {
+    "name": "bridge_main",
+    "text": "amazingrp.ru | Bridge",
+    "type": "amazing_marker_bridge",
+    "icon": "/icons/amazing_marker_bridge.png",
+    "color": "ColorYellow",
+    "x": 13703.8,
+    "y": 16120.9,
+    "category": "infra"
+  },
+  {
+    "name": "rb_21_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 9203.9,
+    "y": 11469.4,
+    "category": "bases"
+  },
+  {
+    "name": "uran_proc_1",
+    "text": "amazingrp.ru | Uran 237 Factory",
+    "type": "amazing_marker_uran237_illegal",
+    "icon": "/icons/amazing_marker_uran237_illegal.png",
+    "color": "ColorYellow",
+    "x": 8611.9,
+    "y": 18466.9,
+    "category": "illegal"
+  },
+  {
+    "name": "miniral_proc_3",
+    "text": "amazingrp.ru | Minefactory",
+    "type": "amazing_marker_minefactory",
+    "icon": "/icons/amazing_marker_minefactory.png",
+    "color": "ColorYellow",
+    "x": 9537.5,
+    "y": 15094.2,
+    "category": "routes"
+  },
+  {
+    "name": "mining_proc_3",
+    "text": "amazingrp.ru | Minefactory",
+    "type": "amazing_marker_minefactory",
+    "icon": "/icons/amazing_marker_minefactory.png",
+    "color": "ColorYellow",
+    "x": 14339.2,
+    "y": 18957.7,
+    "category": "routes"
+  },
+  {
+    "name": "mining_sell_3",
+    "text": "amazingrp.ru | Gornorudka Sell",
+    "type": "amazing_marker_gornorudkasell",
+    "icon": "/icons/amazing_marker_gornorudkasell.png",
+    "color": "ColorYellow",
+    "x": 12681.0,
+    "y": 16333.1,
+    "category": "routes"
+  },
+  {
+    "name": "miniral_sell",
+    "text": "amazingrp.ru | Minerals Sell",
+    "type": "amazing_marker_mineralsell",
+    "icon": "/icons/amazing_marker_mineralsell.png",
+    "color": "ColorYellow",
+    "x": 3044.9,
+    "y": 12609.3,
+    "category": "routes"
+  },
+  {
+    "name": "alcho_proc",
+    "text": "amazingrp.ru | Brewery",
+    "type": "amazing_marker_brewery",
+    "icon": "/icons/amazing_marker_brewery.png",
+    "color": "ColorYellow",
+    "x": 16635.1,
+    "y": 20631.4,
+    "category": "other"
+  },
+  {
+    "name": "alcho_sell",
+    "text": "amazingrp.ru | Alcohol Sell",
+    "type": "amazing_marker_alcosell",
+    "icon": "/icons/amazing_marker_alcosell.png",
+    "color": "ColorYellow",
+    "x": 10801.3,
+    "y": 13419.2,
+    "category": "routes"
+  },
+  {
+    "name": "cannabis_proc",
+    "text": "amazingrp.ru | Cannabis Factory",
+    "type": "amazing_marker_weedfactory_illegal",
+    "icon": "/icons/amazing_marker_weedfactory_illegal.png",
+    "color": "ColorYellow",
+    "x": 14517.2,
+    "y": 17762.5,
+    "category": "illegal"
+  },
+  {
+    "name": "phoenix_sub_base_marker",
+    "text": "Phoenix",
+    "type": "amazing_group_phoenix",
+    "icon": "/icons/amazing_group_phoenix.png",
+    "color": "ColorYellow",
+    "x": 10308.7,
+    "y": 17970.4,
+    "category": "bases"
+  },
+  {
+    "name": "army_polygon_marker",
+    "text": "Army",
+    "type": "amazing_group_army",
+    "icon": "/icons/amazing_group_army.png",
+    "color": "ColorWhite",
+    "x": 9789.3,
+    "y": 12692.5,
+    "category": "bases"
+  },
+  {
+    "name": "aquaunion_main_base_marker",
+    "text": "AquaUnion",
+    "type": "amazing_group_aquaunion",
+    "icon": "/icons/amazing_group_aquaunion.png",
+    "color": "ColorYellow",
+    "x": 11159.4,
+    "y": 15658.7,
+    "category": "bases"
+  },
+  {
+    "name": "aquaunion_sub_base_marker",
+    "text": "AquaUnion",
+    "type": "amazing_group_aquaunion",
+    "icon": "/icons/amazing_group_aquaunion.png",
+    "color": "ColorYellow",
+    "x": 28329.9,
+    "y": 25794.0,
+    "category": "bases"
+  },
+  {
+    "name": "water_add",
+    "text": "amazingrp.ru | Water Well",
+    "type": "amazing_marker_water",
+    "icon": "/icons/amazing_marker_water.png",
+    "color": "ColorYellow",
+    "x": 11179.9,
+    "y": 15649.6,
+    "category": "resources"
+  },
+  {
+    "name": "water_proc",
+    "text": "amazingrp.ru | Factory",
+    "type": "amazing_marker_factory",
+    "icon": "/icons/amazing_marker_factory.png",
+    "color": "ColorYellow",
+    "x": 28337.8,
+    "y": 25767.2,
+    "category": "routes"
+  },
+  {
+    "name": "illegal_adv_sell_1",
+    "text": "amazingrp.ru | Coal & Sulfur Sell",
+    "type": "amazing_marker_coalsulfursell",
+    "icon": "/icons/amazing_marker_coalsulfursell.png",
+    "color": "ColorRed",
+    "x": 20859.7,
+    "y": 16940.9,
+    "category": "illegal"
+  },
+  {
+    "name": "erf_main_base_marker",
+    "text": "Reb",
+    "type": "amazing_group_reb",
+    "icon": "/icons/amazing_group_reb.png",
+    "color": "ColorYellow",
+    "x": 26031.3,
+    "y": 19793.2,
+    "category": "bases"
+  },
+  {
+    "name": "wrf_main_base_marker",
+    "text": "Reb",
+    "type": "amazing_group_reb",
+    "icon": "/icons/amazing_group_reb.png",
+    "color": "ColorYellow",
+    "x": 17008.3,
+    "y": 22009.7,
+    "category": "bases"
+  },
+  {
+    "name": "illegal_adv_sell_2",
+    "text": "amazingrp.ru | Coal & Sulfur Sell",
+    "type": "amazing_marker_coalsulfursell",
+    "icon": "/icons/amazing_marker_coalsulfursell.png",
+    "color": "ColorRed",
+    "x": 3522.7,
+    "y": 12413.1,
+    "category": "illegal"
+  },
+  {
+    "name": "mon_main_base_marker",
+    "text": "MON",
+    "type": "amazing_group_mon",
+    "icon": "/icons/amazing_group_mon.png",
+    "color": "ColorYellow",
+    "x": 16684.3,
+    "y": 13625.8,
+    "category": "bases"
+  },
+  {
+    "name": "rb_22_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 3492.8,
+    "y": 14146.4,
+    "category": "bases"
+  },
+  {
+    "name": "k5_main_base_marker",
+    "text": "K5",
+    "type": "amazing_group_k5",
+    "icon": "/icons/amazing_group_k5.png",
+    "color": "ColorYellow",
+    "x": 15222.2,
+    "y": 11368.8,
+    "category": "bases"
+  },
+  {
+    "name": "k5_sub_base_marker",
+    "text": "K5",
+    "type": "amazing_group_k5",
+    "icon": "/icons/amazing_group_k5.png",
+    "color": "ColorYellow",
+    "x": 11816.0,
+    "y": 19452.1,
+    "category": "bases"
+  },
+  {
+    "name": "zpm_rad_20",
+    "text": "zpm_rad_20",
+    "type": "",
+    "icon": "",
+    "color": "ColorBlue",
+    "x": 11412.6,
+    "y": 8019.5,
+    "category": "other"
+  },
+  {
+    "name": "garden_shop_1",
+    "text": "amazingrp.ru | Garden shop",
+    "type": "amazing_marker_garden_shop",
+    "icon": "/icons/amazing_marker_garden_shop.png",
+    "color": "ColorYellow",
+    "x": 3668.2,
+    "y": 13726.8,
+    "category": "shops"
+  },
+  {
+    "name": "garden_shop_2",
+    "text": "amazingrp.ru | Garden shop",
+    "type": "amazing_marker_garden_shop",
+    "icon": "/icons/amazing_marker_garden_shop.png",
+    "color": "ColorYellow",
+    "x": 13988.4,
+    "y": 18636.4,
+    "category": "shops"
+  },
+  {
+    "name": "garden_shop_3",
+    "text": "amazingrp.ru | Garden shop",
+    "type": "amazing_marker_garden_shop",
+    "icon": "/icons/amazing_marker_garden_shop.png",
+    "color": "ColorYellow",
+    "x": 16683.6,
+    "y": 12448.6,
+    "category": "shops"
+  },
+  {
+    "name": "garden_shop_4",
+    "text": "amazingrp.ru | Garden shop",
+    "type": "amazing_marker_garden_shop",
+    "icon": "/icons/amazing_marker_garden_shop.png",
+    "color": "ColorYellow",
+    "x": 25665.0,
+    "y": 21298.9,
+    "category": "shops"
+  },
+  {
+    "name": "greyl_main_base_marker",
+    "text": "GREYLINE",
+    "type": "amazing_group_gl",
+    "icon": "/icons/amazing_group_gl.png",
+    "color": "ColorYellow",
+    "x": 22149.5,
+    "y": 14465.0,
+    "category": "bases"
+  },
+  {
+    "name": "rb_23_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 23723.9,
+    "y": 16224.8,
+    "category": "bases"
+  },
+  {
+    "name": "greyl_sub_base_marker",
+    "text": "GREYLINE",
+    "type": "amazing_group_gl",
+    "icon": "/icons/amazing_group_gl.png",
+    "color": "ColorYellow",
+    "x": 12029.5,
+    "y": 12330.4,
+    "category": "bases"
+  },
+  {
+    "name": "rb_24_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 3780.4,
+    "y": 21499.4,
+    "category": "bases"
+  },
+  {
+    "name": "rb_25_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 7554.3,
+    "y": 12198.0,
+    "category": "bases"
+  },
+  {
+    "name": "rb_26_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 7562.2,
+    "y": 18359.7,
+    "category": "bases"
+  },
+  {
+    "name": "rb_27_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 12054.5,
+    "y": 22779.6,
+    "category": "bases"
+  },
+  {
+    "name": "rb_28_main_base",
+    "text": "amazingrp.ru | Rent Base #1",
+    "type": "amazing_marker_rentbase1",
+    "icon": "/icons/amazing_marker_rentbase1.png",
+    "color": "ColorYellow",
+    "x": 11716.9,
+    "y": 16776.4,
+    "category": "bases"
+  },
+  {
+    "name": "casino_1",
+    "text": "amazingrp.ru | Casino #2",
+    "type": "amazing_marker_casino_2",
+    "icon": "/icons/amazing_marker_casino_2.png",
+    "color": "ColorYellow",
+    "x": 3492.3,
+    "y": 13443.9,
+    "category": "other"
+  },
+  {
+    "name": "gsg_main_base_marker",
+    "text": "GSG",
+    "type": "amazing_group_gsg",
+    "icon": "/icons/amazing_group_gsg.png",
+    "color": "ColorYellow",
+    "x": 19437.2,
+    "y": 12222.6,
+    "category": "bases"
+  },
+  {
+    "name": "gsg_sub_base_marker",
+    "text": "GSG",
+    "type": "amazing_group_gsg",
+    "icon": "/icons/amazing_group_gsg.png",
+    "color": "ColorYellow",
+    "x": 23041.8,
+    "y": 22245.1,
+    "category": "bases"
+  }
+]

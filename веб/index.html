@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Тактическая онлайн-карта Arma 3 Altis</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Google Fonts: Roboto Condensed / Share Tech Mono / Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=12.0">
+</head>
+<body>
+  <!-- Верхняя тактическая панель (HUD) -->
+  <header class="hud-top">
+    <div class="hud-brand">
+      <div class="hud-status-indicator online"></div>
+      <span class="hud-title">ALTIS TACTICAL MAP</span>
+      <span class="hud-subtitle">1:1 SCALE • SEAMLESS</span>
+    </div>
+
+    <div class="hud-coords">
+      <span class="hud-label">СЕТКА:</span>
+      <span id="grid-coord" class="hud-value">--- ---</span>
+      <span class="hud-label">КООРД:</span>
+      <span id="pos-coord" class="hud-value">X: ----- | Y: -----</span>
+    </div>
+
+    <div class="hud-squad-status">
+      <span class="hud-label">ОТРЯД:</span>
+      <span id="current-squad-name" class="hud-squad-badge">НЕ В ОТРЯДЕ</span>
+      <button id="btn-open-squad-modal" class="btn btn-hud">СКВАДЫ</button>
+    </div>
+
+    <div class="hud-controls">
+      <button id="btn-toggle-settings-dialog" class="btn btn-hud active">⚙ НАСТРОЙКА КАРТЫ</button>
+      <button id="btn-toggle-roads" class="btn btn-hud active">ДОРОГИ</button>
+      <button id="btn-toggle-grid" class="btn btn-hud active">СЕТКА</button>
+      <button id="btn-claims-list" class="btn btn-hud">СПИСОК БАЗ</button>
+    </div>
+  </header>
+
+  <!-- Контейнер интерактивной карты -->
+  <div id="map"></div>
+
+  <!-- Панель «НАСТРОЙКА КАРТЫ» (Точная копия игрового меню Arma 3) -->
+  <aside id="map-settings-panel" class="settings-panel">
+    <div class="settings-panel-header" id="settings-drag-handle">
+      <span class="settings-title">НАСТРОЙКА КАРТЫ</span>
+      <button id="btn-settings-close" class="settings-btn-close" title="Скрыть панель">&times;</button>
+    </div>
+
+    <div class="settings-search-bar">
+      <button id="btn-search-prev" class="settings-nav-btn" title="Предыдущий результат / Снять все">&lt;</button>
+      <input type="text" id="settings-search-input" class="settings-search-input" placeholder="Поиск меток..." autocomplete="off">
+      <button id="btn-search-next" class="settings-nav-btn" title="Следующий результат / Выбрать все">&gt;</button>
+    </div>
+
+    <div class="settings-categories-list">
+      <!-- 1. Названия -->
+      <div class="settings-row" data-cat="names">
+        <span class="settings-row-label">Названия</span>
+        <label class="arma-checkbox-wrap">
+          <input type="checkbox" id="chk-cat-names" checked>
+          <span class="arma-checkmark"></span>
+        </label>
+      </div>
+
+      <!-- 2. Ресурсы -->
+      <div class="settings-row" data-cat="resources">
+        <span class="settings-row-label">Ресурсы</span>
+        <label class="arma-checkbox-wrap">
+          <input type="checkbox" id="chk-cat-resources" checked>
+          <span class="arma-checkmark"></span>
+        </label>
+      </div>
+
+      <!-- 3. Маршруты добычи -->
+      <div class="settings-row" data-cat="routes">
+        <span class="settings-row-label">Маршруты добычи</span>
+        <label class="arma-checkbox-wrap">
+          <input type="checkbox" id="chk-cat-routes" checked>
+          <span class="arma-checkmark"></span>
+        </label>
+      </div>
+
+      <!-- 4. Магазины -->
+      <div class="settings-row" data-cat="shops">
+        <span class="settings-row-label">Магазины</span>
+        <label class="arma-checkbox-wrap">
+          <input type="checkbox" id="chk-cat-shops" checked>
+          <span class="arma-checkmark"></span>
+        </label>
+      </div>
+
+      <!-- 5. Инфраструктура -->
+      <div class="settings-row" data-cat="infra">
+        <span class="settings-row-label">Инфраструктура</span>
+        <label class="arma-checkbox-wrap">
+          <input type="checkbox" id="chk-cat-infra" checked>
+          <span class="arma-checkmark"></span>
+        </label>
+      </div>
+
+      <!-- 6. Недвижимость -->
+      <div class="settings-row" data-cat="realestate">
+        <span class="settings-row-label">Недвижимость</span>
+        <label class="arma-checkbox-wrap">
+          <input type="checkbox" id="chk-cat-realestate" checked>
+          <span class="arma-checkmark"></span>
+        </label>
+      </div>
+
+      <!-- 7. DP -->
+      <div class="settings-row" data-cat="dp">
+        <span class="settings-row-label">DP</span>
+        <label class="arma-checkbox-wrap">
+          <input type="checkbox" id="chk-cat-dp" checked>
+          <span class="arma-checkmark"></span>
+        </label>
+      </div>
+
+      <!-- 8. Базы и особняки -->
+      <div class="settings-row" data-cat="bases">
+        <span class="settings-row-label">Базы и особняки</span>
+        <label class="arma-checkbox-wrap">
+          <input type="checkbox" id="chk-cat-bases" checked>
+          <span class="arma-checkmark"></span>
+        </label>
+      </div>
+
+      <!-- 9. Нелегальные точки -->
+      <div class="settings-row" data-cat="illegal">
+        <span class="settings-row-label">Нелегальные точки</span>
+        <label class="arma-checkbox-wrap">
+          <input type="checkbox" id="chk-cat-illegal" checked>
+          <span class="arma-checkmark"></span>
+        </label>
+      </div>
+
+      <!-- 10. Прочее -->
+      <div class="settings-row" data-cat="other">
+        <span class="settings-row-label">Прочее</span>
+        <label class="arma-checkbox-wrap">
+          <input type="checkbox" id="chk-cat-other" checked>
+          <span class="arma-checkmark"></span>
+        </label>
+      </div>
+
+      <!-- 11. Территории -->
+      <div class="settings-row settings-row-territories" data-cat="territories">
+        <span class="settings-row-label">Территории</span>
+        <div class="settings-row-actions">
+          <button id="btn-territory-edit" class="settings-action-btn" title="Редактор территорий">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+          </button>
+          <button id="btn-territory-list" class="settings-action-btn" title="Список территорий">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          </button>
+          <button id="btn-territory-fit" class="settings-action-btn" title="Показать все зоны на карте">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+          </button>
+          <label class="arma-checkbox-wrap">
+            <input type="checkbox" id="chk-cat-territories" checked>
+            <span class="arma-checkmark"></span>
+          </label>
+          <button id="btn-territory-menu" class="settings-action-btn" title="Опции зон">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2.2"></circle><circle cx="12" cy="12" r="2.2"></circle><circle cx="19" cy="12" r="2.2"></circle></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Модальное окно списка территорий -->
+  <div id="territories-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>СПИСОК ТЕРРИТОРИЙ И ЗОН</h2>
+        <button id="modal-territories-close" class="btn-icon">&times;</button>
+      </div>
+      <div class="modal-body">
+        <ul id="territories-list-items" class="territories-interactive-list">
+          <!-- Заполняется динамически из JS -->
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Боковая панель постройки (при клике на здание/гараж) -->
+  <aside id="building-panel" class="side-panel hidden">
+    <div class="panel-header">
+      <div class="panel-title-wrap">
+        <span class="panel-tag">ОБЪЕКТ ИНФРАСТРУКТУРЫ</span>
+        <h3 id="panel-building-name">Постройка</h3>
+        <span id="panel-building-id" class="panel-meta">ID: -----</span>
+      </div>
+      <button id="panel-close-btn" class="btn-icon">&times;</button>
+    </div>
+
+    <div class="panel-body">
+      <div class="info-row">
+        <span class="info-label">Координаты:</span>
+        <span id="panel-building-coords" class="info-value">X: ---, Y: ---</span>
+      </div>
+
+      <div class="form-group">
+        <label for="claim-owner">Владелец / Сквад:</label>
+        <input type="text" id="claim-owner" placeholder="Например: Himan / E.N.O.T" class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label for="claim-password">Пароль / Код замка:</label>
+        <div class="password-input-wrap">
+          <input type="password" id="claim-password" placeholder="Пароль от гаража/базы" class="form-input">
+          <button id="btn-toggle-password-view" class="btn-secondary" title="Показать/скрыть пароль">👁️</button>
+          <button id="btn-copy-password" class="btn-secondary" title="Скопировать пароль">📋</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="claim-status">Статус объекта:</label>
+        <select id="claim-status" class="form-input">
+          <option value="friendly">🟢 Наш гараж / База</option>
+          <option value="hostile">🔴 Вражеский гараж</option>
+          <option value="neutral">⚪ Свободный гараж</option>
+          <option value="loot">🟡 Склад / Схрон</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="claim-notes">Заметки / Инвентарь:</label>
+        <textarea id="claim-notes" rows="3" placeholder="Что внутри, транспорт, детали..." class="form-input"></textarea>
+      </div>
+
+      <div class="panel-actions">
+        <button id="btn-save-claim" class="btn btn-primary">СОХРАНИТЬ В ОТРЯД</button>
+        <button id="btn-delete-claim" class="btn btn-danger">ОЧИСТИТЬ</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Модальное окно управления сквадами -->
+  <div id="squad-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>СИСТЕМА СКВАДОВ (ОТРЯДОВ)</h2>
+        <button id="modal-squad-close" class="btn-icon">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="user-profile-section">
+          <label>Ваш позывной (Никнейм):</label>
+          <input type="text" id="player-nickname" placeholder="Например: Hawk_01" class="form-input">
+        </div>
+
+        <div class="squad-tabs">
+          <div class="squad-tab-card">
+            <h3>Создать новый отряд</h3>
+            <p class="tab-desc">Создайте группу для совместной карты меток и паролей</p>
+            <input type="text" id="new-squad-name" placeholder="Название (например, E.N.O.T)" class="form-input">
+            <input type="password" id="new-squad-password" placeholder="Пароль отряда (по желанию)" class="form-input">
+            <button id="btn-create-squad" class="btn btn-primary">СОЗДАТЬ СКВАД</button>
+          </div>
+
+          <div class="squad-divider">ИЛИ</div>
+
+          <div class="squad-tab-card">
+            <h3>Войти в существующий</h3>
+            <p class="tab-desc">Подключитесь к карте своего клана или напарника</p>
+            <input type="text" id="join-squad-name" placeholder="Название сквада" class="form-input">
+            <input type="password" id="join-squad-password" placeholder="Пароль" class="form-input">
+            <button id="btn-join-squad" class="btn btn-secondary">ВОЙТИ В СКВАД</button>
+          </div>
+        </div>
+
+        <div class="squad-active-members">
+          <h4>Участники сквада онлайн:</h4>
+          <ul id="squad-members-list">
+            <li class="empty-list">Войдите в отряд для синхронизации</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно списка сохраненных баз и паролей -->
+  <div id="claims-modal" class="modal-overlay hidden">
+    <div class="modal-box modal-wide">
+      <div class="modal-header">
+        <h2>СПИСОК СОХРАНЕННЫХ ГАРАЖЕЙ И БАЗ</h2>
+        <button id="modal-claims-close" class="btn-icon">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="claims-filter-wrap">
+          <input type="text" id="search-claims-input" placeholder="Поиск по владельцу, ID или паролю..." class="form-input">
+        </div>
+        <div class="table-container">
+          <table class="claims-table">
+            <thead>
+              <tr>
+                <th>Статус</th>
+                <th>Объект</th>
+                <th>Координаты</th>
+                <th>Владелец</th>
+                <th>Пароль</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody id="claims-table-body">
+              <tr>
+                <td colspan="6" class="text-center">Нет сохраненных баз</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Скрипты: Leaflet и Socket.io -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js?v=12.0"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+{
+  "ОДИНОЧНЫЙ": {
+    "name": "ОДИНОЧНЫЙ",
+    "claims": {
+      "garage_75096": {
+        "id": "garage_75096",
+        "type": "Land_i_Garage_V1_F",
+        "x": 19300.7,
+        "y": 17609.8,
+        "owner": "EfeOmer01 FTB",
+        "password": "1985",
+        "status": "hostile",
+        "notes": "",
+        "updatedBy": "Игрок_357",
+        "updatedAt": "2026-10-29T14:58:49.029Z"
+      },
+      "garage_isl_b_5050": {
+        "id": "garage_isl_b_5050",
+        "type": "Land_i_Garage_V1_F",
+        "x": 10287.3,
+        "y": 19065.6,
+        "owner": "EfeOmer01 FTB",
+        "password": "121212",
+        "status": "friendly",
+        "notes": "",
+        "updatedBy": "Игрок_357",
+        "updatedAt": "2026-11-02T22:50:40.182Z"
+      }
+    },
+    "markers": []
+  },
+  "ENOT": {
+    "name": "ENOT",
+    "claims": {},
+    "markers": []
+  }
+}

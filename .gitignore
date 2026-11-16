@@ -1,0 +1,5 @@
+node_modules/
+**/node.exe
+*.pyc
+__pycache__/
+.env
