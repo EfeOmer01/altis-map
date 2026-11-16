@@ -158,10 +158,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const poly = L.polygon(coords, {
           className: isMission ? 'garage-polygon garage-mission' : 'garage-polygon',
-          weight: 2.5,
+          weight: 4,
           color: isMission ? '#fbbf24' : '#00f0ff',
           fillColor: isMission ? '#fbbf24' : '#00f0ff',
-          fillOpacity: 0.75
+          fillOpacity: 0.88
         });
 
         poly._bData = g;
@@ -201,8 +201,8 @@ document.addEventListener('DOMContentLoaded', () => {
       poly.setStyle({
         color: defaultCol,
         fillColor: defaultCol,
-        fillOpacity: 0.75,
-        weight: 2.5
+        fillOpacity: 0.88,
+        weight: 4
       });
       return;
     }
@@ -231,7 +231,9 @@ document.addEventListener('DOMContentLoaded', () => {
     routes: L.layerGroup().addTo(map),
     shops: L.layerGroup().addTo(map),
     infra: L.layerGroup().addTo(map),
-    realestate: garagesLayer,
+    // Метки категории «Недвижимость». Интерактивные гаражи живут отдельно
+    // в garagesLayer и всегда остаются на карте.
+    realestate: L.layerGroup().addTo(map),
     dp: L.layerGroup().addTo(map),
     bases: L.layerGroup().addTo(map),
     illegal: L.layerGroup().addTo(map),

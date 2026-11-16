@@ -338,18 +338,18 @@ body {
 
 /* ГАРАЖИ (УВЕЛИЧЕННЫЕ И ЯРКИЕ КЛИКАБЕЛЬНЫЕ ЗДАНИЯ) */
 .garage-polygon {
-  stroke-width: 2.5 !important;
+  stroke-width: 4 !important;
   stroke: #00f0ff !important;
-  fill: rgba(0, 240, 255, 0.75) !important;
+  fill: rgba(0, 240, 255, 0.88) !important;
   cursor: pointer;
-  filter: drop-shadow(0 0 4px rgba(0, 240, 255, 0.6));
+  filter: drop-shadow(0 0 7px rgba(0, 240, 255, 0.9));
   transition: all 0.2s ease;
 }
 
 .garage-polygon.garage-mission {
   stroke: #fbbf24 !important;
-  fill: rgba(251, 191, 36, 0.8) !important;
-  filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.7));
+  fill: rgba(251, 191, 36, 0.9) !important;
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.95));
 }
 
 .garage-polygon:hover {
