@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: altis-map
+    name: amazing-garage
     runtime: node
     plan: free
     region: frankfurt
