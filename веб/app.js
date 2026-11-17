@@ -3,6 +3,58 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   // ======================================================================
+  //  0. МГНОВЕННОЕ УПРАВЛЕНИЕ МОДАЛКАМИ HUD
+  // ======================================================================
+  const authModal  = document.getElementById('auth-modal');
+  const squadModal = document.getElementById('squad-modal');
+
+  function openModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('hidden');
+  }
+  function closeModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('hidden');
+  }
+
+  function showAuthMsg(msg, type) {
+    const el = document.getElementById('auth-status-msg');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'auth-status-msg ' + (type || '');
+    el.classList.remove('hidden');
+  }
+
+  // Кнопка ВОЙТИ в HUD
+  document.getElementById('btn-open-auth-modal')?.addEventListener('click', () => {
+    openModal('auth-modal');
+  });
+
+  // Клик по профилю (если уже авторизован) -> открывает окно сквадов или профиля
+  document.getElementById('user-profile-badge')?.addEventListener('click', (e) => {
+    if (e.target && e.target.id === 'btn-logout') return;
+    if (currentUser && currentUser.squadId) {
+      openModal('squad-modal');
+    } else {
+      openModal('auth-modal');
+    }
+  });
+
+  // Кнопка СКВАДЫ в HUD
+  document.getElementById('btn-open-squad-modal')?.addEventListener('click', () => {
+    if (!currentUser) {
+      openModal('auth-modal');
+      showAuthMsg('Сначала войдите в аккаунт, чтобы создать сквад или управлять отрядом!', 'warning');
+      return;
+    }
+    openModal('squad-modal');
+  });
+
+  // Крестики закрытия модалок
+  document.getElementById('modal-auth-close')?.addEventListener('click', () => closeModal('auth-modal'));
+  document.getElementById('modal-squad-close')?.addEventListener('click', () => closeModal('squad-modal'));
+
+  // ======================================================================
   //  1. КОНСТАНТЫ И СИСТЕМА КООРДИНАТ
   // ======================================================================
   const WORLD   = 30720;
@@ -1108,23 +1160,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ======================================================================
-  //  10. МОДАЛКИ: АВТОРИЗАЦИЯ И СКВАДЫ
+  //  10. МОДАЛКИ: АВТОРИЗАЦИЯ И СКВАДЫ (ОБРАБОТКА ФОРМ)
   // ======================================================================
-  const authModal  = document.getElementById('auth-modal');
-  const squadModal = document.getElementById('squad-modal');
-
-  document.getElementById('btn-open-auth-modal')?.addEventListener('click', () => authModal.classList.remove('hidden'));
-  document.getElementById('modal-auth-close')?.addEventListener('click', () => authModal.classList.add('hidden'));
-
-  document.getElementById('btn-open-squad-modal')?.addEventListener('click', () => {
-    if (!currentUser) {
-      alert('Сначала войдите в аккаунт, чтобы создать сквад или управлять отрядом!');
-      authModal.classList.remove('hidden');
-      return;
-    }
-    squadModal.classList.remove('hidden');
-  });
-  document.getElementById('modal-squad-close')?.addEventListener('click', () => squadModal.classList.add('hidden'));
 
   // Логин по паролю
   document.getElementById('btn-auth-login')?.addEventListener('click', async () => {

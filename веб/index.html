@@ -4,15 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Тактическая онлайн-карта Arma 3 Altis</title>
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet CSS (локально, 100% без блокировок и зависимости от CDN) -->
+  <link rel="stylesheet" href="/libs/leaflet/leaflet.css" />
   <!-- Google Identity Services (Sign in with Google) -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <!-- Google Fonts: Roboto Condensed / Share Tech Mono / Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=12.0">
+  <link rel="stylesheet" href="style.css?v=15.0">
 </head>
 <body>
   <!-- Верхняя тактическая панель (HUD) -->
@@ -440,9 +440,51 @@
     </div>
   </div>
 
-  <!-- Скрипты: Leaflet и Socket.io -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Мгновенная и надёжная работа модалок HUD в любых условиях
+    window.openModal = function(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.remove('hidden');
+    };
+    window.closeModal = function(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    };
+    document.addEventListener('DOMContentLoaded', function() {
+      // Кнопка ВОЙТИ
+      document.getElementById('btn-open-auth-modal')?.addEventListener('click', function() {
+        window.openModal('auth-modal');
+      });
+      // Закрытие модалки авторизации
+      document.getElementById('modal-auth-close')?.addEventListener('click', function() {
+        window.closeModal('auth-modal');
+      });
+      // Закрытие модалки сквадов
+      document.getElementById('modal-squad-close')?.addEventListener('click', function() {
+        window.closeModal('squad-modal');
+      });
+      // Закрытие по клику на тёмный фон (оверлей)
+      document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+        overlay.addEventListener('click', function(e) {
+          if (e.target === overlay) overlay.classList.add('hidden');
+        });
+      });
+      // Закрытие всех модалок по Escape
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.modal-overlay').forEach(function(m) {
+            m.classList.add('hidden');
+          });
+          var bp = document.getElementById('building-panel');
+          if (bp) bp.classList.add('hidden');
+        }
+      });
+    });
+  </script>
+
+  <!-- Скрипты: Leaflet локально (без CDN) и Socket.io -->
+  <script src="/libs/leaflet/leaflet.js"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="app.js?v=14.0"></script>
+  <script src="app.js?v=15.0"></script>
 </body>
 </html>
