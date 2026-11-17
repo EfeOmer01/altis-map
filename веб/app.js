@@ -623,6 +623,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  socket.on('squad_disbanded', ({ squadName }) => {
+    if (currentUser && currentUser.squadId === squadName) {
+      alert(`Сквад "${squadName}" был распущен командиром.`);
+      currentUser.squadId = null;
+      currentSquadData = null;
+      claimsData = currentUser.personalGarages || {};
+      updateBuildingsVisuals();
+      renderClaimsTable();
+      updateAuthUI();
+      squadModal.classList.add('hidden');
+      socket.emit('auth_socket', { token: authToken });
+    }
+  });
+
   socket.on('claim_updated', (c) => {
     claimsData[c.id] = c;
     updateBuildingVisual(c.id);
@@ -653,6 +667,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const leaderPanel = document.getElementById('leader-control-panel');
+    const disbandBtn = document.getElementById('btn-disband-squad');
+    if (disbandBtn) {
+      if (isLeader) disbandBtn.classList.remove('hidden');
+      else disbandBtn.classList.add('hidden');
+    }
     if (leaderPanel) {
       if (isLeader) {
         leaderPanel.classList.remove('hidden');
@@ -961,6 +980,35 @@ document.addEventListener('DOMContentLoaded', () => {
         squadModal.classList.add('hidden');
         updateAuthUI();
         socket.emit('auth_socket', { token: authToken });
+      }
+    } catch (e) {
+      alert('Ошибка сети');
+    }
+  });
+
+  // Роспуск / удаление сквада командиром
+  document.getElementById('btn-disband-squad')?.addEventListener('click', async () => {
+    if (!confirm('ВНИМАНИЕ! Вы уверены, что хотите РАСПУСТИТЬ и ПОЛНОСТЬЮ УДАЛИТЬ этот сквад? Все участники вернутся в соло-режим.')) return;
+    try {
+      const res = await fetch('/api/squads/disband', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + authToken
+        }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        currentUser.squadId = null;
+        currentSquadData = null;
+        claimsData = currentUser.personalGarages || {};
+        updateBuildingsVisuals();
+        renderClaimsTable();
+        squadModal.classList.add('hidden');
+        updateAuthUI();
+        socket.emit('auth_socket', { token: authToken });
+      } else {
+        alert(data.error || 'Ошибка при роспуске сквада');
       }
     } catch (e) {
       alert('Ошибка сети');

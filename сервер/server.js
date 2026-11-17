@@ -104,6 +104,31 @@ function saveLocalSquads() {
   catch (e) { console.error('Ошибка записи SQUADS_FILE:', e); }
 }
 
+function cleanupTargetSquad(targetRegex) {
+  let changed = false;
+  for (const name of Object.keys(squadsDb)) {
+    if (targetRegex.test(name.trim())) {
+      console.log(`🗑️ Удаление сквада: ${name}`);
+      delete squadsDb[name];
+      changed = true;
+    }
+  }
+  for (const u of Object.values(usersDb)) {
+    if (u.squadId && targetRegex.test(u.squadId.trim())) {
+      console.log(`👤 Сброс сквада у пользователя: ${u.name || u.id}`);
+      u.squadId = null;
+      changed = true;
+    }
+  }
+  if (changed) {
+    saveLocalSquads();
+    saveLocalUsers();
+  }
+}
+
+// Первичная очистка сквада ENOT / енот
+cleanupTargetSquad(/^(enot|енот)$/i);
+
 async function syncUserToMongo(u) {
   if (useMongoDb && User && u) {
     try {
@@ -193,6 +218,15 @@ if (MONGODB_URI) {
       } else if (Object.keys(squadsDb).length > 0) {
         for (const s of Object.values(squadsDb)) await syncSquadToMongo(s);
       }
+
+      // Удаление ENOT / енот из Mongo
+      try {
+        await Squad.deleteMany({ name: { $regex: /^(enot|енот)$/i } });
+        console.log('✅ Сквад ENOT/енот удален из MongoDB Atlas');
+      } catch (e) {
+        console.error('Ошибка удаления ENOT из Mongo:', e);
+      }
+      cleanupTargetSquad(/^(enot|енот)$/i);
     })
     .catch(err => {
       console.error('⚠️ Ошибка подключения к MongoDB:', err.message);
@@ -514,6 +548,55 @@ app.post('/api/squads/passcode', authMiddleware, (req, res) => {
   persistSquad(squad);
 
   res.json({ success: true, passcode: squad.passcode });
+});
+
+// 6. Роспуск / удаление сквада (ТОЛЬКО ДЛЯ ЛИДЕРА)
+app.post('/api/squads/disband', authMiddleware, async (req, res) => {
+  const sName = req.user.squadId;
+  const squad = squadsDb[sName];
+
+  if (!squad) return res.status(404).json({ error: 'Сквад не найден' });
+  if (squad.leaderId !== req.user.id) {
+    return res.status(403).json({ error: 'Только командир может распустить сквад' });
+  }
+
+  // Сбрасываем squadId у всех участников сквада
+  for (const m of (squad.members || [])) {
+    if (usersDb[m.userId]) {
+      usersDb[m.userId].squadId = null;
+      persistUser(usersDb[m.userId]);
+    }
+  }
+  req.user.squadId = null;
+  persistUser(req.user);
+
+  // Удаляем сквад из squadsDb и локального файла
+  delete squadsDb[sName];
+  saveLocalSquads();
+
+  if (useMongoDb && Squad) {
+    try {
+      await Squad.deleteOne({ name: sName });
+    } catch (e) {
+      console.error('Ошибка удаления Squad из Mongo:', e);
+    }
+  }
+
+  // Оповещаем участников через сокет
+  io.to(sName).emit('squad_disbanded', { squadName: sName });
+
+  res.json({ success: true, message: 'Сквад успешно распущен' });
+});
+
+// Экстренный эндпоинт очистки сквада ENOT / енот
+app.get('/api/squads/purge_enot', async (req, res) => {
+  cleanupTargetSquad(/^(enot|енот)$/i);
+  if (useMongoDb && Squad) {
+    try {
+      await Squad.deleteMany({ name: { $regex: /^(enot|енот)$/i } });
+    } catch (e) {}
+  }
+  res.json({ success: true, message: 'Сквад енот/ENOT удален из всех баз' });
 });
 
 // ============================================================
