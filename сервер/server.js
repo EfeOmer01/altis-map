@@ -17,8 +17,12 @@ const DATA_DIR = path.join(__dirname, '..', 'данные');
 const WEB_DIR = path.join(__dirname, '..', 'веб');
 const SQUADS_FILE = path.join(DATA_DIR, 'база_сквадов.json');
 const USERS_FILE = path.join(DATA_DIR, 'база_пользователей.json');
-const DEFAULT_MONGO_URI = 'mongodb+srv://efeomer311_db_user:xCDOhWuErezwGYA7@cluster0.zdeamq0.mongodb.net/?retryWrites=true&w=majority';
-const MONGODB_URI = process.env.MONGODB_URI || DEFAULT_MONGO_URI;
+const DEFAULT_MONGO_URI = 'mongodb+srv://efeomer311_db_user:xCDOhWuErezwGYA7@cluster0.zdeamq0.mongodb.net/altis_db?retryWrites=true&w=majority';
+let MONGODB_URI = process.env.MONGODB_URI || DEFAULT_MONGO_URI;
+// Если в Render задана старая переменная с опечаткой (zdcamq0 вместо zdeamq0), исправляем на правильный URI
+if (MONGODB_URI.includes('zdcamq0')) {
+  MONGODB_URI = DEFAULT_MONGO_URI;
+}
 
 let mongoError = null;
 
@@ -33,7 +37,10 @@ app.get('/api/config', (req, res) => {
   res.json({
     googleClientId: process.env.GOOGLE_CLIENT_ID || '',
     mongoConnected: useMongoDb,
-    mongoError: mongoError
+    mongoError: mongoError,
+    mongoHost: MONGODB_URI ? (MONGODB_URI.split('@')[1] || '').split('?')[0] : 'none',
+    usersCount: Object.keys(usersDb).length,
+    squadsCount: Object.keys(squadsDb).length
   });
 });
 
@@ -195,10 +202,11 @@ if (MONGODB_URI) {
   User = mongoose.model('User', userSchema);
   Squad = mongoose.model('Squad', squadSchema);
 
-  mongoose.connect(MONGODB_URI)
+  mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 8000 })
     .then(async () => {
       console.log('✅ MongoDB Atlas подключена');
       useMongoDb = true;
+      mongoError = null;
 
       // Синхронизация Users
       const allUsers = await User.find({});
@@ -224,6 +232,8 @@ if (MONGODB_URI) {
     })
     .catch(err => {
       console.error('⚠️ Ошибка подключения к MongoDB:', err.message);
+      mongoError = err.message;
+      useMongoDb = false;
       console.log('📁 Работаем в надежном режиме локального JSON');
     });
 }
@@ -290,8 +300,11 @@ app.post('/api/auth/login', (req, res) => {
 
   const cleanUser = String(username).trim().toLowerCase();
   const user = Object.values(usersDb).find(u => u.username === cleanUser);
-  if (!user || user.passwordHash !== hashPassword(password)) {
-    return res.status(401).json({ error: 'Неверный логин или пароль' });
+  if (!user) {
+    return res.status(401).json({ error: `Пользователь "${username}" не найден в базе. Нажмите вкладку «Регистрация», чтобы создать аккаунт.` });
+  }
+  if (user.passwordHash !== hashPassword(password)) {
+    return res.status(401).json({ error: 'Неверный пароль' });
   }
 
   user.token = generateToken();
