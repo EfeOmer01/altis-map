@@ -40,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
   map.fitBounds(mapBounds);
 
   // Топографическая карта Altis: здания, дороги, высоты, леса и береговая линия
-  // уже находятся в готовом рендере, поэтому не дублируются векторными слоями.
   const topoLayer = L.tileLayer('', {
     tileSize: 256,
     minZoom: 2,
@@ -55,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   topoLayer.addTo(map);
 
-  // Кастомная широкая река уже бесшовно впечена прямо в тайлы гибридной карты.
+  // Кастомная широкая река из PBO: прозрачный оверлей поверх топографической карты.
   const riverBounds = L.latLngBounds(
     gameToLatLng(12000, 14880),
     gameToLatLng(15360, 23520)
@@ -65,19 +64,22 @@ document.addEventListener('DOMContentLoaded', () => {
     interactive: false,
     zIndex: 10
   });
-  // riverOverlay.addTo(map); // река уже находится внутри тайлов карты
+  riverOverlay.addTo(map);
 
-  // Цветная спутниковая версия собрана из исходных тайлов PBO. В ней остаются
-  // все кастомные изменения острова, включая широкую реку. Геометрия тайлов
-  // приведена к тем же границам, что и топографическая подложка.
-  const satelliteLayer = L.tileLayer('/tiles/{z}/{x}/{y}.webp', {
-    tileSize: 144,
-    minZoom: 0,
+  // Цветная спутниковая карта высокого разрешения со зданиями, дорогами и кастомной рекой
+  const satelliteLayer = L.tileLayer('', {
+    tileSize: 256,
+    minZoom: 2,
     maxZoom: 8,
-    maxNativeZoom: 6,
+    maxNativeZoom: 7,
     noWrap: true,
     bounds: mapBounds
   });
+  satelliteLayer.getTileUrl = (coords) => {
+    if (coords.z < 4) return `/hybrid-tiles/overview/${coords.z}/${coords.x}/${coords.y}.jpg`;
+    return `/hybrid-tiles/${coords.z + 8}/map_${coords.x}_${coords.y}.jpg`;
+  };
+
   let satelliteMode = false;
   const basemapButton = document.getElementById('btn-toggle-basemap');
   basemapButton?.addEventListener('click', () => {
