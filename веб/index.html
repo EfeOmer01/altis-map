@@ -344,12 +344,28 @@
           <!-- Панель управления командира -->
           <div id="leader-control-panel" class="leader-panel hidden">
             <h4>👑 ПАНЕЛЬ КОМАНДИРА</h4>
+
             <div class="leader-passcode-row">
-              <label>Пароль для вступления в сквад:</label>
+              <label>Ссылка-приглашение для бойцов:</label>
+              <div class="invite-link-row">
+                <input type="text" id="squad-invite-link-input" class="form-input" readonly placeholder="Генерация ссылки...">
+                <button id="btn-copy-squad-invite" class="btn btn-secondary btn-sm" style="white-space:nowrap;">📋 КОПИРОВАТЬ</button>
+              </div>
+            </div>
+
+            <div class="leader-passcode-row">
+              <label>Пароль для прямого входа (опционально):</label>
               <div class="passcode-edit-group">
                 <input type="text" id="squad-passcode-input" class="form-input" placeholder="Пароль сквада">
                 <button id="btn-save-squad-passcode" class="btn btn-primary btn-sm">СОХРАНИТЬ</button>
               </div>
+            </div>
+
+            <div class="squad-requests-box">
+              <label>Входящие заявки (<span id="squad-requests-count">0</span>):</label>
+              <ul id="squad-requests-list" class="squad-requests-list">
+                <li class="empty-list" style="color:var(--text-muted); font-size:12px;">Нет новых заявок</li>
+              </ul>
             </div>
           </div>
 

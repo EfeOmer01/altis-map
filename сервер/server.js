@@ -185,6 +185,7 @@ if (MONGODB_URI) {
     leaderId: String,
     passcode: String,
     members: { type: [mongoose.Schema.Types.Mixed], default: [] },
+    joinRequests: { type: [mongoose.Schema.Types.Mixed], default: [] },
     claims: { type: mongoose.Schema.Types.Mixed, default: {} },
     markers: { type: [mongoose.Schema.Types.Mixed], default: [] }
   }, { strict: false, minimize: false });
@@ -425,6 +426,7 @@ app.post('/api/squads/create', authMiddleware, (req, res) => {
       role: 'leader',
       joinedAt: new Date().toISOString()
     }],
+    joinRequests: [],
     claims: {},
     markers: []
   };
@@ -599,6 +601,99 @@ app.get('/api/squads/purge_enot', async (req, res) => {
   res.json({ success: true, message: 'Сквад енот/ENOT удален из всех баз' });
 });
 
+// 7. Подача заявки на вступление по ссылке
+app.post('/api/squads/request_join', authMiddleware, (req, res) => {
+  const { squadName } = req.body;
+  const sName = String(squadName || '').trim();
+  const squad = squadsDb[sName];
+
+  if (!squad) return res.status(404).json({ error: 'Сквад не найден' });
+  if (req.user.squadId === sName) {
+    return res.status(400).json({ error: 'Вы уже состоите в этом скваде' });
+  }
+
+  squad.joinRequests = squad.joinRequests || [];
+  const existingReq = squad.joinRequests.find(r => r.userId === req.user.id);
+  if (existingReq) {
+    return res.status(400).json({ error: 'Вы уже отправили заявку в этот сквад. Ожидайте решения командира.' });
+  }
+
+  const newReq = {
+    userId: req.user.id,
+    name: req.user.name,
+    avatar: req.user.avatar,
+    requestedAt: new Date().toISOString()
+  };
+  squad.joinRequests.push(newReq);
+  persistSquad(squad);
+
+  // Оповещаем сокет-комнату сквада в реальном времени
+  io.to(sName).emit('squad_requests_updated', squad.joinRequests);
+
+  res.json({ success: true, message: `Заявка в сквад "${sName}" успешно отправлена командиру!` });
+});
+
+// 8. Принятие заявки (ТОЛЬКО ДЛЯ ЛИДЕРА)
+app.post('/api/squads/accept_request', authMiddleware, (req, res) => {
+  const { targetUserId } = req.body;
+  const sName = req.user.squadId;
+  const squad = squadsDb[sName];
+
+  if (!squad) return res.status(404).json({ error: 'Сквад не найден' });
+  if (squad.leaderId !== req.user.id) {
+    return res.status(403).json({ error: 'Только командир может принимать заявки' });
+  }
+
+  squad.joinRequests = (squad.joinRequests || []).filter(r => r.userId !== targetUserId);
+
+  const targetUser = usersDb[targetUserId];
+  if (!targetUser) {
+    persistSquad(squad);
+    return res.status(404).json({ error: 'Пользователь не найден' });
+  }
+
+  squad.members = squad.members || [];
+  if (!squad.members.some(m => m.userId === targetUserId)) {
+    squad.members.push({
+      userId: targetUser.id,
+      name: targetUser.name,
+      avatar: targetUser.avatar,
+      role: 'member',
+      joinedAt: new Date().toISOString()
+    });
+  }
+
+  targetUser.squadId = sName;
+  persistUser(targetUser);
+  persistSquad(squad);
+
+  io.to(sName).emit('squad_members_updated', squad.members);
+  io.to(sName).emit('squad_requests_updated', squad.joinRequests);
+  io.emit('user_request_accepted_event', { userId: targetUserId, squadName: sName });
+
+  res.json({ success: true, squad });
+});
+
+// 9. Отклонение заявки (ТОЛЬКО ДЛЯ ЛИДЕРА)
+app.post('/api/squads/reject_request', authMiddleware, (req, res) => {
+  const { targetUserId } = req.body;
+  const sName = req.user.squadId;
+  const squad = squadsDb[sName];
+
+  if (!squad) return res.status(404).json({ error: 'Сквад не найден' });
+  if (squad.leaderId !== req.user.id) {
+    return res.status(403).json({ error: 'Только командир может отклонять заявки' });
+  }
+
+  squad.joinRequests = (squad.joinRequests || []).filter(r => r.userId !== targetUserId);
+  persistSquad(squad);
+
+  io.to(sName).emit('squad_requests_updated', squad.joinRequests);
+  io.emit('user_request_rejected_event', { userId: targetUserId, squadName: sName });
+
+  res.json({ success: true, joinRequests: squad.joinRequests });
+});
+
 // ============================================================
 //  API ДАННЫХ КАРТЫ
 // ============================================================
@@ -657,12 +752,17 @@ io.on('connection', (socket) => {
     currentUser = user;
     currentSquad = user.squadId;
 
+    socket.join('user_' + user.id);
+
     if (currentSquad && squadsDb[currentSquad]) {
       socket.join(currentSquad);
       if (!onlineUsersBySquad[currentSquad]) onlineUsersBySquad[currentSquad] = new Set();
       onlineUsersBySquad[currentSquad].add(user.id);
 
       socket.emit('squad_data', squadsDb[currentSquad]);
+      if (squadsDb[currentSquad].leaderId === user.id) {
+        socket.emit('squad_requests_updated', squadsDb[currentSquad].joinRequests || []);
+      }
       io.to(currentSquad).emit('squad_online', Array.from(onlineUsersBySquad[currentSquad]));
     } else {
       // Одиночка — отправляем личные гаражи

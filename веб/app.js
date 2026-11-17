@@ -52,8 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (coords.z < 4) return `/topo-tiles/overview/${coords.z}/${coords.x}/${coords.y}.jpg`;
     return `/topo-tiles/${coords.z + 8}/map_${coords.x}_${coords.y}.jpg`;
   };
-  topoLayer.addTo(map);
-
   // Кастомная широкая река из PBO: прозрачный оверлей поверх топографической карты.
   const riverBounds = L.latLngBounds(
     gameToLatLng(12000, 14880),
@@ -64,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
     interactive: false,
     zIndex: 10
   });
-  riverOverlay.addTo(map);
 
   // Цветная спутниковая карта высокого разрешения со зданиями, дорогами и кастомной рекой
   const satelliteLayer = L.tileLayer('', {
@@ -80,10 +77,29 @@ document.addEventListener('DOMContentLoaded', () => {
     return `/hybrid-tiles/${coords.z + 8}/map_${coords.x}_${coords.y}.jpg`;
   };
 
-  let satelliteMode = false;
+  // По умолчанию активен цветной гибридный спутник (или выбор из localStorage)
+  const savedBasemap = localStorage.getItem('altis_basemap_mode');
+  let satelliteMode = (savedBasemap !== 'topo');
   const basemapButton = document.getElementById('btn-toggle-basemap');
+
+  if (satelliteMode) {
+    satelliteLayer.addTo(map);
+    if (basemapButton) {
+      basemapButton.textContent = 'ТОПО';
+      basemapButton.classList.add('active');
+    }
+  } else {
+    topoLayer.addTo(map);
+    riverOverlay.addTo(map);
+    if (basemapButton) {
+      basemapButton.textContent = 'СПУТНИК';
+      basemapButton.classList.remove('active');
+    }
+  }
+
   basemapButton?.addEventListener('click', () => {
     satelliteMode = !satelliteMode;
+    localStorage.setItem('altis_basemap_mode', satelliteMode ? 'satellite' : 'topo');
     if (satelliteMode) {
       map.removeLayer(topoLayer);
       map.removeLayer(riverOverlay);
@@ -217,8 +233,16 @@ document.addEventListener('DOMContentLoaded', () => {
             ? '<span style="color:#fbbf24; font-weight:bold;">★ Кастомный (миссия)</span>'
             : '<span style="color:#00f0ff; font-weight:bold;">🏛️ Островной</span>';
 
-          if (c && c.owner) {
-            return `<b>${g.name || 'Гараж'}</b><br>${typeBadge}<br>Владелец: <span style="color:#58a6ff">${c.owner}</span><br>Пароль: <code>${c.password ? '••••••' : 'Нет'}</code>`;
+          if (c && (c.owner || c.status)) {
+            const statusLabel = c.status === 'hostile'
+              ? '<span style="color:#f85149; font-weight:bold;">🔴 Вражеский</span>'
+              : c.status === 'loot'
+              ? '<span style="color:#d29922; font-weight:bold;">🟡 Склад</span>'
+              : c.status === 'neutral'
+              ? '<span style="color:#8b949e; font-weight:bold;">⚪ Свободный</span>'
+              : '<span style="color:#3fb950; font-weight:bold;">🟢 Наш гараж</span>';
+
+            return `<b>${g.name || 'Гараж'}</b><br>${typeBadge} • ${statusLabel}<br>Владелец: <span style="color:#58a6ff">${c.owner || '—'}</span><br>Пароль: <code>${c.password ? '••••••' : 'Нет'}</code>`;
           }
           return `<b>${g.name || 'Гараж'}</b><br>${typeBadge}<br><small style="color:#58a6ff">Клик — задать владельца и пароль</small>`;
         }, { className: 'tactical-tooltip', sticky: true });
@@ -238,10 +262,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!poly) return;
     const c = claimsData[id];
     const g = poly._bData;
+    const el = poly.getElement();
+
+    if (el) {
+      el.classList.remove('status-friendly', 'status-hostile', 'status-loot', 'status-neutral');
+    }
+
     const isMission = (g && g.source === 'mission');
     const defaultCol = isMission ? '#fbbf24' : '#00f0ff';
 
-    if (!c || !c.owner) {
+    if (!c || (!c.owner && !c.status)) {
       poly.setStyle({
         color: defaultCol,
         fillColor: defaultCol,
@@ -261,9 +291,13 @@ document.addEventListener('DOMContentLoaded', () => {
     poly.setStyle({
       color: col,
       fillColor: col,
-      fillOpacity: 0.85,
-      weight: 3
+      fillOpacity: 0.88,
+      weight: 4
     });
+
+    if (el) {
+      el.classList.add(`status-${c.status || 'friendly'}`);
+    }
   }
 
   // ======================================================================
@@ -463,6 +497,7 @@ document.addEventListener('DOMContentLoaded', () => {
     checkServerConfig();
     if (!authToken) {
       updateAuthUI();
+      handleInviteParam();
       return;
     }
     try {
@@ -481,6 +516,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.warn('Сервер недоступен для проверки сессии:', e);
     }
     updateAuthUI();
+    handleInviteParam();
   }
 
   async function checkServerConfig() {
@@ -536,6 +572,19 @@ document.addEventListener('DOMContentLoaded', () => {
         squadNameEl.className = 'hud-squad-badge';
         soloView?.classList.remove('hidden');
         activeView?.classList.add('hidden');
+      }
+
+      // Если была отложенная заявка по ссылке-приглашению
+      const pendingSquad = sessionStorage.getItem('pending_join_squad');
+      if (pendingSquad) {
+        sessionStorage.removeItem('pending_join_squad');
+        if (currentUser.squadId !== pendingSquad) {
+          setTimeout(() => {
+            if (confirm(`Вы авторизовались! Отправить заявку на вступление в сквад "${pendingSquad}" командиру?`)) {
+              requestJoinSquad(pendingSquad);
+            }
+          }, 300);
+        }
       }
     } else {
       btnAuth?.classList.remove('hidden');
@@ -637,6 +686,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  socket.on('squad_requests_updated', (requests) => {
+    if (currentSquadData) currentSquadData.joinRequests = requests;
+    renderSquadRequests(requests);
+  });
+
+  socket.on('user_request_accepted_event', ({ userId, squadName }) => {
+    if (currentUser && currentUser.id === userId) {
+      alert(`🎉 Ваша заявка в сквад "${squadName}" принята командиром! Добро пожаловать в отряд.`);
+      currentUser.squadId = squadName;
+      updateAuthUI();
+      socket.emit('auth_socket', { token: authToken });
+    }
+  });
+
+  socket.on('user_request_rejected_event', ({ userId, squadName }) => {
+    if (currentUser && currentUser.id === userId) {
+      alert(`Командир сквада "${squadName}" отклонил вашу заявку на вступление.`);
+    }
+  });
+
   socket.on('claim_updated', (c) => {
     claimsData[c.id] = c;
     updateBuildingVisual(c.id);
@@ -677,6 +746,11 @@ document.addEventListener('DOMContentLoaded', () => {
         leaderPanel.classList.remove('hidden');
         const passIn = document.getElementById('squad-passcode-input');
         if (passIn && currentSquadData.passcode) passIn.value = currentSquadData.passcode;
+        const linkIn = document.getElementById('squad-invite-link-input');
+        if (linkIn && currentSquadData) {
+          linkIn.value = window.location.origin + '/?join_squad=' + encodeURIComponent(currentSquadData.name);
+        }
+        renderSquadRequests(currentSquadData.joinRequests || []);
       } else {
         leaderPanel.classList.add('hidden');
       }
@@ -724,6 +798,146 @@ document.addEventListener('DOMContentLoaded', () => {
       ul.appendChild(li);
     });
   }
+
+  function renderSquadRequests(requests) {
+    const ul = document.getElementById('squad-requests-list');
+    const countEl = document.getElementById('squad-requests-count');
+    if (!ul) return;
+    const reqs = requests || [];
+    if (countEl) countEl.textContent = reqs.length;
+
+    ul.innerHTML = '';
+    if (reqs.length === 0) {
+      ul.innerHTML = '<li class="empty-list" style="color:var(--text-muted); font-size:12px;">Нет новых заявок</li>';
+      return;
+    }
+
+    reqs.forEach(r => {
+      const li = document.createElement('li');
+      li.className = 'request-item';
+      li.innerHTML = `
+        <div class="member-info-col">
+          <img src="${r.avatar || ('https://api.dicebear.com/7.x/bottts/svg?seed=' + r.userId)}" class="member-avatar" alt="">
+          <div>
+            <div style="font-weight:600; font-size:13px; color:#f0f6fc;">${r.name || 'Боец'}</div>
+            <div style="font-size:10px; color:#8b949e;">${r.requestedAt ? new Date(r.requestedAt).toLocaleTimeString() : ''}</div>
+          </div>
+        </div>
+        <div class="request-actions">
+          <button class="btn-accept-request">✓ ПРИНЯТЬ</button>
+          <button class="btn-reject-request">✕</button>
+        </div>
+      `;
+
+      li.querySelector('.btn-accept-request').onclick = () => acceptJoinRequest(r.userId);
+      li.querySelector('.btn-reject-request').onclick = () => rejectJoinRequest(r.userId);
+
+      ul.appendChild(li);
+    });
+  }
+
+  async function acceptJoinRequest(targetUserId) {
+    try {
+      const res = await fetch('/api/squads/accept_request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + authToken
+        },
+        body: JSON.stringify({ targetUserId })
+      });
+      const data = await res.json();
+      if (!res.ok) alert(data.error || 'Ошибка принятия заявки');
+    } catch (e) {
+      alert('Ошибка сети');
+    }
+  }
+
+  async function rejectJoinRequest(targetUserId) {
+    try {
+      const res = await fetch('/api/squads/reject_request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + authToken
+        },
+        body: JSON.stringify({ targetUserId })
+      });
+      const data = await res.json();
+      if (!res.ok) alert(data.error || 'Ошибка отклонения заявки');
+    } catch (e) {
+      alert('Ошибка сети');
+    }
+  }
+
+  // Обработка перехода по ссылке-приглашению
+  async function handleInviteParam() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const inviteSquad = urlParams.get('join_squad');
+    if (!inviteSquad) return;
+
+    window.history.replaceState({}, document.title, window.location.pathname);
+
+    if (!currentUser) {
+      sessionStorage.setItem('pending_join_squad', inviteSquad);
+      alert(`Вы перешли по приглашению в сквад "${inviteSquad}".\nПожалуйста, войдите в аккаунт или зарегистрируйтесь, чтобы отправить заявку командиру.`);
+      const am = document.getElementById('auth-modal');
+      if (am) am.classList.remove('hidden');
+      return;
+    }
+
+    if (currentUser.squadId === inviteSquad) {
+      alert(`Вы уже состоите в скваде "${inviteSquad}".`);
+      return;
+    }
+
+    const confirmMsg = currentUser.squadId
+      ? `Вы перешли по приглашению в сквад "${inviteSquad}".\nСейчас вы состоите в "${currentUser.squadId}".\nОтправить заявку командиру "${inviteSquad}"?`
+      : `Отправить заявку на вступление в сквад "${inviteSquad}" командиру отряда?`;
+
+    if (confirm(confirmMsg)) {
+      requestJoinSquad(inviteSquad);
+    }
+  }
+
+  async function requestJoinSquad(squadName) {
+    try {
+      const res = await fetch('/api/squads/request_join', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + authToken
+        },
+        body: JSON.stringify({ squadName })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert(data.message || `Заявка в сквад "${squadName}" успешно отправлена командиру!`);
+      } else {
+        alert(data.error || 'Ошибка отправки заявки');
+      }
+    } catch (e) {
+      alert('Ошибка сети при отправке заявки');
+    }
+  }
+
+  // Копирование ссылки-приглашения
+  document.getElementById('btn-copy-squad-invite')?.addEventListener('click', () => {
+    const linkIn = document.getElementById('squad-invite-link-input');
+    if (!linkIn || !linkIn.value) return;
+    navigator.clipboard.writeText(linkIn.value).then(() => {
+      const btn = document.getElementById('btn-copy-squad-invite');
+      const oldText = btn.textContent;
+      btn.textContent = '✓ СКОПИРОВАНО!';
+      btn.style.color = '#3fb950';
+      setTimeout(() => {
+        btn.textContent = oldText;
+        btn.style.color = '';
+      }, 2000);
+    }).catch(() => {
+      alert('Ссылка: ' + linkIn.value);
+    });
+  });
 
   // ======================================================================
   //  9. БОКОВАЯ ПАНЕЛЬ ПОСТРОЙКИ (ВЛАДЕЛЕЦ / ПАРОЛЬ)
@@ -1160,6 +1374,35 @@ document.addEventListener('DOMContentLoaded', () => {
     return chk ? chk.checked : true;
   }
 
+  function saveCategoryFilters() {
+    try {
+      const state = {};
+      catNames.forEach(cat => {
+        const chk = document.getElementById(`chk-cat-${cat}`);
+        if (chk) state[cat] = chk.checked;
+      });
+      localStorage.setItem('altis_category_filters', JSON.stringify(state));
+    } catch (e) {}
+  }
+
+  function loadSavedCategoryFilters() {
+    try {
+      const raw = localStorage.getItem('altis_category_filters');
+      if (!raw) return;
+      const state = JSON.parse(raw);
+      catNames.forEach(cat => {
+        if (typeof state[cat] === 'boolean') {
+          const chk = document.getElementById(`chk-cat-${cat}`);
+          const lyr = categoryLayers[cat];
+          if (chk) chk.checked = state[cat];
+          if (lyr) {
+            state[cat] ? map.addLayer(lyr) : map.removeLayer(lyr);
+          }
+        }
+      });
+    } catch (e) {}
+  }
+
   catNames.forEach(cat => {
     const chk = document.getElementById(`chk-cat-${cat}`);
     if (!chk) return;
@@ -1171,11 +1414,15 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         map.removeLayer(lyr);
       }
+      saveCategoryFilters();
       // Перепроверяем фильтрацию при поиске
       const q = (document.getElementById('settings-search-input')?.value || '').trim().toLowerCase();
       if (q) filterMarkersByQuery(q);
     });
   });
+
+  // Восстанавливаем сохраненные настройки фильтров маркеров из localStorage
+  loadSavedCategoryFilters();
 
   // Клик по всей строке категории переключает чекбокс
   document.querySelectorAll('.settings-row').forEach(row => {
@@ -1201,6 +1448,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     });
+    saveCategoryFilters();
     const q = (document.getElementById('settings-search-input')?.value || '').trim().toLowerCase();
     if (q) filterMarkersByQuery(q);
   }
