@@ -55,8 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   topoLayer.addTo(map);
 
-  // Кастомная широкая река из PBO: прозрачный оверлей поверх топографической карты.
-  // Охватывает диапазон тайлов 25..31 по X (12000..15360м) и 15..32 по Y (14880..23520м).
+  // Кастомная широкая река уже бесшовно впечена прямо в тайлы гибридной карты.
   const riverBounds = L.latLngBounds(
     gameToLatLng(12000, 14880),
     gameToLatLng(15360, 23520)
@@ -66,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     interactive: false,
     zIndex: 10
   });
-  riverOverlay.addTo(map);
+  // riverOverlay.addTo(map); // река уже находится внутри тайлов карты
 
   // Цветная спутниковая версия собрана из исходных тайлов PBO. В ней остаются
   // все кастомные изменения острова, включая широкую реку. Геометрия тайлов
