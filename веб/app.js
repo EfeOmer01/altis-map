@@ -55,6 +55,19 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   topoLayer.addTo(map);
 
+  // Кастомная широкая река из PBO: прозрачный оверлей поверх топографической карты.
+  // Охватывает диапазон тайлов 25..31 по X (12000..15360м) и 15..32 по Y (14880..23520м).
+  const riverBounds = L.latLngBounds(
+    gameToLatLng(12000, 14880),
+    gameToLatLng(15360, 23520)
+  );
+  const riverOverlay = L.imageOverlay('/river-overlay.webp', riverBounds, {
+    opacity: 0.95,
+    interactive: false,
+    zIndex: 10
+  });
+  riverOverlay.addTo(map);
+
   // Цветная спутниковая версия собрана из исходных тайлов PBO. В ней остаются
   // все кастомные изменения острова, включая широкую реку. Геометрия тайлов
   // приведена к тем же границам, что и топографическая подложка.
@@ -72,12 +85,14 @@ document.addEventListener('DOMContentLoaded', () => {
     satelliteMode = !satelliteMode;
     if (satelliteMode) {
       map.removeLayer(topoLayer);
+      map.removeLayer(riverOverlay);
       satelliteLayer.addTo(map);
       basemapButton.textContent = 'ТОПО';
       basemapButton.classList.add('active');
     } else {
       map.removeLayer(satelliteLayer);
       topoLayer.addTo(map);
+      riverOverlay.addTo(map);
       basemapButton.textContent = 'СПУТНИК';
       basemapButton.classList.remove('active');
     }
