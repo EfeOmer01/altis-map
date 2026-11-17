@@ -449,24 +449,151 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
   // ======================================================================
-  //  8. SOCKET.IO И СИСТЕМА СКВАДОВ
+  //  8. АВТОРИЗАЦИЯ, SOCKET.IO И СИСТЕМА СКВАДОВ
   // ======================================================================
   const socket = io();
-  let currentSquad = localStorage.getItem('arma_squad') || 'ОДИНОЧНЫЙ';
-  let playerNick   = localStorage.getItem('arma_nick')  || ('Игрок_' + Math.floor(Math.random() * 1000));
-  let claimsData   = {};
+  let currentUser = null;
+  let authToken   = localStorage.getItem('arma_token') || null;
+  let claimsData  = {};
+  let currentSquadData = null;
+  let currentOnlineIds = new Set();
 
-  document.getElementById('current-squad-name').textContent = currentSquad;
-  document.getElementById('player-nickname').value = playerNick;
+  // Инициализация авторизации при загрузке
+  async function initAuth() {
+    if (!authToken) {
+      updateAuthUI();
+      return;
+    }
+    try {
+      const res = await fetch('/api/auth/me', {
+        headers: { 'Authorization': 'Bearer ' + authToken }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        currentUser = data.user;
+        socket.emit('auth_socket', { token: authToken });
+      } else {
+        authToken = null;
+        localStorage.removeItem('arma_token');
+      }
+    } catch (e) {
+      console.warn('Сервер недоступен для проверки сессии:', e);
+    }
+    updateAuthUI();
+  }
 
+  function updateAuthUI() {
+    const btnAuth = document.getElementById('btn-open-auth-modal');
+    const badge = document.getElementById('user-profile-badge');
+    const avatarImg = document.getElementById('user-avatar-img');
+    const nameEl = document.getElementById('user-display-name');
+    const squadNameEl = document.getElementById('current-squad-name');
+    const soloView = document.getElementById('squad-solo-view');
+    const activeView = document.getElementById('squad-active-view');
+
+    if (currentUser) {
+      btnAuth?.classList.add('hidden');
+      badge?.classList.remove('hidden');
+      if (avatarImg) avatarImg.src = currentUser.avatar || ('https://api.dicebear.com/7.x/bottts/svg?seed=' + currentUser.id);
+      if (nameEl) nameEl.textContent = currentUser.name || currentUser.username || 'Боец';
+
+      if (currentUser.squadId) {
+        squadNameEl.textContent = currentUser.squadId;
+        squadNameEl.className = 'hud-squad-badge squad-active';
+        soloView?.classList.add('hidden');
+        activeView?.classList.remove('hidden');
+        const actName = document.getElementById('active-squad-name');
+        if (actName) actName.textContent = currentUser.squadId;
+      } else {
+        squadNameEl.textContent = 'ОДИНОЧКА';
+        squadNameEl.className = 'hud-squad-badge';
+        soloView?.classList.remove('hidden');
+        activeView?.classList.add('hidden');
+      }
+    } else {
+      btnAuth?.classList.remove('hidden');
+      badge?.classList.add('hidden');
+      squadNameEl.textContent = 'ГОСТЬ';
+      squadNameEl.className = 'hud-squad-badge';
+      soloView?.classList.remove('hidden');
+      activeView?.classList.add('hidden');
+    }
+  }
+
+  // Google One Tap / GIS callback
+  window.handleGoogleCredentialResponse = async (response) => {
+    try {
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential: response.credential })
+      });
+      const data = await res.json();
+      if (res.ok && data.token) {
+        authToken = data.token;
+        currentUser = data.user;
+        localStorage.setItem('arma_token', authToken);
+        updateAuthUI();
+        document.getElementById('auth-modal')?.classList.add('hidden');
+        socket.emit('auth_socket', { token: authToken });
+      } else {
+        showAuthMsg(data.error || 'Ошибка входа Google', 'error');
+      }
+    } catch (e) {
+      showAuthMsg('Ошибка соединения с сервером', 'error');
+    }
+  };
+
+  function showAuthMsg(msg, type) {
+    const el = document.getElementById('auth-status-msg');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'auth-status-msg ' + (type || '');
+    el.classList.remove('hidden');
+  }
+
+  // Socket.io события
   socket.on('connect', () => {
-    joinSquad(currentSquad, playerNick);
+    if (authToken) socket.emit('auth_socket', { token: authToken });
   });
 
-  socket.on('squad_data', (data) => {
-    claimsData = data.claims || {};
+  socket.on('squad_data', (squad) => {
+    currentSquadData = squad;
+    claimsData = squad.claims || {};
     updateBuildingsVisuals();
     renderClaimsTable();
+    renderSquadMembers(squad.members || []);
+  });
+
+  socket.on('personal_data', (personalGarages) => {
+    currentSquadData = null;
+    claimsData = personalGarages || {};
+    updateBuildingsVisuals();
+    renderClaimsTable();
+  });
+
+  socket.on('squad_members_updated', (members) => {
+    if (currentSquadData) currentSquadData.members = members;
+    renderSquadMembers(members);
+  });
+
+  socket.on('squad_online', (onlineIds) => {
+    currentOnlineIds = new Set(onlineIds);
+    if (currentSquadData && currentSquadData.members) {
+      renderSquadMembers(currentSquadData.members);
+    }
+  });
+
+  socket.on('user_kicked_event', ({ userId, squadName }) => {
+    if (currentUser && currentUser.id === userId) {
+      alert('Вы были исключены из сквада командиром.');
+      currentUser.squadId = null;
+      claimsData = currentUser.personalGarages || {};
+      updateBuildingsVisuals();
+      renderClaimsTable();
+      updateAuthUI();
+      socket.emit('auth_socket', { token: authToken });
+    }
   });
 
   socket.on('claim_updated', (c) => {
@@ -481,27 +608,75 @@ document.addEventListener('DOMContentLoaded', () => {
     renderClaimsTable();
   });
 
-  socket.on('squad_members', (members) => {
+  function renderSquadMembers(members) {
     const ul = document.getElementById('squad-members-list');
+    if (!ul) return;
     ul.innerHTML = '';
     if (!members || members.length === 0) {
-      ul.innerHTML = '<li class="empty-list">Нет участников онлайн</li>';
+      ul.innerHTML = '<li class="empty-list">Нет участников</li>';
       return;
     }
+
+    const isLeader = currentUser && currentSquadData && currentSquadData.leaderId === currentUser.id;
+    const roleBadge = document.getElementById('active-user-role');
+    if (roleBadge) {
+      roleBadge.textContent = isLeader ? 'Командир' : 'Боец';
+      roleBadge.style.borderColor = isLeader ? '#eab308' : '#3b82f6';
+      roleBadge.style.color = isLeader ? '#fde047' : '#93c5fd';
+    }
+
+    const leaderPanel = document.getElementById('leader-control-panel');
+    if (leaderPanel) {
+      if (isLeader) {
+        leaderPanel.classList.remove('hidden');
+        const passIn = document.getElementById('squad-passcode-input');
+        if (passIn && currentSquadData.passcode) passIn.value = currentSquadData.passcode;
+      } else {
+        leaderPanel.classList.add('hidden');
+      }
+    }
+
     members.forEach(m => {
       const li = document.createElement('li');
-      li.textContent = `● ${m}`;
+      li.className = 'member-item';
+
+      const isOnline = currentOnlineIds.has(m.userId);
+      const isMemberLeader = currentSquadData && currentSquadData.leaderId === m.userId;
+
+      li.innerHTML = `
+        <div class="member-info-col">
+          <span class="member-status-dot ${isOnline ? 'online' : ''}" title="${isOnline ? 'В сети' : 'Не в сети'}"></span>
+          <img src="${m.avatar || ('https://api.dicebear.com/7.x/bottts/svg?seed=' + m.userId)}" class="member-avatar" alt="">
+          <span class="member-name">${m.name || 'Боец'} ${isMemberLeader ? '👑' : ''}</span>
+        </div>
+      `;
+
+      if (isLeader && m.userId !== currentUser.id) {
+        const kickBtn = document.createElement('button');
+        kickBtn.className = 'btn-kick-member';
+        kickBtn.textContent = 'КИКНУТЬ';
+        kickBtn.onclick = async () => {
+          if (!confirm(`Выгнать бойца "${m.name}" из сквада?`)) return;
+          try {
+            const res = await fetch('/api/squads/kick', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + authToken
+              },
+              body: JSON.stringify({ targetUserId: m.userId })
+            });
+            const data = await res.json();
+            if (!res.ok) alert(data.error || 'Ошибка при исключении');
+          } catch (e) {
+            alert('Ошибка сети');
+          }
+        };
+        li.appendChild(kickBtn);
+      }
+
       ul.appendChild(li);
     });
-  });
-
-  function joinSquad(name, nick) {
-    currentSquad = name;
-    playerNick   = nick;
-    localStorage.setItem('arma_squad', name);
-    localStorage.setItem('arma_nick', nick);
-    document.getElementById('current-squad-name').textContent = name;
-    socket.emit('join_squad', { squad: name, nick });
   }
 
   // ======================================================================
@@ -515,6 +690,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const passIn      = document.getElementById('claim-password');
   const statusIn    = document.getElementById('claim-status');
   const notesIn     = document.getElementById('claim-notes');
+  const btnSaveClaim = document.getElementById('btn-save-claim');
 
   function openBuildingPanel(b) {
     selectedBuilding = b;
@@ -523,10 +699,18 @@ document.addEventListener('DOMContentLoaded', () => {
     panelCoords.textContent = `X: ${b.x}, Y: ${b.y}`;
 
     const c = claimsData[b.id] || {};
-    ownerIn.value  = c.owner    || '';
+    ownerIn.value  = c.owner    || (currentUser ? currentUser.name : '');
     passIn.value   = c.password || '';
     statusIn.value = c.status   || 'friendly';
     notesIn.value  = c.notes    || '';
+
+    if (btnSaveClaim) {
+      if (currentUser && currentUser.squadId) {
+        btnSaveClaim.textContent = 'СОХРАНИТЬ В СКВАД';
+      } else {
+        btnSaveClaim.textContent = 'СОХРАНИТЬ (ЛИЧНЫЙ)';
+      }
+    }
 
     panel.classList.remove('hidden');
   }
@@ -536,21 +720,28 @@ document.addEventListener('DOMContentLoaded', () => {
     selectedBuilding = null;
   });
 
-  document.getElementById('btn-save-claim').addEventListener('click', () => {
+  btnSaveClaim?.addEventListener('click', () => {
     if (!selectedBuilding) return;
+    if (!currentUser) {
+      alert('Пожалуйста, авторизуйтесь в правом верхнем углу, чтобы сохранять свои гаражи и пароли!');
+      document.getElementById('auth-modal')?.classList.remove('hidden');
+      return;
+    }
+
     const obj = {
       id: selectedBuilding.id,
       type: selectedBuilding.type,
       x: selectedBuilding.x,
       y: selectedBuilding.y,
-      owner: ownerIn.value.trim(),
+      owner: ownerIn.value.trim() || currentUser.name,
       password: passIn.value.trim(),
       status: statusIn.value,
       notes: notesIn.value.trim(),
-      updatedBy: playerNick,
+      updatedBy: currentUser.name,
       updatedAt: new Date().toISOString()
     };
-    socket.emit('save_claim', { squad: currentSquad, claim: obj });
+
+    socket.emit('save_claim', { claim: obj });
     claimsData[selectedBuilding.id] = obj;
     updateBuildingVisual(selectedBuilding.id);
     renderClaimsTable();
@@ -559,7 +750,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('btn-delete-claim').addEventListener('click', () => {
     if (!selectedBuilding) return;
-    socket.emit('delete_claim', { squad: currentSquad, claimId: selectedBuilding.id });
+    if (!currentUser) return;
+    socket.emit('delete_claim', { claimId: selectedBuilding.id });
     delete claimsData[selectedBuilding.id];
     updateBuildingVisual(selectedBuilding.id);
     renderClaimsTable();
@@ -578,27 +770,201 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ======================================================================
-  //  10. МОДАЛКА СКВАДОВ
+  //  10. МОДАЛКИ: АВТОРИЗАЦИЯ И СКВАДЫ
   // ======================================================================
+  const authModal  = document.getElementById('auth-modal');
   const squadModal = document.getElementById('squad-modal');
-  document.getElementById('btn-open-squad-modal').addEventListener('click', () => squadModal.classList.remove('hidden'));
-  document.getElementById('modal-squad-close').addEventListener('click',  () => squadModal.classList.add('hidden'));
 
-  document.getElementById('btn-create-squad').addEventListener('click', () => {
+  document.getElementById('btn-open-auth-modal')?.addEventListener('click', () => authModal.classList.remove('hidden'));
+  document.getElementById('modal-auth-close')?.addEventListener('click', () => authModal.classList.add('hidden'));
+
+  document.getElementById('btn-open-squad-modal')?.addEventListener('click', () => {
+    if (!currentUser) {
+      alert('Сначала войдите в аккаунт, чтобы создать сквад или управлять отрядом!');
+      authModal.classList.remove('hidden');
+      return;
+    }
+    squadModal.classList.remove('hidden');
+  });
+  document.getElementById('modal-squad-close')?.addEventListener('click', () => squadModal.classList.add('hidden'));
+
+  // Логин по паролю
+  document.getElementById('btn-auth-login')?.addEventListener('click', async () => {
+    const u = document.getElementById('auth-username').value.trim();
+    const p = document.getElementById('auth-password').value.trim();
+    if (!u || !p) return showAuthMsg('Заполните логин и пароль', 'error');
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: u, password: p })
+      });
+      const data = await res.json();
+      if (res.ok && data.token) {
+        authToken = data.token;
+        currentUser = data.user;
+        localStorage.setItem('arma_token', authToken);
+        updateAuthUI();
+        authModal.classList.add('hidden');
+        socket.emit('auth_socket', { token: authToken });
+      } else {
+        showAuthMsg(data.error || 'Ошибка входа', 'error');
+      }
+    } catch (e) {
+      showAuthMsg('Ошибка сети', 'error');
+    }
+  });
+
+  // Регистрация
+  document.getElementById('btn-auth-register')?.addEventListener('click', async () => {
+    const u = document.getElementById('auth-username').value.trim();
+    const p = document.getElementById('auth-password').value.trim();
+    const n = document.getElementById('auth-name').value.trim() || u;
+    if (!u || !p) return showAuthMsg('Заполните логин и пароль', 'error');
+
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: u, password: p, name: n })
+      });
+      const data = await res.json();
+      if (res.ok && data.token) {
+        authToken = data.token;
+        currentUser = data.user;
+        localStorage.setItem('arma_token', authToken);
+        updateAuthUI();
+        authModal.classList.add('hidden');
+        socket.emit('auth_socket', { token: authToken });
+      } else {
+        showAuthMsg(data.error || 'Ошибка регистрации', 'error');
+      }
+    } catch (e) {
+      showAuthMsg('Ошибка сети', 'error');
+    }
+  });
+
+  // Выход из аккаунта
+  document.getElementById('btn-logout')?.addEventListener('click', () => {
+    authToken = null;
+    currentUser = null;
+    localStorage.removeItem('arma_token');
+    claimsData = {};
+    updateBuildingsVisuals();
+    renderClaimsTable();
+    updateAuthUI();
+    window.location.reload();
+  });
+
+  // Создание сквада
+  document.getElementById('btn-create-squad')?.addEventListener('click', async () => {
+    if (!currentUser) return;
     const n = document.getElementById('new-squad-name').value.trim();
-    const nick = document.getElementById('player-nickname').value.trim() || 'Командир';
+    const p = document.getElementById('new-squad-password').value.trim();
     if (!n) return alert('Введите название сквада!');
-    joinSquad(n, nick);
-    squadModal.classList.add('hidden');
+
+    try {
+      const res = await fetch('/api/squads/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + authToken
+        },
+        body: JSON.stringify({ name: n, passcode: p })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        currentUser = data.user;
+        squadModal.classList.add('hidden');
+        updateAuthUI();
+        socket.emit('auth_socket', { token: authToken });
+      } else {
+        alert(data.error || 'Ошибка создания сквада');
+      }
+    } catch (e) {
+      alert('Ошибка сети');
+    }
   });
 
-  document.getElementById('btn-join-squad').addEventListener('click', () => {
+  // Вступление в сквад
+  document.getElementById('btn-join-squad')?.addEventListener('click', async () => {
+    if (!currentUser) return;
     const n = document.getElementById('join-squad-name').value.trim();
-    const nick = document.getElementById('player-nickname').value.trim() || 'Боец';
+    const p = document.getElementById('join-squad-password').value.trim();
     if (!n) return alert('Введите название сквада!');
-    joinSquad(n, nick);
-    squadModal.classList.add('hidden');
+
+    try {
+      const res = await fetch('/api/squads/join', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + authToken
+        },
+        body: JSON.stringify({ name: n, passcode: p })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        currentUser = data.user;
+        squadModal.classList.add('hidden');
+        updateAuthUI();
+        socket.emit('auth_socket', { token: authToken });
+      } else {
+        alert(data.error || 'Ошибка вступления');
+      }
+    } catch (e) {
+      alert('Ошибка сети');
+    }
   });
+
+  // Выход из сквада
+  document.getElementById('btn-leave-squad')?.addEventListener('click', async () => {
+    if (!confirm('Покинуть сквад? Вы потеряете доступ к общим гаражам отряда.')) return;
+    try {
+      const res = await fetch('/api/squads/leave', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + authToken
+        }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        currentUser = data.user;
+        squadModal.classList.add('hidden');
+        updateAuthUI();
+        socket.emit('auth_socket', { token: authToken });
+      }
+    } catch (e) {
+      alert('Ошибка сети');
+    }
+  });
+
+  // Смена пароля сквада командиром
+  document.getElementById('btn-save-squad-passcode')?.addEventListener('click', async () => {
+    const p = document.getElementById('squad-passcode-input').value.trim();
+    try {
+      const res = await fetch('/api/squads/passcode', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + authToken
+        },
+        body: JSON.stringify({ newPasscode: p })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert('Пароль сквада успешно обновлён!');
+      } else {
+        alert(data.error || 'Ошибка смены пароля');
+      }
+    } catch (e) {
+      alert('Ошибка сети');
+    }
+  });
+
+  // Запуск авторизации
+  initAuth();
 
   // ======================================================================
   //  11. МОДАЛКА СПИСКА БАЗ

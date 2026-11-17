@@ -6,6 +6,8 @@
   <title>Тактическая онлайн-карта Arma 3 Altis</title>
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Google Identity Services (Sign in with Google) -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <!-- Google Fonts: Roboto Condensed / Share Tech Mono / Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,6 +34,16 @@
       <span class="hud-label">ОТРЯД:</span>
       <span id="current-squad-name" class="hud-squad-badge">НЕ В ОТРЯДЕ</span>
       <button id="btn-open-squad-modal" class="btn btn-hud">СКВАДЫ</button>
+    </div>
+
+    <!-- Блок профиля и авторизации -->
+    <div class="hud-auth-box">
+      <button id="btn-open-auth-modal" class="btn btn-hud btn-auth-btn">👤 ВОЙТИ</button>
+      <div id="user-profile-badge" class="user-profile-badge hidden">
+        <img id="user-avatar-img" class="user-avatar-img" src="" alt="avatar">
+        <span id="user-display-name" class="user-display-name"></span>
+        <button id="btn-logout" class="btn btn-hud-sm" title="Выйти из аккаунта">ВЫХОД</button>
+      </div>
     </div>
 
     <div class="hud-controls">
@@ -242,45 +254,119 @@
     </div>
   </aside>
 
+  <!-- Модальное окно авторизации (Google One Tap + Логин/Пароль) -->
+  <div id="auth-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>АВТОРИЗАЦИЯ И ПРОФИЛЬ</h2>
+        <button id="modal-auth-close" class="btn-icon">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="auth-section">
+          <div class="auth-subtitle">Вход через аккаунт Google:</div>
+          <div id="g_id_onload"
+               data-client_id=""
+               data-callback="handleGoogleCredentialResponse"
+               data-auto_prompt="false">
+          </div>
+          <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="filled_blue" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
+          <div class="auth-hint">При наличии GOOGLE_CLIENT_ID в настройках сервера работает официальный вход Google.</div>
+        </div>
+
+        <div class="squad-divider">ИЛИ ЛОГИН И ПАРОЛЬ</div>
+
+        <div class="auth-section">
+          <label>Логин:</label>
+          <input type="text" id="auth-username" placeholder="Логин (например, Hawk_77)" class="form-input" autocomplete="username">
+          
+          <label>Пароль:</label>
+          <input type="password" id="auth-password" placeholder="Пароль" class="form-input" autocomplete="current-password">
+          
+          <label>Позывной в игре (для регистрации):</label>
+          <input type="text" id="auth-name" placeholder="Позывной / Имя" class="form-input">
+
+          <div class="auth-btn-row">
+            <button id="btn-auth-login" class="btn btn-primary">ВОЙТИ</button>
+            <button id="btn-auth-register" class="btn btn-secondary">РЕГИСТРАЦИЯ</button>
+          </div>
+
+          <div id="auth-status-msg" class="auth-status-msg hidden"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Модальное окно управления сквадами -->
   <div id="squad-modal" class="modal-overlay hidden">
     <div class="modal-box">
       <div class="modal-header">
-        <h2>СИСТЕМА СКВАДОВ (ОТРЯДОВ)</h2>
+        <h2 id="squad-modal-title">СИСТЕМА СКВАДОВ (ОТРЯДОВ)</h2>
         <button id="modal-squad-close" class="btn-icon">&times;</button>
       </div>
 
       <div class="modal-body">
-        <div class="user-profile-section">
-          <label>Ваш позывной (Никнейм):</label>
-          <input type="text" id="player-nickname" placeholder="Например: Hawk_01" class="form-input">
-        </div>
-
-        <div class="squad-tabs">
-          <div class="squad-tab-card">
-            <h3>Создать новый отряд</h3>
-            <p class="tab-desc">Создайте группу для совместной карты меток и паролей</p>
-            <input type="text" id="new-squad-name" placeholder="Название (например, E.N.O.T)" class="form-input">
-            <input type="password" id="new-squad-password" placeholder="Пароль отряда (по желанию)" class="form-input">
-            <button id="btn-create-squad" class="btn btn-primary">СОЗДАТЬ СКВАД</button>
+        <!-- Блок, когда игрок НЕ в скваде -->
+        <div id="squad-solo-view">
+          <div class="squad-status-banner solo">
+            <span class="banner-badge">РЕЖИМ ОДИНОЧКИ</span>
+            <p>Вы не состоите в скваде. Все гаражи на карте — ваши <strong>личные</strong>. Чужие метки скрыты, а ваши не видны никому, пока вы не вступите в сквад.</p>
           </div>
 
-          <div class="squad-divider">ИЛИ</div>
+          <div class="squad-tabs">
+            <div class="squad-tab-card">
+              <h3>Создать новый отряд</h3>
+              <p class="tab-desc">Вы станете Командиром и сможете управлять доступом бойцов к гаражам</p>
+              <input type="text" id="new-squad-name" placeholder="Название (например, E.N.O.T)" class="form-input">
+              <input type="password" id="new-squad-password" placeholder="Пароль для вступления" class="form-input">
+              <button id="btn-create-squad" class="btn btn-primary">СОЗДАТЬ СКВАД</button>
+            </div>
 
-          <div class="squad-tab-card">
-            <h3>Войти в существующий</h3>
-            <p class="tab-desc">Подключитесь к карте своего клана или напарника</p>
-            <input type="text" id="join-squad-name" placeholder="Название сквада" class="form-input">
-            <input type="password" id="join-squad-password" placeholder="Пароль" class="form-input">
-            <button id="btn-join-squad" class="btn btn-secondary">ВОЙТИ В СКВАД</button>
+            <div class="squad-divider">ИЛИ</div>
+
+            <div class="squad-tab-card">
+              <h3>Войти в существующий</h3>
+              <p class="tab-desc">Подключитесь к карте своего клана, чтобы видеть общие базы и пароли</p>
+              <input type="text" id="join-squad-name" placeholder="Название сквада" class="form-input">
+              <input type="password" id="join-squad-password" placeholder="Пароль отряда" class="form-input">
+              <button id="btn-join-squad" class="btn btn-secondary">ВСТУПИТЬ В СКВАД</button>
+            </div>
           </div>
         </div>
 
-        <div class="squad-active-members">
-          <h4>Участники сквада онлайн:</h4>
-          <ul id="squad-members-list">
-            <li class="empty-list">Войдите в отряд для синхронизации</li>
-          </ul>
+        <!-- Блок, когда игрок В СКВАДЕ -->
+        <div id="squad-active-view" class="hidden">
+          <div class="squad-status-banner active-squad">
+            <div>
+              <span class="banner-badge squad-badge">В СКВАДЕ: <span id="active-squad-name">---</span></span>
+              <span id="active-user-role" class="user-role-badge">Боец</span>
+            </div>
+            <p>Гаражи, пароли и метки синхронизируются в реальном времени между всеми соклановцами.</p>
+          </div>
+
+          <!-- Панель управления командира -->
+          <div id="leader-control-panel" class="leader-panel hidden">
+            <h4>👑 ПАНЕЛЬ КОМАНДИРА</h4>
+            <div class="leader-passcode-row">
+              <label>Пароль для вступления в сквад:</label>
+              <div class="passcode-edit-group">
+                <input type="text" id="squad-passcode-input" class="form-input" placeholder="Пароль сквада">
+                <button id="btn-save-squad-passcode" class="btn btn-primary btn-sm">СОХРАНИТЬ</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Список бойцов сквада -->
+          <div class="squad-members-wrap">
+            <h4>Состав отряда:</h4>
+            <ul id="squad-members-list" class="squad-members-detailed-list">
+              <!-- Заполняется динамически -->
+            </ul>
+          </div>
+
+          <div class="squad-footer-actions">
+            <button id="btn-leave-squad" class="btn btn-danger">ПОКИНУТЬ СКВАД</button>
+          </div>
         </div>
       </div>
     </div>
