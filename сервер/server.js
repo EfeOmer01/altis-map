@@ -17,7 +17,7 @@ const DATA_DIR = path.join(__dirname, '..', 'данные');
 const WEB_DIR = path.join(__dirname, '..', 'веб');
 const SQUADS_FILE = path.join(DATA_DIR, 'база_сквадов.json');
 const USERS_FILE = path.join(DATA_DIR, 'база_пользователей.json');
-const DEFAULT_MONGO_URI = 'mongodb+srv://efeomer311_db_user:xCDOhWuErezwGYA7@cluster0.zdcamq0.mongodb.net/altismap?retryWrites=true&w=majority&appName=Cluster0';
+const DEFAULT_MONGO_URI = 'mongodb+srv://efeomer311_db_user:xCDOhWuErezwGYA7@cluster0.zdeamq0.mongodb.net/altismap?retryWrites=true&w=majority&appName=Cluster0';
 const MONGODB_URI = process.env.MONGODB_URI || DEFAULT_MONGO_URI;
 
 app.use(cors());
