@@ -1169,6 +1169,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const p = document.getElementById('auth-password').value.trim();
     if (!u || !p) return showAuthMsg('Заполните логин и пароль', 'error');
 
+    showAuthMsg('Вход в систему...', '');
+
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
@@ -1182,13 +1184,24 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('arma_token', authToken);
         updateAuthUI();
         authModal.classList.add('hidden');
-        socket.emit('auth_socket', { token: authToken });
+        if (typeof socket !== 'undefined' && socket) {
+          socket.emit('auth_socket', { token: authToken });
+        }
       } else {
         showAuthMsg(data.error || 'Ошибка входа', 'error');
       }
     } catch (e) {
-      showAuthMsg('Ошибка сети', 'error');
+      showAuthMsg('Ошибка сети при входе', 'error');
     }
+  });
+
+  // Нажатие Enter в полях логина
+  ['auth-username', 'auth-password'].forEach(id => {
+    document.getElementById(id)?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        document.getElementById('btn-auth-login')?.click();
+      }
+    });
   });
 
   // Регистрация
