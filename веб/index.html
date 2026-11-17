@@ -263,18 +263,15 @@
       </div>
 
       <div class="modal-body">
-        <div class="auth-section">
+        <div id="google-auth-container" class="auth-section hidden">
           <div class="auth-subtitle">Вход через аккаунт Google:</div>
-          <div id="g_id_onload"
-               data-client_id=""
-               data-callback="handleGoogleCredentialResponse"
-               data-auto_prompt="false">
-          </div>
-          <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="filled_blue" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
-          <div class="auth-hint">При наличии GOOGLE_CLIENT_ID в настройках сервера работает официальный вход Google.</div>
+          <div id="google-button-slot"></div>
+          <div class="squad-divider">ИЛИ ЛОГИН И ПАРОЛЬ</div>
         </div>
-
-        <div class="squad-divider">ИЛИ ЛОГИН И ПАРОЛЬ</div>
+        <div id="google-not-configured-notice" class="auth-section">
+          <div class="auth-subtitle">Быстрый вход в систему:</div>
+          <div class="auth-hint">Введите ваш логин и пароль ниже (регистрация в 1 клик):</div>
+        </div>
 
         <div class="auth-section">
           <label>Логин:</label>

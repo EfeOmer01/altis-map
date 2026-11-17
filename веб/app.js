@@ -460,6 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Инициализация авторизации при загрузке
   async function initAuth() {
+    checkServerConfig();
     if (!authToken) {
       updateAuthUI();
       return;
@@ -480,6 +481,32 @@ document.addEventListener('DOMContentLoaded', () => {
       console.warn('Сервер недоступен для проверки сессии:', e);
     }
     updateAuthUI();
+  }
+
+  async function checkServerConfig() {
+    try {
+      const res = await fetch('/api/config');
+      const data = await res.json();
+      if (data.googleClientId && window.google) {
+        document.getElementById('google-auth-container')?.classList.remove('hidden');
+        document.getElementById('google-not-configured-notice')?.classList.add('hidden');
+        google.accounts.id.initialize({
+          client_id: data.googleClientId,
+          callback: window.handleGoogleCredentialResponse
+        });
+        const slot = document.getElementById('google-button-slot');
+        if (slot) {
+          google.accounts.id.renderButton(slot, {
+            theme: 'filled_blue',
+            size: 'large',
+            text: 'signin_with',
+            shape: 'rectangular'
+          });
+        }
+      }
+    } catch (e) {
+      console.warn('Config fetch error:', e);
+    }
   }
 
   function updateAuthUI() {

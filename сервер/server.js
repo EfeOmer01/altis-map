@@ -25,6 +25,13 @@ app.use(express.json());
 // Health-check для UptimeRobot
 app.get('/health', (req, res) => res.status(200).send('OK'));
 
+// Публичный конфиг для клиента (Google Client ID)
+app.get('/api/config', (req, res) => {
+  res.json({
+    googleClientId: process.env.GOOGLE_CLIENT_ID || ''
+  });
+});
+
 // Статика веб-клиента
 app.use(express.static(WEB_DIR, {
   setHeaders: (res, p) => {
