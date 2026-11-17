@@ -17,8 +17,10 @@ const DATA_DIR = path.join(__dirname, '..', 'данные');
 const WEB_DIR = path.join(__dirname, '..', 'веб');
 const SQUADS_FILE = path.join(DATA_DIR, 'база_сквадов.json');
 const USERS_FILE = path.join(DATA_DIR, 'база_пользователей.json');
-const DEFAULT_MONGO_URI = 'mongodb+srv://efeomer311_db_user:xCDOhWuErezwGYA7@cluster0.zdeamq0.mongodb.net/altismap?retryWrites=true&w=majority&appName=Cluster0';
+const DEFAULT_MONGO_URI = 'mongodb+srv://efeomer311_db_user:xCDOhWuErezwGYA7@cluster0.zdeamq0.mongodb.net/?retryWrites=true&w=majority';
 const MONGODB_URI = process.env.MONGODB_URI || DEFAULT_MONGO_URI;
+
+let mongoError = null;
 
 app.use(cors());
 app.use(express.json());
@@ -30,7 +32,8 @@ app.get('/health', (req, res) => res.status(200).send('OK'));
 app.get('/api/config', (req, res) => {
   res.json({
     googleClientId: process.env.GOOGLE_CLIENT_ID || '',
-    mongoConnected: useMongoDb
+    mongoConnected: useMongoDb,
+    mongoError: mongoError
   });
 });
 
@@ -367,10 +370,15 @@ app.post('/api/user/personal_claim', authMiddleware, (req, res) => {
   const { claim } = req.body;
   if (!claim || !claim.id) return res.status(400).json({ error: 'Некорректные данные' });
 
+  const assignedOwner = (claim.owner !== undefined && String(claim.owner).trim() !== '')
+    ? String(claim.owner).trim()
+    : (req.user.name || 'Боец');
+
   req.user.personalGarages = req.user.personalGarages || {};
   req.user.personalGarages[claim.id] = {
     ...claim,
-    owner: req.user.name,
+    owner: assignedOwner,
+    updatedBy: req.user.name || 'Боец',
     updatedAt: new Date().toISOString()
   };
   persistUser(req.user);
@@ -764,11 +772,16 @@ io.on('connection', (socket) => {
   socket.on('save_claim', ({ claim }) => {
     if (!currentUser || !claim || !claim.id) return;
 
+    const assignedOwner = (claim.owner !== undefined && String(claim.owner).trim() !== '')
+      ? String(claim.owner).trim()
+      : (currentUser.name || 'Боец');
+
     if (currentSquad && squadsDb[currentSquad]) {
       squadsDb[currentSquad].claims = squadsDb[currentSquad].claims || {};
       squadsDb[currentSquad].claims[claim.id] = {
         ...claim,
-        owner: currentUser.name,
+        owner: assignedOwner,
+        updatedBy: currentUser.name || 'Боец',
         updatedAt: new Date().toISOString()
       };
       persistSquad(squadsDb[currentSquad]);
@@ -778,7 +791,8 @@ io.on('connection', (socket) => {
       currentUser.personalGarages = currentUser.personalGarages || {};
       currentUser.personalGarages[claim.id] = {
         ...claim,
-        owner: currentUser.name,
+        owner: assignedOwner,
+        updatedBy: currentUser.name || 'Боец',
         updatedAt: new Date().toISOString()
       };
       persistUser(currentUser);

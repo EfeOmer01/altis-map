@@ -959,7 +959,7 @@ document.addEventListener('DOMContentLoaded', () => {
     panelCoords.textContent = `X: ${b.x}, Y: ${b.y}`;
 
     const c = claimsData[b.id] || {};
-    ownerIn.value  = c.owner    || (currentUser ? currentUser.name : '');
+    ownerIn.value  = (c.owner !== undefined) ? c.owner : '';
     passIn.value   = c.password || '';
     statusIn.value = c.status   || 'friendly';
     notesIn.value  = c.notes    || '';
