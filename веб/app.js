@@ -236,6 +236,8 @@ document.addEventListener('DOMContentLoaded', () => {
           if (c && (c.owner || c.status)) {
             const statusLabel = c.status === 'hostile'
               ? '<span style="color:#f85149; font-weight:bold;">🔴 Вражеский</span>'
+              : c.status === 'ally'
+              ? '<span style="color:#bc8cff; font-weight:bold;">🟣 Гараж друга</span>'
               : c.status === 'loot'
               ? '<span style="color:#d29922; font-weight:bold;">🟡 Склад</span>'
               : c.status === 'neutral'
@@ -265,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const el = poly.getElement();
 
     if (el) {
-      el.classList.remove('status-friendly', 'status-hostile', 'status-loot', 'status-neutral');
+      el.classList.remove('status-friendly', 'status-ally', 'status-hostile', 'status-loot', 'status-neutral');
     }
 
     const isMission = (g && g.source === 'mission');
@@ -283,6 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const palette = {
       friendly: '#3fb950',
+      ally: '#bc8cff',
       hostile: '#f85149',
       loot: '#d29922',
       neutral: '#8b949e'
@@ -318,11 +321,65 @@ document.addEventListener('DOMContentLoaded', () => {
     other: L.layerGroup().addTo(map),
     territories: L.layerGroup().addTo(map)
   };
+  function cleanMarkerLabel(value) {
+    return String(value || '')
+      .replace(/^\s*amazingrp(?:g)?\.ru\s*\|\s*/i, '')
+      .trim();
+  }
+
+  let allSettlementsData = [];
+  let allDPMarkersData = [];
+
+  function getGarageLandmark(x, y) {
+    let nearestCity = null;
+    let minCityDist = Infinity;
+    if (allSettlementsData && allSettlementsData.length) {
+      for (let i = 0; i < allSettlementsData.length; i++) {
+        const c = allSettlementsData[i];
+        const d = Math.hypot(c.x - x, c.y - y);
+        if (d < minCityDist) {
+          minCityDist = d;
+          nearestCity = c;
+        }
+      }
+    }
+
+    let nearestDP = null;
+    let minDPDist = Infinity;
+    if (allDPMarkersData && allDPMarkersData.length) {
+      for (let i = 0; i < allDPMarkersData.length; i++) {
+        const dp = allDPMarkersData[i];
+        const d = Math.hypot(dp.x - x, dp.y - y);
+        if (d < minDPDist) {
+          minDPDist = d;
+          nearestDP = dp;
+        }
+      }
+    }
+
+    const fmt = (d) => {
+      if (isNaN(d) || d === Infinity) return '';
+      return d < 1000 ? `~${Math.round(d)}м` : `~${(d / 1000).toFixed(1)}км`;
+    };
+
+    return {
+      cityName: nearestCity ? nearestCity.name : '',
+      cityDist: minCityDist,
+      cityFormattedDist: fmt(minCityDist),
+      dpName: nearestDP ? (cleanMarkerLabel(nearestDP.text) || (nearestDP.name || '').toUpperCase()) : '',
+      dpDist: minDPDist,
+      dpFormattedDist: fmt(minDPDist)
+    };
+  }
+
   const citiesLayer = categoryLayers.names;
 
   fetch('/api/cities')
     .then(r => r.json())
     .then(cities => {
+      allSettlementsData = cities.filter(c => ['NameCityCapital', 'NameCity', 'NameVillage'].includes(c.type));
+      if (!allSettlementsData.length) allSettlementsData = cities;
+      renderClaimsTable();
       cities.forEach(c => {
         let cls = 'arma-city-village';
         let labelText = c.name;
@@ -357,15 +414,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // ======================================================================
   const allMarkerEntries = []; // { marker, data, cat }
 
-  function cleanMarkerLabel(value) {
-    return String(value || '')
-      .replace(/^\s*amazingrp(?:g)?\.ru\s*\|\s*/i, '')
-      .trim();
-  }
-
   fetch('/api/markers')
     .then(r => r.json())
     .then(markers => {
+      allDPMarkersData = markers.filter(m => m.category === 'dp' || (m.name && m.name.toLowerCase().startsWith('dp_')) || (m.text && /dp\s*\d+/i.test(m.text)));
+      renderClaimsTable();
       markers.forEach(m => {
         const isDP = (m.category === 'dp');
         const label = cleanMarkerLabel(m.text);
@@ -718,6 +771,12 @@ document.addEventListener('DOMContentLoaded', () => {
     renderClaimsTable();
   });
 
+  socket.on('squad_claims_all_updated', (claims) => {
+    claimsData = claims || {};
+    updateBuildingsVisuals();
+    renderClaimsTable();
+  });
+
   function renderSquadMembers(members) {
     const ul = document.getElementById('squad-members-list');
     if (!ul) return;
@@ -956,7 +1015,13 @@ document.addEventListener('DOMContentLoaded', () => {
     selectedBuilding = b;
     panelName.textContent   = b.name || (b.type || '').replace(/^Land_/, '');
     panelId.textContent     = `ID: ${b.id}`;
-    panelCoords.textContent = `X: ${b.x}, Y: ${b.y}`;
+
+    const lm = getGarageLandmark(b.x, b.y);
+    const lmParts = [];
+    if (lm.cityName) lmParts.push(`🏙️ ${lm.cityName} (${lm.cityFormattedDist})`);
+    if (lm.dpName) lmParts.push(`📦 ${lm.dpName} (${lm.dpFormattedDist})`);
+    const lmText = lmParts.join(' • ');
+    panelCoords.innerHTML = `X: ${Math.round(b.x)}, Y: ${Math.round(b.y)}${lmText ? `<br><small style="color:#e3b341; font-weight:500;">${lmText}</small>` : ''}`;
 
     const c = claimsData[b.id] || {};
     ownerIn.value  = (c.owner !== undefined) ? c.owner : '';
@@ -1256,7 +1321,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAuth();
 
   // ======================================================================
-  //  11. МОДАЛКА СПИСКА БАЗ
+  //  11. МОДАЛКА СПИСКА ГАРАЖЕЙ И МАССОВАЯ СМЕНА ПАРОЛЕЙ
   // ======================================================================
   const claimsModal = document.getElementById('claims-modal');
   document.getElementById('btn-claims-list').addEventListener('click', () => {
@@ -1267,28 +1332,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderClaimsTable() {
     const tbody = document.getElementById('claims-table-body');
-    const filter = (document.getElementById('search-claims-input')?.value || '').toLowerCase();
+    const filter = (document.getElementById('search-claims-input')?.value || '').toLowerCase().trim();
     tbody.innerHTML = '';
 
-    const list = Object.values(claimsData).filter(c =>
-      (c.owner    && c.owner.toLowerCase().includes(filter)) ||
-      (c.type     && c.type.toLowerCase().includes(filter)) ||
-      (c.password && c.password.toLowerCase().includes(filter)) ||
-      (c.id       && c.id.toLowerCase().includes(filter))
-    );
+    const list = Object.values(claimsData).filter(c => {
+      const lm = getGarageLandmark(c.x, c.y);
+      const matchLM = (lm.cityName && lm.cityName.toLowerCase().includes(filter)) ||
+                      (lm.dpName && lm.dpName.toLowerCase().includes(filter));
+      return matchLM ||
+        (c.owner    && c.owner.toLowerCase().includes(filter)) ||
+        (c.type     && c.type.toLowerCase().includes(filter)) ||
+        (c.password && c.password.toLowerCase().includes(filter)) ||
+        (c.id       && c.id.toLowerCase().includes(filter));
+    });
 
     if (!list.length) {
-      tbody.innerHTML = '<tr><td colspan="6" class="text-center">Нет сохраненных баз/гаражей</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center">Нет сохраненных гаражей</td></tr>';
       return;
     }
 
     list.forEach(c => {
       const tr = document.createElement('tr');
-      const icon = c.status === 'hostile' ? '🔴 Враг' : c.status === 'loot' ? '🟡 Склад' : c.status === 'neutral' ? '⚪ Свободен' : '🟢 Наш';
+      const icon = c.status === 'hostile' ? '🔴 Враг'
+        : c.status === 'ally' ? '🟣 Друг'
+        : c.status === 'loot' ? '🟡 Склад'
+        : c.status === 'neutral' ? '⚪ Свободен'
+        : '🟢 Наш';
+
+      const lm = getGarageLandmark(c.x, c.y);
+
       tr.innerHTML = `
         <td>${icon}</td>
         <td><b>${(c.type || '').replace(/^Land_/, '')}</b><br><small style="color:#8b949e">${c.id}</small></td>
-        <td style="font-family:var(--font-mono);font-size:12px">X: ${c.x} | Y: ${c.y}</td>
+        <td style="font-size:12px; line-height:1.45;">
+          ${lm.cityName ? `<div style="font-weight:600; color:#e6edf3;">🏙️ ${lm.cityName} <small style="color:#8b949e; font-weight:normal;">(${lm.cityFormattedDist})</small></div>` : ''}
+          ${lm.dpName ? `<div style="color:#e3b341; font-weight:500;">📦 ${lm.dpName} <small style="color:#8b949e; font-weight:normal;">(${lm.dpFormattedDist})</small></div>` : ''}
+          <div style="font-family:var(--font-mono); font-size:11px; color:#58a6ff; margin-top:2px;">X: ${Math.round(c.x)} | Y: ${Math.round(c.y)}</div>
+        </td>
         <td style="color:#58a6ff">${c.owner || '—'}</td>
         <td><code>${c.password ? '••••••' : '—'}</code></td>
         <td><button class="btn btn-secondary" data-fly="${c.id}" data-x="${c.x}" data-y="${c.y}">НАЙТИ</button></td>`;
@@ -1309,6 +1389,83 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.getElementById('search-claims-input')?.addEventListener('input', renderClaimsTable);
+
+  async function performBulkPasswordChange(newPassword, msgElement) {
+    if (!currentUser) {
+      alert('Пожалуйста, сначала авторизуйтесь!');
+      return;
+    }
+    const cleanPass = String(newPassword !== undefined ? newPassword : '').trim();
+    if (!cleanPass) {
+      if (!confirm('Вы оставили пароль пустым. Снять пароль со всех наших зеленых гаражей (Наш гараж / База)?')) {
+        return;
+      }
+    } else {
+      if (!confirm(`Установить новый пароль "${cleanPass}" на ВСЕ гаражи со статусом 🟢 «Наш гараж»?`)) {
+        return;
+      }
+    }
+
+    if (msgElement) {
+      msgElement.style.display = 'block';
+      msgElement.style.color = '#58a6ff';
+      msgElement.textContent = 'Обновление паролей...';
+    }
+
+    try {
+      const res = await fetch('/api/squads/bulk_password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ newPassword: cleanPass })
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        if (msgElement) {
+          msgElement.style.color = '#f85149';
+          msgElement.textContent = `Ошибка: ${data.error || 'Не удалось сменить пароли'}`;
+        } else {
+          alert(`Ошибка: ${data.error || 'Не удалось сменить пароли'}`);
+        }
+        return;
+      }
+
+      if (data.claims) {
+        claimsData = data.claims;
+        updateBuildingsVisuals();
+        renderClaimsTable();
+      }
+
+      const countMsg = `Успешно! Обновлено гаражей: ${data.count || 0}. Пароль изменен на: ${cleanPass ? '••••••' : 'без пароля'}`;
+      if (msgElement) {
+        msgElement.style.color = '#3fb950';
+        msgElement.textContent = countMsg;
+        setTimeout(() => { msgElement.style.display = 'none'; }, 6000);
+      } else {
+        alert(countMsg);
+      }
+    } catch (e) {
+      console.error(e);
+      if (msgElement) {
+        msgElement.style.color = '#f85149';
+        msgElement.textContent = 'Ошибка сети при смене паролей';
+      }
+    }
+  }
+
+  document.getElementById('btn-bulk-change-password')?.addEventListener('click', () => {
+    const val = document.getElementById('bulk-garage-password-input')?.value;
+    const msg = document.getElementById('bulk-pass-status-msg');
+    performBulkPasswordChange(val, msg);
+  });
+
+  document.getElementById('btn-bulk-change-password-quick')?.addEventListener('click', () => {
+    const val = document.getElementById('bulk-garage-password-input-quick')?.value;
+    const msg = document.getElementById('bulk-pass-quick-msg');
+    performBulkPasswordChange(val, msg);
+  });
 
   // ======================================================================
   //  12. ПАНЕЛЬ «НАСТРОЙКА КАРТЫ» (ФИЛЬТРАЦИЯ 11 КАТЕГОРИЙ И ПОИСК)

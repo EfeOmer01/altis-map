@@ -550,6 +550,49 @@ app.post('/api/squads/passcode', authMiddleware, (req, res) => {
   res.json({ success: true, passcode: squad.passcode });
 });
 
+// 5.1. Массовая смена паролей на дружественных гаражах (зеленые «Наш гараж / База»)
+app.post('/api/squads/bulk_password', authMiddleware, (req, res) => {
+  const { newPassword } = req.body;
+  const sName = req.user.squadId;
+  const cleanPass = String(newPassword !== undefined ? newPassword : '').trim();
+
+  if (sName && squadsDb[sName]) {
+    const squad = squadsDb[sName];
+    squad.claims = squad.claims || {};
+    let count = 0;
+
+    Object.keys(squad.claims).forEach(id => {
+      const c = squad.claims[id];
+      if (c && (c.status === 'friendly' || !c.status)) {
+        c.password = cleanPass;
+        c.updatedBy = req.user.name || 'Боец';
+        c.updatedAt = new Date().toISOString();
+        count++;
+      }
+    });
+
+    persistSquad(squad);
+    io.to(sName).emit('squad_claims_all_updated', squad.claims);
+    return res.json({ success: true, count, claims: squad.claims });
+  } else {
+    req.user.personalGarages = req.user.personalGarages || {};
+    let count = 0;
+
+    Object.keys(req.user.personalGarages).forEach(id => {
+      const c = req.user.personalGarages[id];
+      if (c && (c.status === 'friendly' || !c.status)) {
+        c.password = cleanPass;
+        c.updatedBy = req.user.name || 'Боец';
+        c.updatedAt = new Date().toISOString();
+        count++;
+      }
+    });
+
+    persistUser(req.user);
+    return res.json({ success: true, count, claims: req.user.personalGarages });
+  }
+});
+
 // 6. Роспуск / удаление сквада (ТОЛЬКО ДЛЯ ЛИДЕРА)
 app.post('/api/squads/disband', authMiddleware, async (req, res) => {
   const sName = req.user.squadId;
@@ -816,6 +859,47 @@ io.on('connection', (socket) => {
         persistUser(currentUser);
         socket.emit('claim_removed', claimId);
       }
+    }
+  });
+
+  // Массовая смена паролей на дружественных гаражах
+  socket.on('bulk_update_friendly_passwords', ({ newPassword }, callback) => {
+    if (!currentUser) {
+      if (typeof callback === 'function') callback({ success: false, error: 'Необходима авторизация' });
+      return;
+    }
+    const cleanPass = String(newPassword !== undefined ? newPassword : '').trim();
+    let count = 0;
+
+    if (currentSquad && squadsDb[currentSquad]) {
+      const squad = squadsDb[currentSquad];
+      squad.claims = squad.claims || {};
+      Object.keys(squad.claims).forEach(id => {
+        const c = squad.claims[id];
+        if (c && (c.status === 'friendly' || !c.status)) {
+          c.password = cleanPass;
+          c.updatedBy = currentUser.name || 'Боец';
+          c.updatedAt = new Date().toISOString();
+          count++;
+        }
+      });
+      persistSquad(squad);
+      io.to(currentSquad).emit('squad_claims_all_updated', squad.claims);
+      if (typeof callback === 'function') callback({ success: true, count, claims: squad.claims });
+    } else {
+      currentUser.personalGarages = currentUser.personalGarages || {};
+      Object.keys(currentUser.personalGarages).forEach(id => {
+        const c = currentUser.personalGarages[id];
+        if (c && (c.status === 'friendly' || !c.status)) {
+          c.password = cleanPass;
+          c.updatedBy = currentUser.name || 'Боец';
+          c.updatedAt = new Date().toISOString();
+          count++;
+        }
+      });
+      persistUser(currentUser);
+      socket.emit('squad_claims_all_updated', currentUser.personalGarages);
+      if (typeof callback === 'function') callback({ success: true, count, claims: currentUser.personalGarages });
     }
   });
 

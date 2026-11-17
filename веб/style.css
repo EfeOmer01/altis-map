@@ -356,11 +356,17 @@ body {
   filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.95));
 }
 
-/* Статусы гаражей: Наш (зеленый), Враг (красный), Склад (желтый), Свободный (серый) */
+/* Статусы гаражей: Наш (зеленый), Союзник/Друг (фиолетовый), Враг (красный), Склад (желтый), Свободный (серый) */
 .garage-polygon.status-friendly {
   stroke: #3fb950 !important;
   fill: rgba(63, 185, 80, 0.88) !important;
   filter: drop-shadow(0 0 8px rgba(63, 185, 80, 0.9)) !important;
+}
+
+.garage-polygon.status-ally {
+  stroke: #bc8cff !important;
+  fill: rgba(188, 140, 255, 0.88) !important;
+  filter: drop-shadow(0 0 8px rgba(188, 140, 255, 0.95)) !important;
 }
 
 .garage-polygon.status-hostile {
