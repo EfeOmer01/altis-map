@@ -267,7 +267,13 @@ app.post('/api/auth/register', (req, res) => {
   const cleanUser = String(username).trim().toLowerCase();
   const exists = Object.values(usersDb).find(u => u.username === cleanUser);
   if (exists) {
-    return res.status(400).json({ error: 'Пользователь с таким логином уже существует' });
+    // Если пользователь уже есть и пароль верный — просто выполняем вход!
+    if (exists.passwordHash === hashPassword(password)) {
+      exists.token = generateToken();
+      persistUser(exists);
+      return res.json({ token: exists.token, user: sanitizeUser(exists) });
+    }
+    return res.status(400).json({ error: 'Пользователь с таким логином уже существует. Введите верный пароль.' });
   }
 
   const id = 'u_' + crypto.randomBytes(8).toString('hex');
@@ -291,7 +297,7 @@ app.post('/api/auth/register', (req, res) => {
   res.json({ token, user: sanitizeUser(newUser) });
 });
 
-// 2. Вход по логину и паролю
+// 2. Вход по логину и паролю (с авто-созданием аккаунта в облачной базе MongoDB)
 app.post('/api/auth/login', (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
@@ -299,10 +305,32 @@ app.post('/api/auth/login', (req, res) => {
   }
 
   const cleanUser = String(username).trim().toLowerCase();
-  const user = Object.values(usersDb).find(u => u.username === cleanUser);
+  let user = Object.values(usersDb).find(u => u.username === cleanUser);
+
+  // Если пользователя еще нет в MongoDB Atlas:
+  // Автоматически регистрируем его прямо сейчас, чтобы никогда не было ошибки "аккаунт потерян"!
   if (!user) {
-    return res.status(401).json({ error: `Пользователь "${username}" не найден в базе. Нажмите вкладку «Регистрация», чтобы создать аккаунт.` });
+    const id = 'u_' + crypto.randomBytes(8).toString('hex');
+    const token = generateToken();
+    user = {
+      id,
+      username: cleanUser,
+      passwordHash: hashPassword(password),
+      googleId: null,
+      name: String(username).trim(),
+      avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=' + cleanUser,
+      squadId: null,
+      personalGarages: {},
+      token,
+      createdAt: new Date().toISOString()
+    };
+    usersDb[id] = user;
+    persistUser(user);
+    console.log(`✅ Пользователь "${cleanUser}" автоматически зарегистрирован в MongoDB Atlas и авторизован.`);
+    return res.json({ token: user.token, user: sanitizeUser(user) });
   }
+
+  // Если пользователь уже существует — проверяем пароль
   if (user.passwordHash !== hashPassword(password)) {
     return res.status(401).json({ error: 'Неверный пароль' });
   }
