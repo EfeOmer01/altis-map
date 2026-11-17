@@ -17,7 +17,8 @@ const DATA_DIR = path.join(__dirname, '..', 'данные');
 const WEB_DIR = path.join(__dirname, '..', 'веб');
 const SQUADS_FILE = path.join(DATA_DIR, 'база_сквадов.json');
 const USERS_FILE = path.join(DATA_DIR, 'база_пользователей.json');
-const MONGODB_URI = process.env.MONGODB_URI;
+const DEFAULT_MONGO_URI = 'mongodb+srv://efeomer311_db_user:xCDOhWuErezwGYA7@cluster0.zdcamq0.mongodb.net/altismap?retryWrites=true&w=majority&appName=Cluster0';
+const MONGODB_URI = process.env.MONGODB_URI || DEFAULT_MONGO_URI;
 
 app.use(cors());
 app.use(express.json());
@@ -25,10 +26,11 @@ app.use(express.json());
 // Health-check для UptimeRobot
 app.get('/health', (req, res) => res.status(200).send('OK'));
 
-// Публичный конфиг для клиента (Google Client ID)
+// Публичный конфиг для клиента
 app.get('/api/config', (req, res) => {
   res.json({
-    googleClientId: process.env.GOOGLE_CLIENT_ID || ''
+    googleClientId: process.env.GOOGLE_CLIENT_ID || '',
+    mongoConnected: useMongoDb
   });
 });
 
@@ -126,9 +128,6 @@ function cleanupTargetSquad(targetRegex) {
   }
 }
 
-// Первичная очистка сквада ENOT / енот
-cleanupTargetSquad(/^(enot|енот)$/i);
-
 async function syncUserToMongo(u) {
   if (useMongoDb && User && u) {
     try {
@@ -219,15 +218,6 @@ if (MONGODB_URI) {
       } else if (Object.keys(squadsDb).length > 0) {
         for (const s of Object.values(squadsDb)) await syncSquadToMongo(s);
       }
-
-      // Удаление ENOT / енот из Mongo
-      try {
-        await Squad.deleteMany({ name: { $regex: /^(enot|енот)$/i } });
-        console.log('✅ Сквад ENOT/енот удален из MongoDB Atlas');
-      } catch (e) {
-        console.error('Ошибка удаления ENOT из Mongo:', e);
-      }
-      cleanupTargetSquad(/^(enot|енот)$/i);
     })
     .catch(err => {
       console.error('⚠️ Ошибка подключения к MongoDB:', err.message);
