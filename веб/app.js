@@ -362,13 +362,17 @@ document.addEventListener('DOMContentLoaded', () => {
       return d < 1000 ? `~${Math.round(d)}м` : `~${(d / 1000).toFixed(1)}км`;
     };
 
+    // Если гараж дальше 700 метров от DP, НЕ привязываем к DP (только деревня/город)
+    const hasNearbyDP = (minDPDist <= 700 && nearestDP);
+    const dpLabel = hasNearbyDP ? (cleanMarkerLabel(nearestDP.text) || (nearestDP.name || '').toUpperCase()) : '';
+
     return {
       cityName: nearestCity ? nearestCity.name : '',
       cityDist: minCityDist,
       cityFormattedDist: fmt(minCityDist),
-      dpName: nearestDP ? (cleanMarkerLabel(nearestDP.text) || (nearestDP.name || '').toUpperCase()) : '',
-      dpDist: minDPDist,
-      dpFormattedDist: fmt(minDPDist)
+      dpName: dpLabel,
+      dpDist: hasNearbyDP ? minDPDist : Infinity,
+      dpFormattedDist: hasNearbyDP ? fmt(minDPDist) : ''
     };
   }
 
@@ -377,7 +381,16 @@ document.addEventListener('DOMContentLoaded', () => {
   fetch('/api/cities')
     .then(r => r.json())
     .then(cities => {
-      allSettlementsData = cities.filter(c => ['NameCityCapital', 'NameCity', 'NameVillage'].includes(c.type));
+      const isNamedPlace = c => {
+        if (['NameCityCapital', 'NameCity', 'NameVillage'].includes(c.type)) return true;
+        if (c.type === 'NameLocal') {
+          if (/^(factory|military|quarry|dump|airbase|terminal|storage|mine|power plant)/i.test(c.name)) return false;
+          if (['castle', 'dump'].includes((c.name || '').toLowerCase())) return false;
+          return true;
+        }
+        return false;
+      };
+      allSettlementsData = cities.filter(isNamedPlace);
       if (!allSettlementsData.length) allSettlementsData = cities;
       renderClaimsTable();
       cities.forEach(c => {
@@ -1330,6 +1343,142 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('modal-claims-close').addEventListener('click', () => claimsModal.classList.add('hidden'));
 
+  function normalizeDP(s) {
+    if (!s) return '';
+    return String(s).toLowerCase().replace(/дп/g, 'dp').replace(/[\s\-_]/g, '');
+  }
+
+  function ruToEn(str) {
+    const map = {
+      'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'e','ж':'zh',
+      'з':'z','и':'i','й':'y','к':'k','л':'l','м':'m','н':'n','о':'o',
+      'п':'p','р':'r','с':'s','т':'t','у':'u','ф':'f','х':'ch','ц':'ts',
+      'ч':'ch','ш':'sh','щ':'sch','ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya'
+    };
+    return str.toLowerCase().split('').map(ch => map[ch] !== undefined ? map[ch] : ch).join('');
+  }
+
+  function switchLayout(s) {
+    const enToRu = {
+      'q':'й','w':'ц','e':'у','r':'к','t':'е','y':'н','u':'г','i':'ш','o':'щ','p':'з','[':'х',']':'ъ',
+      'a':'ф','s':'ы','d':'в','f':'а','g':'п','h':'р','j':'о','k':'л','l':'д',';':'ж','\'':'э',
+      'z':'я','x':'ч','c':'с','v':'м','b':'и','n':'т','m':'ь',',':'б','.':'ю'
+    };
+    const ruToEn = {};
+    for (const [k, v] of Object.entries(enToRu)) ruToEn[v] = k;
+    return s.split('').map(ch => ruToEn[ch] || enToRu[ch] || ch).join('');
+  }
+
+  const ALTIS_NAMES_RU = {
+    'kavala': 'кавала',
+    'pyrgos': 'пиргос',
+    'athira': 'атира афира',
+    'sofia': 'софия',
+    'zaros': 'зарос',
+    'neochori': 'неохори',
+    'panochori': 'панохори',
+    'neri': 'нери',
+    'aggelochori': 'аггелохори ангелохори',
+    'paros': 'парос',
+    'kalochori': 'калохори',
+    'chalkeia': 'халкия халкея',
+    'charkia': 'харкия чаркия',
+    'agios dionysios': 'агиос дионисиос',
+    'agios konstantinos': 'агиос константинос',
+    'agios petros': 'агиос петрос',
+    'agia triada': 'агиа триада айя триада',
+    'abdera': 'абдера',
+    'alikampos': 'аликампос',
+    'anthrakia': 'антракия анфракия',
+    'delfinaki': 'дельфинаки',
+    'dorida': 'дорида',
+    'ekali': 'экали екали',
+    'feres': 'ферес',
+    'frini': 'фрини',
+    'galati': 'галати',
+    'gravia': 'гравия',
+    'ifestiona': 'ифестиона',
+    'ioannina': 'иоаннина',
+    'kalithea': 'калитея калифея',
+    'katalaki': 'каталаки',
+    'kore': 'коре',
+    'koroni': 'корони',
+    'lakka': 'лакка',
+    'molos': 'молос',
+    'negades': 'негадес',
+    'nifi': 'нифи',
+    'oreokastro': 'ореокастро',
+    'orino': 'орино',
+    'panagia': 'панагия',
+    'poliakko': 'полиакко',
+    'rodopoli': 'родополи',
+    'selakano': 'селакано',
+    'stavros': 'ставрос',
+    'syrta': 'сирта',
+    'telos': 'телос',
+    'therisa': 'териса фериса',
+    'topolia': 'тополия',
+    'zeloran': 'зелоран',
+    'drimea': 'дримея',
+    'edessa': 'эдесса едесса',
+    'vikos': 'викос',
+    'trachia': 'трахия тракия',
+    'mazi': 'мази',
+    'livadi': 'ливади',
+    'limni': 'лимни',
+    'almyra': 'алмира алмыра',
+    'iraklia': 'ираклия',
+    'nidasos': 'нидасос',
+    'gatolia': 'гатолия',
+    'polemistia': 'полемистия',
+    'limnichori': 'лимнихори',
+    'sideras': 'сидерас',
+    'bomos': 'бомос',
+    'aristi': 'аристи',
+    'fotia': 'фотия',
+    'gori': 'гори',
+    'krya nera': 'крия нера крыа нера',
+    'amfissa': 'амфисса амфиса',
+    'kastro': 'кастро',
+    'faros': 'фарос'
+  };
+
+  function matchGarageSearch(c, lm, filter) {
+    if (!filter) return true;
+    const f = filter.toLowerCase().trim();
+    const fSwitched = switchLayout(f).toLowerCase().trim();
+    const fEn = ruToEn(f);
+
+    // 1. Поиск по DP (дп 7, дп7, dp 7, dp7, dp-7...)
+    const fNormDP = normalizeDP(f);
+    const fSwitchedDP = normalizeDP(fSwitched);
+    if (lm.dpName) {
+      const dpNorm = normalizeDP(lm.dpName);
+      if ((fNormDP.startsWith('dp') && dpNorm.includes(fNormDP)) ||
+          (fSwitchedDP.startsWith('dp') && dpNorm.includes(fSwitchedDP))) {
+        return true;
+      }
+      if ((dpNorm.includes(fNormDP) && fNormDP.length >= 2) ||
+          (dpNorm.includes(fSwitchedDP) && fSwitchedDP.length >= 2)) {
+        return true;
+      }
+    }
+
+    // 2. Поиск по городу/локации (русский и английский: zeloran = зелоран, kavala = кавала...)
+    if (lm.cityName) {
+      const cn = lm.cityName.toLowerCase();
+      const ruAliases = ALTIS_NAMES_RU[cn] || '';
+      if (cn.includes(f) || cn.includes(fEn) || cn.includes(fSwitched)) return true;
+      if (ruAliases.includes(f) || ruAliases.includes(fSwitched)) return true;
+    }
+
+    // 3. Стандартные поля гаража: владелец, ID, тип, пароль
+    return (c.owner    && (c.owner.toLowerCase().includes(f) || c.owner.toLowerCase().includes(fSwitched))) ||
+           (c.type     && (c.type.toLowerCase().includes(f) || c.type.toLowerCase().includes(fSwitched))) ||
+           (c.password && (c.password.toLowerCase().includes(f))) ||
+           (c.id       && (c.id.toLowerCase().includes(f) || c.id.toLowerCase().includes(fSwitched)));
+  }
+
   function renderClaimsTable() {
     const tbody = document.getElementById('claims-table-body');
     const filter = (document.getElementById('search-claims-input')?.value || '').toLowerCase().trim();
@@ -1337,19 +1486,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const list = Object.values(claimsData).filter(c => {
       const lm = getGarageLandmark(c.x, c.y);
-      const matchLM = (lm.cityName && lm.cityName.toLowerCase().includes(filter)) ||
-                      (lm.dpName && lm.dpName.toLowerCase().includes(filter));
-      return matchLM ||
-        (c.owner    && c.owner.toLowerCase().includes(filter)) ||
-        (c.type     && c.type.toLowerCase().includes(filter)) ||
-        (c.password && c.password.toLowerCase().includes(filter)) ||
-        (c.id       && c.id.toLowerCase().includes(filter));
+      return matchGarageSearch(c, lm, filter);
     });
 
     if (!list.length) {
       tbody.innerHTML = '<tr><td colspan="6" class="text-center">Нет сохраненных гаражей</td></tr>';
       return;
     }
+
+    // Сортировка: Сначала наши 🟢, потом друзья 🟣, склад 🟡, враги 🔴, свободные ⚪
+    const statusPriority = { friendly: 1, ally: 2, loot: 3, hostile: 4, neutral: 5 };
+    list.sort((a, b) => {
+      const pA = statusPriority[a.status] || 1;
+      const pB = statusPriority[b.status] || 1;
+      if (pA !== pB) return pA - pB;
+      const lmA = getGarageLandmark(a.x, a.y);
+      const lmB = getGarageLandmark(b.x, b.y);
+      return (lmA.cityName || '').localeCompare(lmB.cityName || '');
+    });
 
     list.forEach(c => {
       const tr = document.createElement('tr');
@@ -1620,14 +1774,27 @@ document.addEventListener('DOMContentLoaded', () => {
   function filterMarkersByQuery(query) {
     currentSearchResults = [];
     currentSearchIdx = 0;
-    const hasQuery = query.length > 0;
+    const q = (query || '').toLowerCase().trim();
+    const hasQuery = q.length > 0;
+    const qSwitched = switchLayout(q).toLowerCase().trim();
+    const qEn = ruToEn(q);
+    const qNormDP = normalizeDP(q);
 
     allMarkerEntries.forEach(entry => {
       const m = entry.data;
-      const match = !hasQuery ||
-        (m.text && m.text.toLowerCase().includes(query)) ||
-        (m.name && m.name.toLowerCase().includes(query)) ||
-        (m.type && m.type.toLowerCase().includes(query));
+      let match = !hasQuery;
+      if (hasQuery) {
+        const text = (m.text || '').toLowerCase();
+        const name = (m.name || '').toLowerCase();
+        const type = (m.type || '').toLowerCase();
+        const normDP = normalizeDP(text) || normalizeDP(name);
+
+        match = text.includes(q) || text.includes(qSwitched) || text.includes(qEn) ||
+                name.includes(q) || name.includes(qSwitched) || name.includes(qEn) ||
+                type.includes(q) ||
+                (qNormDP.startsWith('dp') && normDP.includes(qNormDP)) ||
+                (normDP.includes(qNormDP) && qNormDP.length >= 2);
+      }
 
       const catChecked = isCategoryChecked(entry.cat);
       const lyr = categoryLayers[entry.cat];
