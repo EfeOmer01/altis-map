@@ -48,6 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     openModal('squad-modal');
+    if (authToken && typeof socket !== 'undefined' && socket) {
+      socket.emit('auth_socket', { token: authToken });
+    }
   });
 
   // Крестики закрытия модалок

@@ -716,7 +716,7 @@ app.post('/api/squads/request_join', authMiddleware, (req, res) => {
 });
 
 // 8. Принятие заявки (ТОЛЬКО ДЛЯ ЛИДЕРА)
-app.post('/api/squads/accept_request', authMiddleware, (req, res) => {
+app.post('/api/squads/accept_request', authMiddleware, async (req, res) => {
   const { targetUserId } = req.body;
   const sName = req.user.squadId;
   const squad = squadsDb[sName];
@@ -726,9 +726,17 @@ app.post('/api/squads/accept_request', authMiddleware, (req, res) => {
     return res.status(403).json({ error: 'Только командир может принимать заявки' });
   }
 
+  let targetUser = usersDb[targetUserId];
+  if (!targetUser && mongoConnected) {
+    const doc = await User.findOne({ id: targetUserId });
+    if (doc) {
+      targetUser = doc.toObject();
+      usersDb[targetUserId] = targetUser;
+    }
+  }
+
   squad.joinRequests = (squad.joinRequests || []).filter(r => r.userId !== targetUserId);
 
-  const targetUser = usersDb[targetUserId];
   if (!targetUser) {
     persistSquad(squad);
     return res.status(404).json({ error: 'Пользователь не найден' });
