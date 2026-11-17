@@ -544,6 +544,12 @@ app.post('/api/squads/leave', authMiddleware, (req, res) => {
   res.json({ success: true, user: sanitizeUser(req.user) });
 });
 
+function isSquadAdminOrLeader(squad, userId) {
+  if (!squad || !userId) return false;
+  if (squad.leaderId === userId) return true;
+  return (squad.members || []).some(m => m.userId === userId && (m.role === 'admin' || m.role === 'leader'));
+}
+
 // 4. Кик участника (ТОЛЬКО ДЛЯ ЛИДЕРА)
 app.post('/api/squads/kick', authMiddleware, (req, res) => {
   const { targetUserId } = req.body;
@@ -574,6 +580,37 @@ app.post('/api/squads/kick', authMiddleware, (req, res) => {
   res.json({ success: true, members: squad.members });
 });
 
+// 4.1. Изменение роли участника (Повышение до админа / понижение до бойца - ТОЛЬКО ДЛЯ ЛИДЕРА)
+app.post('/api/squads/set_role', authMiddleware, (req, res) => {
+  const { targetUserId, newRole } = req.body;
+  const sName = req.user.squadId;
+  const squad = squadsDb[sName];
+
+  if (!squad) return res.status(404).json({ error: 'Сквад не найден' });
+  if (squad.leaderId !== req.user.id) {
+    return res.status(403).json({ error: 'Только командир сквада может назначать администраторов' });
+  }
+  if (!['admin', 'member'].includes(newRole)) {
+    return res.status(400).json({ error: 'Недопустимая роль. Допустимы: admin, member' });
+  }
+  if (targetUserId === req.user.id) {
+    return res.status(400).json({ error: 'Нельзя изменить роль создателя (командира) сквада' });
+  }
+
+  const member = (squad.members || []).find(m => m.userId === targetUserId);
+  if (!member) {
+    return res.status(404).json({ error: 'Участник не найден в составе сквада' });
+  }
+
+  member.role = newRole;
+  persistSquad(squad);
+
+  // Оповещаем сокет-комнату сквада в реальном времени
+  io.to(sName).emit('squad_members_updated', squad.members);
+
+  res.json({ success: true, member, members: squad.members });
+});
+
 // 5. Смена пароля сквада (ТОЛЬКО ДЛЯ ЛИДЕРА)
 app.post('/api/squads/passcode', authMiddleware, (req, res) => {
   const { newPasscode } = req.body;
@@ -591,7 +628,7 @@ app.post('/api/squads/passcode', authMiddleware, (req, res) => {
   res.json({ success: true, passcode: squad.passcode });
 });
 
-// 5.1. Массовая смена паролей на дружественных гаражах (зеленые «Наш гараж / База»)
+// 5.1. Массовая смена паролей на дружественных гаражах (ТОЛЬКО ДЛЯ АДМИНОВ И КОМАНДИРА)
 app.post('/api/squads/bulk_password', authMiddleware, (req, res) => {
   const { newPassword } = req.body;
   const sName = req.user.squadId;
@@ -599,6 +636,12 @@ app.post('/api/squads/bulk_password', authMiddleware, (req, res) => {
 
   if (sName && squadsDb[sName]) {
     const squad = squadsDb[sName];
+
+    // Проверка прав: только админы и лидер
+    if (!isSquadAdminOrLeader(squad, req.user.id)) {
+      return res.status(403).json({ error: 'Только администраторы и командир сквада могут массово менять пароли' });
+    }
+
     squad.claims = squad.claims || {};
     let count = 0;
 
@@ -606,7 +649,7 @@ app.post('/api/squads/bulk_password', authMiddleware, (req, res) => {
       const c = squad.claims[id];
       if (c && (c.status === 'friendly' || !c.status)) {
         c.password = cleanPass;
-        c.updatedBy = req.user.name || 'Боец';
+        c.updatedBy = req.user.name || 'Админ';
         c.updatedAt = new Date().toISOString();
         count++;
       }

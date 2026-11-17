@@ -854,12 +854,26 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const isLeader = currentUser && currentSquadData && currentSquadData.leaderId === currentUser.id;
+    const myMember = currentSquadData?.members?.find(m => m.userId === currentUser?.id);
+    const isLeader = currentUser && currentSquadData && (currentSquadData.leaderId === currentUser.id || myMember?.role === 'leader');
+    const isAdmin = myMember?.role === 'admin';
+    const canManageAdmin = isLeader || isAdmin;
+
     const roleBadge = document.getElementById('active-user-role');
     if (roleBadge) {
-      roleBadge.textContent = isLeader ? 'Командир' : 'Боец';
-      roleBadge.style.borderColor = isLeader ? '#eab308' : '#3b82f6';
-      roleBadge.style.color = isLeader ? '#fde047' : '#93c5fd';
+      if (isLeader) {
+        roleBadge.textContent = 'Командир';
+        roleBadge.style.borderColor = '#eab308';
+        roleBadge.style.color = '#fde047';
+      } else if (isAdmin) {
+        roleBadge.textContent = 'Админ';
+        roleBadge.style.borderColor = '#a855f7';
+        roleBadge.style.color = '#c084fc';
+      } else {
+        roleBadge.textContent = 'Боец';
+        roleBadge.style.borderColor = '#3b82f6';
+        roleBadge.style.color = '#93c5fd';
+      }
     }
 
     const leaderPanel = document.getElementById('leader-control-panel');
@@ -868,8 +882,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (isLeader) disbandBtn.classList.remove('hidden');
       else disbandBtn.classList.add('hidden');
     }
+
+    // Панель управления (ссылка, заявки, массовая смена паролей) доступна Лидеру и Админам
     if (leaderPanel) {
-      if (isLeader) {
+      if (canManageAdmin) {
         leaderPanel.classList.remove('hidden');
         const passIn = document.getElementById('squad-passcode-input');
         if (passIn && currentSquadData.passcode) passIn.value = currentSquadData.passcode;
@@ -883,22 +899,66 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // В модалке Списка Гаражей скрываем быструю смену паролей для обычных бойцов
+    const bulkQuickWrap = document.getElementById('bulk-garage-password-wrap-quick');
+    if (bulkQuickWrap) {
+      if (!currentUser?.squadId || canManageAdmin) {
+        bulkQuickWrap.classList.remove('hidden');
+      } else {
+        bulkQuickWrap.classList.add('hidden');
+      }
+    }
+
     members.forEach(m => {
       const li = document.createElement('li');
       li.className = 'member-item';
 
       const isOnline = currentOnlineIds.has(m.userId);
-      const isMemberLeader = currentSquadData && currentSquadData.leaderId === m.userId;
+      const isMemberLeader = currentSquadData && (currentSquadData.leaderId === m.userId || m.role === 'leader');
+      const isMemberAdmin = !isMemberLeader && m.role === 'admin';
+
+      const roleBadgeHtml = isMemberLeader 
+        ? '<span class="member-role-badge role-leader">👑 Командир</span>' 
+        : isMemberAdmin 
+        ? '<span class="member-role-badge role-admin">🛡️ Админ</span>' 
+        : '<span class="member-role-badge role-member">👤 Боец</span>';
 
       li.innerHTML = `
         <div class="member-info-col">
           <span class="member-status-dot ${isOnline ? 'online' : ''}" title="${isOnline ? 'В сети' : 'Не в сети'}"></span>
           <img src="${m.avatar || ('https://api.dicebear.com/7.x/bottts/svg?seed=' + m.userId)}" class="member-avatar" alt="">
-          <span class="member-name">${m.name || 'Боец'} ${isMemberLeader ? '👑' : ''}</span>
+          <span class="member-name">${m.name || 'Боец'}</span>
+          ${roleBadgeHtml}
         </div>
+        <div class="member-actions"></div>
       `;
 
+      const actionsCol = li.querySelector('.member-actions');
+
+      // Кнопки управления участником — ТОЛЬКО ДЛЯ КОМАНДИРА (ЛИДЕРА)
       if (isLeader && m.userId !== currentUser.id) {
+        // Кнопка повышения / понижения роли
+        const roleBtn = document.createElement('button');
+        if (isMemberAdmin) {
+          roleBtn.className = 'btn-role-demote';
+          roleBtn.textContent = '⬇ СНЯТЬ АДМИНА';
+          roleBtn.title = 'Понизить до обычного бойца';
+          roleBtn.onclick = async () => {
+            if (!confirm(`Снять статус администратора с "${m.name}"?`)) return;
+            await changeMemberRole(m.userId, 'member');
+          };
+        } else {
+          roleBtn.className = 'btn-role-promote';
+          roleBtn.textContent = '⬆ В АДМИНЫ';
+          roleBtn.title = 'Назначить администратором сквада';
+          roleBtn.onclick = async () => {
+            if (!confirm(`Повысить бойца "${m.name}" до Администратора сквада?`)) return;
+            await changeMemberRole(m.userId, 'admin');
+          };
+        }
+        actionsCol.appendChild(roleBtn);
+
+        // Кнопка кика
         const kickBtn = document.createElement('button');
         kickBtn.className = 'btn-kick-member';
         kickBtn.textContent = 'КИКНУТЬ';
@@ -919,11 +979,35 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Ошибка сети');
           }
         };
-        li.appendChild(kickBtn);
+        actionsCol.appendChild(kickBtn);
       }
 
       ul.appendChild(li);
     });
+  }
+
+  async function changeMemberRole(targetUserId, newRole) {
+    try {
+      const res = await fetch('/api/squads/set_role', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + authToken
+        },
+        body: JSON.stringify({ targetUserId, newRole })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        if (currentSquadData) {
+          currentSquadData.members = data.members;
+        }
+        renderSquadMembers(data.members);
+      } else {
+        alert(data.error || 'Ошибка изменения роли');
+      }
+    } catch (e) {
+      alert('Ошибка сети при изменении роли');
+    }
   }
 
   function renderSquadRequests(requests) {

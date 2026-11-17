@@ -1324,6 +1324,73 @@ body {
   box-shadow: 0 0 6px #22c55e;
 }
 
+.member-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.member-role-badge {
+  font-family: var(--font-arma);
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.member-role-badge.role-leader {
+  background: rgba(234, 179, 8, 0.15);
+  border: 1px solid #eab308;
+  color: #fde047;
+}
+
+.member-role-badge.role-admin {
+  background: rgba(168, 85, 247, 0.18);
+  border: 1px solid #a855f7;
+  color: #d8b4fe;
+}
+
+.member-role-badge.role-member {
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid #3b82f6;
+  color: #93c5fd;
+}
+
+.btn-role-promote {
+  padding: 2px 7px;
+  font-size: 10px;
+  font-family: var(--font-arma);
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid #3b82f6;
+  color: #93c5fd;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-role-promote:hover {
+  background: #3b82f6;
+  color: #ffffff;
+}
+
+.btn-role-demote {
+  padding: 2px 7px;
+  font-size: 10px;
+  font-family: var(--font-arma);
+  background: rgba(245, 158, 11, 0.2);
+  border: 1px solid #f59e0b;
+  color: #fcd34d;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-role-demote:hover {
+  background: #f59e0b;
+  color: #12161c;
+}
+
 .btn-kick-member {
   padding: 2px 8px;
   font-size: 11px;
