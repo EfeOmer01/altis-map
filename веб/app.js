@@ -83,16 +83,46 @@ document.addEventListener('DOMContentLoaded', () => {
   // ======================================================================
   const map = L.map('map', {
     crs: L.CRS.Simple,
-    minZoom: 2,
+    minZoom: 2.4,
     maxZoom: 8,
-    zoomSnap: 1,
-    zoomDelta: 1,
+    zoomSnap: 0.25,
+    zoomDelta: 0.5,
+    wheelPxPerZoomLevel: 100,
     attributionControl: false,
-    maxBounds: mapBounds.pad(0.15),
-    maxBoundsViscosity: 0.8
+    maxBounds: mapBounds.pad(0.18),
+    maxBoundsViscosity: 0.85
   });
 
+  // Автоматическая адаптация minZoom под размер экрана, чтобы карта не улетала далеко назад
+  function adjustMinZoom() {
+    try {
+      const fitZoom = map.getBoundsZoom(mapBounds);
+      const optimalMinZoom = Math.max(2.2, Math.min(3.0, fitZoom - 0.35));
+      map.setMinZoom(optimalMinZoom);
+    } catch (_) {}
+  }
+  adjustMinZoom();
   map.fitBounds(mapBounds);
+  window.addEventListener('resize', adjustMinZoom);
+
+  // Уровни детализации (LOD) в зависимости от текущего зума
+  function updateZoomTier() {
+    const z = map.getZoom();
+    const mapEl = document.getElementById('map');
+    if (!mapEl) return;
+
+    mapEl.classList.remove('zoom-tier-far', 'zoom-tier-mid', 'zoom-tier-close');
+    if (z < 3.8) {
+      mapEl.classList.add('zoom-tier-far');
+    } else if (z < 5.0) {
+      mapEl.classList.add('zoom-tier-mid');
+    } else {
+      mapEl.classList.add('zoom-tier-close');
+    }
+  }
+
+  map.on('zoom zoomend', updateZoomTier);
+  updateZoomTier();
 
   // Топографическая карта Altis: здания, дороги, высоты, леса и береговая линия
   const topoLayer = L.tileLayer('', {
@@ -455,8 +485,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (c.type === 'NameCityCapital') {
           cls = 'arma-city-capital';
           labelText = c.name.toUpperCase();
-        } else if (c.type === 'NameCity') {
+        } else if (c.type === 'NameCity' || c.type === 'CityCenter') {
           cls = 'arma-city-normal';
+        } else if (c.type === 'NameVillage') {
+          cls = 'arma-city-village';
+        } else if (c.type === 'NameMarine') {
+          cls = 'arma-city-marine';
+          labelText = c.name.toLowerCase();
         } else if (c.type === 'Hill') {
           cls = 'arma-city-hill';
           labelText = c.name ? `▲ ${c.name}` : `▲ ${(Math.round(c.y % 350 + 80))}m`;

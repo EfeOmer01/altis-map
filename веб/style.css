@@ -310,6 +310,20 @@ body {
      1px  1px 0 #ffffff;
 }
 
+.arma-city-marine {
+  font-family: var(--font-arma);
+  font-size: 11px;
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #3b6e8c;
+  text-shadow: 
+    -1px -1px 0 rgba(255, 255, 255, 0.8),
+     1px -1px 0 rgba(255, 255, 255, 0.8),
+    -1px  1px 0 rgba(255, 255, 255, 0.8),
+     1px  1px 0 rgba(255, 255, 255, 0.8);
+}
+
 /* --- ПОСТРОЙКИ (СЕРЫЕ СИЛУЭТЫ КАК В ARMA 3) --- */
 .building-polygon {
   stroke-width: 1 !important;
@@ -1051,6 +1065,69 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.6px;
 }
+
+/* ======================================================================
+   УРОВНИ ДЕТАЛИЗАЦИИ КАРТЫ (LOD) ДЛЯ ПРЕДОТВРАЩЕНИЯ НАЛОЖЕНИЯ МЕТОК
+   ====================================================================== */
+
+/* 1. ДАЛЬНИЙ ОБЗОР (весь остров, zoom < 3.8) */
+/* Скрываем мелкие деревни, тактические промзоны (military, factory, quarry...), холмы, заливы и тексты зон */
+.zoom-tier-far .arma-city-village,
+.zoom-tier-far .arma-city-marine,
+.zoom-tier-far .arma-city-local,
+.zoom-tier-far .arma-city-hill,
+.zoom-tier-far .arma-zone-label {
+  display: none !important;
+}
+
+/* На дальнем зуме аккуратный размер столиц и городов */
+.zoom-tier-far .arma-city-capital {
+  font-size: 14px !important;
+  letter-spacing: 1.5px !important;
+}
+.zoom-tier-far .arma-city-normal {
+  font-size: 12px !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* На дальнем зуме скрываем громоздкие текстовые плашки у маркеров, оставляя чистые иконки */
+.zoom-tier-far .arma-marker-wrap .arma-marker-text {
+  display: none !important;
+}
+
+/* DP метки на дальнем зуме: компактная плашка 20px без текста */
+.zoom-tier-far .arma-marker-wrap.arma-marker-dp {
+  padding: 2px 3px !important;
+  border-radius: 3px !important;
+  box-shadow: 0 1px 4px rgba(250, 204, 21, 0.4) !important;
+}
+.zoom-tier-far .arma-marker-wrap.arma-marker-dp .arma-marker-img {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+/* При наведении курсора на маркер на дальнем зуме текст плашки временно всплывает */
+.zoom-tier-far .arma-marker-wrap:hover .arma-marker-text {
+  display: inline-block !important;
+  margin-left: 4px;
+}
+
+/* 2. СРЕДНИЙ МАСШТАБ (районный масштаб, 3.8 <= zoom < 5.0) */
+/* Видны города, поселки, заливы и подписи маркеров.
+   Но локальные тактические объекты (военные базы, карьеры, склады, заводы) и высоты холмов скрыты,
+   чтобы не накладываться на названия городов */
+.zoom-tier-mid .arma-city-local,
+.zoom-tier-mid .arma-city-hill {
+  display: none !important;
+}
+
+.zoom-tier-mid .arma-zone-label {
+  font-size: 11px !important;
+  opacity: 0.85;
+}
+
+/* 3. БЛИЗКИЙ ТАКТИЧЕСКИЙ МАСШТАБ (zoom >= 5.0) */
+/* Отображаются все тактические названия, высоты холмов и полные плашки */
 
 .territories-interactive-list {
   list-style: none;
