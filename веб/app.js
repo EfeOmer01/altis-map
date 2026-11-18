@@ -97,7 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function adjustMinZoom() {
     try {
       const fitZoom = map.getBoundsZoom(mapBounds);
-      const optimalMinZoom = Math.max(2.2, Math.min(3.0, fitZoom - 0.35));
+      // Карта никогда не должна уходить назад меньше, чем нужно для комфортного обзора всего острова
+      const optimalMinZoom = Math.max(2.5, fitZoom - 0.15);
       map.setMinZoom(optimalMinZoom);
     } catch (_) {}
   }
@@ -112,9 +113,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!mapEl) return;
 
     mapEl.classList.remove('zoom-tier-far', 'zoom-tier-mid', 'zoom-tier-close');
-    if (z < 3.8) {
+    if (z < 4.2) {
       mapEl.classList.add('zoom-tier-far');
-    } else if (z < 5.0) {
+    } else if (z < 5.2) {
       mapEl.classList.add('zoom-tier-mid');
     } else {
       mapEl.classList.add('zoom-tier-close');
@@ -466,19 +467,14 @@ document.addEventListener('DOMContentLoaded', () => {
   fetch('/api/cities')
     .then(r => r.json())
     .then(cities => {
-      const isNamedPlace = c => {
-        if (['NameCityCapital', 'NameCity', 'NameVillage'].includes(c.type)) return true;
-        if (c.type === 'NameLocal') {
-          if (/^(factory|military|quarry|dump|airbase|terminal|storage|mine|power plant)/i.test(c.name)) return false;
-          if (['castle', 'dump'].includes((c.name || '').toLowerCase())) return false;
-          return true;
-        }
-        return false;
-      };
-      allSettlementsData = cities.filter(isNamedPlace);
-      if (!allSettlementsData.length) allSettlementsData = cities;
+      // Фильтруем ТОЛЬКО настоящие населенные пункты (столицы, города, поселки)
+      // Исключаем все технические метки Arma (factory, military, quarry, power plant, hill11...),
+      // которые создавали второй призрачный слой и накладывались друг на друга.
+      const realSettlements = cities.filter(c => ['NameCityCapital', 'NameCity', 'CityCenter', 'NameVillage'].includes(c.type));
+      allSettlementsData = realSettlements;
       renderClaimsTable();
-      cities.forEach(c => {
+
+      realSettlements.forEach(c => {
         let cls = 'arma-city-village';
         let labelText = c.name;
 
@@ -489,15 +485,6 @@ document.addEventListener('DOMContentLoaded', () => {
           cls = 'arma-city-normal';
         } else if (c.type === 'NameVillage') {
           cls = 'arma-city-village';
-        } else if (c.type === 'NameMarine') {
-          cls = 'arma-city-marine';
-          labelText = c.name.toLowerCase();
-        } else if (c.type === 'Hill') {
-          cls = 'arma-city-hill';
-          labelText = c.name ? `▲ ${c.name}` : `▲ ${(Math.round(c.y % 350 + 80))}m`;
-        } else if (c.type === 'NameLocal') {
-          cls = 'arma-city-local';
-          labelText = c.name.replace(/\d+$/, '').toLowerCase();
         }
 
         const icon = L.divIcon({
