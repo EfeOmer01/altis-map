@@ -261,6 +261,7 @@ if (MONGODB_URI) {
           const sObj = s.toObject();
           backfillHistoricalLogs(sObj);
           squadsDb[s.name] = sObj;
+          await syncSquadToMongo(sObj);
         }
         saveLocalSquads();
         console.log(`✅ Загружено сквадов из Mongo: ${allSquads.length}`);
