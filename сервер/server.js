@@ -196,7 +196,8 @@ if (MONGODB_URI) {
     members: { type: [mongoose.Schema.Types.Mixed], default: [] },
     joinRequests: { type: [mongoose.Schema.Types.Mixed], default: [] },
     claims: { type: mongoose.Schema.Types.Mixed, default: {} },
-    markers: { type: [mongoose.Schema.Types.Mixed], default: [] }
+    markers: { type: [mongoose.Schema.Types.Mixed], default: [] },
+    logs: { type: [mongoose.Schema.Types.Mixed], default: [] }
   }, { strict: false, minimize: false });
 
   User = mongoose.model('User', userSchema);
@@ -467,7 +468,8 @@ app.post('/api/squads/create', authMiddleware, (req, res) => {
     }],
     joinRequests: [],
     claims: {},
-    markers: []
+    markers: [],
+    logs: []
   };
 
   squadsDb[sName] = newSquad;
@@ -548,6 +550,33 @@ function isSquadAdminOrLeader(squad, userId) {
   if (!squad || !userId) return false;
   if (squad.leaderId === userId) return true;
   return (squad.members || []).some(m => m.userId === userId && (m.role === 'admin' || m.role === 'leader'));
+}
+
+function getStatusLabel(s) {
+  if (s === 'friendly') return 'Наш гараж / База';
+  if (s === 'hostile') return 'Вражеский';
+  if (s === 'ally') return 'Союзник';
+  if (s === 'loot') return 'Лут / Схрон';
+  return 'Свободный / Нейтральный';
+}
+
+function addSquadLog(squad, entry) {
+  if (!squad) return;
+  squad.logs = squad.logs || [];
+  const logItem = {
+    id: 'log_' + crypto.randomBytes(6).toString('hex'),
+    timestamp: new Date().toISOString(),
+    isReverted: false,
+    revertedAt: null,
+    revertedBy: null,
+    ...entry
+  };
+  squad.logs.unshift(logItem);
+  if (squad.logs.length > 500) {
+    squad.logs.pop();
+  }
+  io.to(squad.name).emit('squad_logs_updated', squad.logs);
+  return logItem;
 }
 
 // 4. Кик участника (ТОЛЬКО ДЛЯ ЛИДЕРА)
@@ -644,16 +673,32 @@ app.post('/api/squads/bulk_password', authMiddleware, (req, res) => {
 
     squad.claims = squad.claims || {};
     let count = 0;
+    const oldPasswords = {};
 
     Object.keys(squad.claims).forEach(id => {
       const c = squad.claims[id];
       if (c && (c.status === 'friendly' || !c.status)) {
+        oldPasswords[id] = c.password || '';
         c.password = cleanPass;
         c.updatedBy = req.user.name || 'Админ';
         c.updatedAt = new Date().toISOString();
         count++;
       }
     });
+
+    if (count > 0) {
+      addSquadLog(squad, {
+        userId: req.user.id,
+        userName: req.user.name || 'Админ',
+        userAvatar: req.user.avatar || '',
+        actionType: 'bulk_password',
+        targetId: 'all_friendly',
+        targetName: 'Все наши гаражи',
+        description: `Массово сменил пароль на ${count} гаражах на "${cleanPass}"`,
+        previousState: oldPasswords,
+        newState: { newPassword: cleanPass }
+      });
+    }
 
     persistSquad(squad);
     io.to(sName).emit('squad_claims_all_updated', squad.claims);
@@ -675,6 +720,182 @@ app.post('/api/squads/bulk_password', authMiddleware, (req, res) => {
     persistUser(req.user);
     return res.json({ success: true, count, claims: req.user.personalGarages });
   }
+});
+
+// 5.2. Получение журнала действий сквада (ЛОГИ)
+app.get('/api/squads/logs', authMiddleware, (req, res) => {
+  const sName = req.user.squadId;
+  const squad = squadsDb[sName];
+
+  if (!squad) return res.status(404).json({ error: 'Сквад не найден' });
+  if (!isSquadAdminOrLeader(squad, req.user.id)) {
+    return res.status(403).json({ error: 'Журнал действий доступен только командиру и администраторам сквада' });
+  }
+
+  squad.logs = squad.logs || [];
+  res.json({ success: true, logs: squad.logs });
+});
+
+// 5.3. Откат конкретного действия из журнала
+app.post('/api/squads/rollback_log', authMiddleware, (req, res) => {
+  const { logId } = req.body;
+  const sName = req.user.squadId;
+  const squad = squadsDb[sName];
+
+  if (!squad) return res.status(404).json({ error: 'Сквад не найден' });
+  if (!isSquadAdminOrLeader(squad, req.user.id)) {
+    return res.status(403).json({ error: 'Только командир или администратор сквада может откатывать действия' });
+  }
+
+  squad.logs = squad.logs || [];
+  const logItem = squad.logs.find(l => l.id === logId);
+  if (!logItem) return res.status(404).json({ error: 'Запись в журнале не найдена' });
+  if (logItem.isReverted) return res.status(400).json({ error: 'Это действие уже было откатано' });
+
+  squad.claims = squad.claims || {};
+  let rollbackDesc = '';
+
+  if (logItem.actionType === 'claim_save') {
+    if (!logItem.previousState) {
+      // Был создан новый гараж -> удаляем его
+      delete squad.claims[logItem.targetId];
+      io.to(sName).emit('claim_removed', logItem.targetId);
+      rollbackDesc = `Откатил создание гаража #${logItem.targetId}`;
+    } else {
+      // Были изменены данные гаража -> восстанавливаем прежнее состояние
+      squad.claims[logItem.targetId] = JSON.parse(JSON.stringify(logItem.previousState));
+      io.to(sName).emit('claim_updated', squad.claims[logItem.targetId]);
+      rollbackDesc = `Откатил изменения гаража #${logItem.targetId}`;
+    }
+  } else if (logItem.actionType === 'claim_delete') {
+    // Гараж был удален -> восстанавливаем его обратно
+    if (logItem.previousState) {
+      squad.claims[logItem.targetId] = JSON.parse(JSON.stringify(logItem.previousState));
+      io.to(sName).emit('claim_updated', squad.claims[logItem.targetId]);
+      rollbackDesc = `Восстановил удаленный гараж #${logItem.targetId}`;
+    }
+  } else if (logItem.actionType === 'bulk_password') {
+    // Массовая смена паролей -> восстанавливаем прежние пароли
+    if (logItem.previousState && typeof logItem.previousState === 'object') {
+      let restoredCount = 0;
+      Object.keys(logItem.previousState).forEach(id => {
+        if (squad.claims[id]) {
+          squad.claims[id].password = logItem.previousState[id];
+          restoredCount++;
+        }
+      });
+      io.to(sName).emit('squad_claims_all_updated', squad.claims);
+      rollbackDesc = `Откатил массовую смену паролей (${restoredCount} гаражей)`;
+    }
+  }
+
+  logItem.isReverted = true;
+  logItem.revertedAt = new Date().toISOString();
+  logItem.revertedBy = req.user.name || 'Командир';
+
+  persistSquad(squad);
+  io.to(sName).emit('squad_logs_updated', squad.logs);
+
+  res.json({ success: true, message: rollbackDesc, log: logItem, claims: squad.claims });
+});
+
+// 5.4. Массовый откат ВСЕХ действий пользователя за период (24h, 7d, 30d, all)
+app.post('/api/squads/rollback_user', authMiddleware, (req, res) => {
+  const { targetUserId, timeframe } = req.body;
+  const sName = req.user.squadId;
+  const squad = squadsDb[sName];
+
+  if (!squad) return res.status(404).json({ error: 'Сквад не найден' });
+  if (squad.leaderId !== req.user.id) {
+    return res.status(403).json({ error: 'Только командир сквада может выполнять массовый откат действий пользователя' });
+  }
+  if (!targetUserId) return res.status(400).json({ error: 'Не указан боец для отката' });
+
+  const now = Date.now();
+  let cutoff = 0;
+  let periodName = 'всё время';
+
+  if (timeframe === '24h') {
+    cutoff = now - 24 * 60 * 60 * 1000;
+    periodName = 'последние 24 часа';
+  } else if (timeframe === '7d') {
+    cutoff = now - 7 * 24 * 60 * 60 * 1000;
+    periodName = 'последние 7 дней';
+  } else if (timeframe === '30d') {
+    cutoff = now - 30 * 24 * 60 * 60 * 1000;
+    periodName = 'последние 30 дней';
+  }
+
+  squad.logs = squad.logs || [];
+  // Находим все неоткатанные действия бойца за период (в обратном порядке, от новых к старым)
+  const matchingLogs = squad.logs.filter(l => 
+    l.userId === targetUserId && 
+    !l.isReverted && 
+    l.actionType !== 'bulk_rollback_user' &&
+    (cutoff === 0 || new Date(l.timestamp).getTime() >= cutoff)
+  );
+
+  if (matchingLogs.length === 0) {
+    return res.status(400).json({ error: `У выбранного бойца нет активных действий за ${periodName}` });
+  }
+
+  squad.claims = squad.claims || {};
+  let revertedCount = 0;
+  const targetUserName = matchingLogs[0]?.userName || 'Боец';
+
+  for (const logItem of matchingLogs) {
+    if (logItem.actionType === 'claim_save') {
+      if (!logItem.previousState) {
+        delete squad.claims[logItem.targetId];
+      } else {
+        squad.claims[logItem.targetId] = JSON.parse(JSON.stringify(logItem.previousState));
+      }
+    } else if (logItem.actionType === 'claim_delete') {
+      if (logItem.previousState) {
+        squad.claims[logItem.targetId] = JSON.parse(JSON.stringify(logItem.previousState));
+      }
+    } else if (logItem.actionType === 'bulk_password') {
+      if (logItem.previousState && typeof logItem.previousState === 'object') {
+        Object.keys(logItem.previousState).forEach(id => {
+          if (squad.claims[id]) {
+            squad.claims[id].password = logItem.previousState[id];
+          }
+        });
+      }
+    }
+
+    logItem.isReverted = true;
+    logItem.revertedAt = new Date().toISOString();
+    logItem.revertedBy = req.user.name || 'Командир';
+    revertedCount++;
+  }
+
+  // Обновляем все гаражи сквада
+  io.to(sName).emit('squad_claims_all_updated', squad.claims);
+
+  // Добавляем системную запись в журнал
+  addSquadLog(squad, {
+    userId: req.user.id,
+    userName: req.user.name || 'Командир',
+    userAvatar: req.user.avatar || '',
+    actionType: 'bulk_rollback_user',
+    targetId: targetUserId,
+    targetName: targetUserName,
+    description: `Откатил ВСЕ действия бойца ${targetUserName} за ${periodName} (отменено ${revertedCount} действий)`,
+    previousState: null,
+    newState: null,
+    isReverted: true
+  });
+
+  persistSquad(squad);
+  io.to(sName).emit('squad_logs_updated', squad.logs);
+
+  res.json({
+    success: true,
+    revertedCount,
+    message: `Успешно откатано ${revertedCount} действий бойца ${targetUserName} за ${periodName}`,
+    claims: squad.claims
+  });
 });
 
 // 6. Роспуск / удаление сквада (ТОЛЬКО ДЛЯ ЛИДЕРА)
@@ -912,15 +1133,54 @@ io.on('connection', (socket) => {
       : (currentUser.name || 'Боец');
 
     if (currentSquad && squadsDb[currentSquad]) {
-      squadsDb[currentSquad].claims = squadsDb[currentSquad].claims || {};
-      squadsDb[currentSquad].claims[claim.id] = {
+      const squad = squadsDb[currentSquad];
+      squad.claims = squad.claims || {};
+      const prevClaim = squad.claims[claim.id] ? JSON.parse(JSON.stringify(squad.claims[claim.id])) : null;
+
+      const newClaim = {
         ...claim,
         owner: assignedOwner,
         updatedBy: currentUser.name || 'Боец',
         updatedAt: new Date().toISOString()
       };
-      persistSquad(squadsDb[currentSquad]);
-      io.to(currentSquad).emit('claim_updated', squadsDb[currentSquad].claims[claim.id]);
+      squad.claims[claim.id] = newClaim;
+
+      let actionDesc = '';
+      if (!prevClaim) {
+        actionDesc = `Захватил гараж #${claim.id} (статус: ${getStatusLabel(newClaim.status)}${newClaim.password ? `, пароль: "${newClaim.password}"` : ''})`;
+      } else {
+        const changes = [];
+        if (prevClaim.status !== newClaim.status) {
+          changes.push(`статус "${getStatusLabel(prevClaim.status)}" ➔ "${getStatusLabel(newClaim.status)}"`);
+        }
+        if (prevClaim.password !== newClaim.password) {
+          changes.push(newClaim.password ? `пароль "${prevClaim.password || 'нет'}" ➔ "${newClaim.password}"` : 'пароль удален');
+        }
+        if (prevClaim.owner !== newClaim.owner) {
+          changes.push(`владелец "${prevClaim.owner || '—'}" ➔ "${newClaim.owner}"`);
+        }
+        if (prevClaim.comment !== newClaim.comment) {
+          changes.push(`комментарий обновлен`);
+        }
+        actionDesc = changes.length > 0 
+          ? `Изменил гараж #${claim.id}: ${changes.join(', ')}`
+          : `Обновил данные гаража #${claim.id}`;
+      }
+
+      addSquadLog(squad, {
+        userId: currentUser.id,
+        userName: currentUser.name || 'Боец',
+        userAvatar: currentUser.avatar || '',
+        actionType: 'claim_save',
+        targetId: claim.id,
+        targetName: claim.name || `Гараж #${claim.id}`,
+        description: actionDesc,
+        previousState: prevClaim,
+        newState: JSON.parse(JSON.stringify(newClaim))
+      });
+
+      persistSquad(squad);
+      io.to(currentSquad).emit('claim_updated', newClaim);
     } else {
       // Сохраняем как личный
       currentUser.personalGarages = currentUser.personalGarages || {};
@@ -940,9 +1200,24 @@ io.on('connection', (socket) => {
     if (!currentUser || !claimId) return;
 
     if (currentSquad && squadsDb[currentSquad]) {
-      if (squadsDb[currentSquad].claims && squadsDb[currentSquad].claims[claimId]) {
-        delete squadsDb[currentSquad].claims[claimId];
-        persistSquad(squadsDb[currentSquad]);
+      const squad = squadsDb[currentSquad];
+      if (squad.claims && squad.claims[claimId]) {
+        const prevClaim = JSON.parse(JSON.stringify(squad.claims[claimId]));
+        delete squad.claims[claimId];
+
+        addSquadLog(squad, {
+          userId: currentUser.id,
+          userName: currentUser.name || 'Боец',
+          userAvatar: currentUser.avatar || '',
+          actionType: 'claim_delete',
+          targetId: claimId,
+          targetName: prevClaim.name || `Гараж #${claimId}`,
+          description: `Удалил гараж #${claimId} (статус был: ${getStatusLabel(prevClaim.status)}, пароль: ${prevClaim.password || 'нет'})`,
+          previousState: prevClaim,
+          newState: null
+        });
+
+        persistSquad(squad);
         io.to(currentSquad).emit('claim_removed', claimId);
       }
     } else {
@@ -965,16 +1240,40 @@ io.on('connection', (socket) => {
 
     if (currentSquad && squadsDb[currentSquad]) {
       const squad = squadsDb[currentSquad];
+
+      // Проверка прав на массовую смену
+      if (!isSquadAdminOrLeader(squad, currentUser.id)) {
+        if (typeof callback === 'function') callback({ success: false, error: 'Только администраторы и командир сквада могут массово менять пароли' });
+        return;
+      }
+
       squad.claims = squad.claims || {};
+      const oldPasswords = {};
       Object.keys(squad.claims).forEach(id => {
         const c = squad.claims[id];
         if (c && (c.status === 'friendly' || !c.status)) {
+          oldPasswords[id] = c.password || '';
           c.password = cleanPass;
-          c.updatedBy = currentUser.name || 'Боец';
+          c.updatedBy = currentUser.name || 'Админ';
           c.updatedAt = new Date().toISOString();
           count++;
         }
       });
+
+      if (count > 0) {
+        addSquadLog(squad, {
+          userId: currentUser.id,
+          userName: currentUser.name || 'Админ',
+          userAvatar: currentUser.avatar || '',
+          actionType: 'bulk_password',
+          targetId: 'all_friendly',
+          targetName: 'Все наши гаражи',
+          description: `Массово сменил пароль на ${count} гаражах на "${cleanPass}"`,
+          previousState: oldPasswords,
+          newState: { newPassword: cleanPass }
+        });
+      }
+
       persistSquad(squad);
       io.to(currentSquad).emit('squad_claims_all_updated', squad.claims);
       if (typeof callback === 'function') callback({ success: true, count, claims: squad.claims });

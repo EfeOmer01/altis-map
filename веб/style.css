@@ -1556,3 +1556,177 @@ body {
   background: #ef4444;
   color: #ffffff;
 }
+
+/* ======================================================================
+   ЖУРНАЛ ДЕЙСТВИЙ СКВАДА (АУДИТ И ОТКАТ)
+   ====================================================================== */
+
+.logs-controls-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #161b22;
+  border: 1px solid var(--border-color);
+  padding: 10px 14px;
+  border-radius: 6px;
+  flex-wrap: wrap;
+}
+
+.logs-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.logs-filter-group label {
+  font-weight: 600;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.log-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  gap: 12px;
+  transition: background 0.15s ease;
+}
+
+.log-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.log-item:last-child {
+  border-bottom: none;
+}
+
+.log-item.is-reverted {
+  opacity: 0.55;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.log-user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 150px;
+}
+
+.log-user-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: #0d1117;
+  object-fit: cover;
+}
+
+.log-user-name {
+  font-weight: 600;
+  font-size: 13px;
+  color: #f0f6fc;
+  white-space: nowrap;
+}
+
+.log-content-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.log-header-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.log-badge {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--font-arma);
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-claim-create {
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid #22c55e;
+  color: #86efac;
+}
+
+.badge-claim-edit {
+  background: rgba(234, 179, 8, 0.2);
+  border: 1px solid #eab308;
+  color: #fde047;
+}
+
+.badge-claim-delete {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid #ef4444;
+  color: #fca5a5;
+}
+
+.badge-bulk-pass {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid #3b82f6;
+  color: #93c5fd;
+}
+
+.badge-rollback {
+  background: rgba(168, 85, 247, 0.2);
+  border: 1px solid #a855f7;
+  color: #d8b4fe;
+}
+
+.log-timestamp {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.log-description {
+  font-size: 12.5px;
+  color: var(--text-main);
+  line-height: 1.35;
+}
+
+.log-actions-col {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.btn-rollback-single {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--font-arma);
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid #f59e0b;
+  color: #fcd34d;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-rollback-single:hover {
+  background: #f59e0b;
+  color: #12161c;
+}
+
+.badge-reverted {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

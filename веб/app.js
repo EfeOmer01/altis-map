@@ -1781,6 +1781,257 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ======================================================================
+  //  11.1 ЖУРНАЛ ДЕЙСТВИЙ СКВАДА (АУДИТ И ОТКАТ)
+  // ======================================================================
+  const squadLogsModal = document.getElementById('squad-logs-modal');
+  let currentSquadLogs = [];
+
+  async function fetchSquadLogs() {
+    if (!authToken || !currentUser?.squadId) return;
+    try {
+      const res = await fetch('/api/squads/logs', {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+      });
+      const data = await res.json();
+      if (data.success && Array.isArray(data.logs)) {
+        currentSquadLogs = data.logs;
+        renderSquadLogs(currentSquadLogs);
+      }
+    } catch (err) {
+      console.error('Ошибка загрузки логов сквада:', err);
+    }
+  }
+
+  function renderSquadLogs(logs) {
+    if (!logs) logs = currentSquadLogs || [];
+    currentSquadLogs = logs;
+
+    const listEl = document.getElementById('squad-logs-list');
+    const userSelect = document.getElementById('logs-filter-user');
+    const timeSelect = document.getElementById('logs-filter-timeframe');
+    if (!listEl) return;
+
+    const selectedUser = userSelect ? userSelect.value : 'all';
+    const selectedTime = timeSelect ? timeSelect.value : 'all';
+
+    // Заполняем фильтр пользователей уникальными бойцами
+    if (userSelect) {
+      const currentVal = userSelect.value;
+      const usersMap = new Map();
+      (currentSquadData?.members || []).forEach(m => {
+        usersMap.set(m.userId, m.name || 'Боец');
+      });
+      logs.forEach(l => {
+        if (l.userId && l.userName && !usersMap.has(l.userId)) {
+          usersMap.set(l.userId, `${l.userName} (бывший участник)`);
+        }
+      });
+
+      let optionsHtml = '<option value="all">Все бойцы</option>';
+      usersMap.forEach((name, id) => {
+        optionsHtml += `<option value="${id}">${name}</option>`;
+      });
+      userSelect.innerHTML = optionsHtml;
+      userSelect.value = currentVal && (currentVal === 'all' || usersMap.has(currentVal)) ? currentVal : 'all';
+    }
+
+    // Вычисляем порог времени
+    const now = Date.now();
+    let cutoff = 0;
+    if (selectedTime === '24h') cutoff = now - 24 * 60 * 60 * 1000;
+    else if (selectedTime === '7d') cutoff = now - 7 * 24 * 60 * 60 * 1000;
+    else if (selectedTime === '30d') cutoff = now - 30 * 24 * 60 * 60 * 1000;
+
+    // Фильтрация
+    const filtered = logs.filter(l => {
+      if (selectedUser !== 'all' && l.userId !== selectedUser) return false;
+      if (cutoff > 0 && new Date(l.timestamp).getTime() < cutoff) return false;
+      return true;
+    });
+
+    if (filtered.length === 0) {
+      listEl.innerHTML = '<li class="empty-list" style="text-align:center; padding:35px; color:var(--text-muted); font-size:13px;">Записей по выбранным фильтрам не найдено</li>';
+      return;
+    }
+
+    const myMember = currentSquadData?.members?.find(m => m.userId === currentUser?.id);
+    const canRollback = currentUser && currentSquadData && (currentSquadData.leaderId === currentUser.id || myMember?.role === 'admin' || myMember?.role === 'leader');
+
+    listEl.innerHTML = '';
+    filtered.forEach(item => {
+      const li = document.createElement('li');
+      li.className = `log-item ${item.isReverted ? 'is-reverted' : ''}`;
+
+      let badgeCls = 'badge-claim-edit';
+      let badgeLabel = 'ИЗМЕНЕНИЕ';
+      if (item.actionType === 'claim_save') {
+        if (!item.previousState) {
+          badgeCls = 'badge-claim-create';
+          badgeLabel = '➕ СОЗДАНИЕ';
+        } else {
+          badgeCls = 'badge-claim-edit';
+          badgeLabel = '✏ ИЗМЕНЕНИЕ';
+        }
+      } else if (item.actionType === 'claim_delete') {
+        badgeCls = 'badge-claim-delete';
+        badgeLabel = '🗑 УДАЛЕНИЕ';
+      } else if (item.actionType === 'bulk_password') {
+        badgeCls = 'badge-bulk-pass';
+        badgeLabel = '🔑 ПАРОЛИ';
+      } else if (item.actionType === 'bulk_rollback_user') {
+        badgeCls = 'badge-rollback';
+        badgeLabel = '⏪ ОТКАТ';
+      }
+
+      const dateObj = new Date(item.timestamp);
+      const timeFormatted = isNaN(dateObj.getTime()) ? '' : `${dateObj.toLocaleDateString('ru-RU')} ${dateObj.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
+
+      let actionBtnHtml = '';
+      if (canRollback && item.actionType !== 'bulk_rollback_user') {
+        if (item.isReverted) {
+          actionBtnHtml = `<span class="badge-reverted" title="Откатано: ${item.revertedBy || ''} (${item.revertedAt ? new Date(item.revertedAt).toLocaleTimeString() : ''})">✓ Откатано</span>`;
+        } else {
+          actionBtnHtml = `<button class="btn-rollback-single" data-log-id="${item.id}">↩ ОТКАТИТЬ</button>`;
+        }
+      }
+
+      li.innerHTML = `
+        <div class="log-user-info">
+          <img src="${item.userAvatar || ('https://api.dicebear.com/7.x/bottts/svg?seed=' + item.userId)}" class="log-user-avatar" alt="">
+          <span class="log-user-name">${item.userName || 'Боец'}</span>
+        </div>
+        <div class="log-content-col">
+          <div class="log-header-row">
+            <span class="log-badge ${badgeCls}">${badgeLabel}</span>
+            <span class="log-timestamp">${timeFormatted}</span>
+          </div>
+          <div class="log-description">${item.description || ''}</div>
+        </div>
+        <div class="log-actions-col">
+          ${actionBtnHtml}
+        </div>
+      `;
+
+      const btnRollback = li.querySelector('.btn-rollback-single');
+      if (btnRollback) {
+        btnRollback.addEventListener('click', async () => {
+          if (!confirm(`Откатить действие: "${item.description}"?`)) return;
+          try {
+            btnRollback.disabled = true;
+            btnRollback.textContent = 'Откат...';
+            const res = await fetch('/api/squads/rollback_log', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+              },
+              body: JSON.stringify({ logId: item.id })
+            });
+            const data = await res.json();
+            if (!res.ok || !data.success) {
+              alert(data.error || 'Ошибка при откате действия');
+              btnRollback.disabled = false;
+              btnRollback.textContent = '↩ ОТКАТИТЬ';
+              return;
+            }
+            showLogsAlert(data.message || 'Действие успешно откатано!', 'success');
+            if (data.claims) {
+              claimsData = data.claims;
+              updateBuildingsVisuals();
+              renderClaimsTable();
+            }
+          } catch (e) {
+            console.error(e);
+            alert('Ошибка сети при откате');
+            btnRollback.disabled = false;
+            btnRollback.textContent = '↩ ОТКАТИТЬ';
+          }
+        });
+      }
+
+      listEl.appendChild(li);
+    });
+  }
+
+  function showLogsAlert(text, type) {
+    const alertEl = document.getElementById('logs-status-alert');
+    if (!alertEl) return;
+    alertEl.textContent = text;
+    alertEl.style.display = 'block';
+    alertEl.className = type === 'error' ? 'alert-error' : 'alert-success';
+    alertEl.style.background = type === 'error' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(34, 197, 94, 0.2)';
+    alertEl.style.color = type === 'error' ? '#fca5a5' : '#86efac';
+    alertEl.style.border = `1px solid ${type === 'error' ? '#ef4444' : '#22c55e'}`;
+    setTimeout(() => { alertEl.style.display = 'none'; }, 5000);
+  }
+
+  // Кнопка открытия журнала логов
+  document.getElementById('btn-open-squad-logs')?.addEventListener('click', () => {
+    if (squadLogsModal) {
+      squadLogsModal.classList.remove('hidden');
+      fetchSquadLogs();
+    }
+  });
+
+  // Фильтры
+  document.getElementById('logs-filter-user')?.addEventListener('change', () => {
+    renderSquadLogs();
+  });
+  document.getElementById('logs-filter-timeframe')?.addEventListener('change', () => {
+    renderSquadLogs();
+  });
+
+  // Кнопка массового отката действий бойца
+  document.getElementById('btn-rollback-user-actions')?.addEventListener('click', async () => {
+    const userSelect = document.getElementById('logs-filter-user');
+    const timeSelect = document.getElementById('logs-filter-timeframe');
+    const targetUserId = userSelect?.value;
+    const timeframe = timeSelect?.value || 'all';
+
+    if (!targetUserId || targetUserId === 'all') {
+      alert('Пожалуйста, выберите конкретного бойца в выпадающем списке слева, действия которого хотите откатить.');
+      return;
+    }
+
+    const userName = userSelect.options[userSelect.selectedIndex]?.text || 'Боец';
+    const periodName = timeSelect.options[timeSelect.selectedIndex]?.text || 'выбранный период';
+
+    if (!confirm(`⚠️ ВНИМАНИЕ: Вы уверены, что хотите откатить ВСЕ действия бойца "${userName}" за ${periodName}?\n\nВсе созданные им гаражи будут удалены, измененные пароли и статусы возвращены в исходное состояние.`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/squads/rollback_user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify({ targetUserId, timeframe })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        alert(data.error || 'Ошибка при массовом откате');
+        return;
+      }
+      showLogsAlert(data.message || `Успешно откатано ${data.revertedCount} действий!`, 'success');
+      if (data.claims) {
+        claimsData = data.claims;
+        updateBuildingsVisuals();
+        renderClaimsTable();
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Ошибка сети при массовом откате действий');
+    }
+  });
+
+  socket.on('squad_logs_updated', (logs) => {
+    if (currentSquadData) currentSquadData.logs = logs;
+    renderSquadLogs(logs);
+  });
+
+  // ======================================================================
   //  12. ПАНЕЛЬ «НАСТРОЙКА КАРТЫ» (ФИЛЬТРАЦИЯ 11 КАТЕГОРИЙ И ПОИСК)
   // ======================================================================
   const settingsPanel = document.getElementById('map-settings-panel');
