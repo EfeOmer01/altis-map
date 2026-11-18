@@ -60,6 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // ======================================================================
   //  1. КОНСТАНТЫ И СИСТЕМА КООРДИНАТ
   // ======================================================================
+  const isMobile = (typeof L !== 'undefined' && L.Browser && L.Browser.mobile) || 
+                   (window.innerWidth <= 768) || 
+                   (navigator.maxTouchPoints > 0 && window.innerWidth <= 1024);
+
   const WORLD   = 30720;
   // Готовая топографическая подложка Altis имеет 144 условные единицы по стороне.
   // Все игровые координаты пересчитываются в неё без смещения.
@@ -83,14 +87,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // ======================================================================
   const map = L.map('map', {
     crs: L.CRS.Simple,
-    minZoom: 2.4,
+    preferCanvas: true, // Аппаратный Canvas GPU рендеринг вместо сотен тяжелых SVG узлов (критично для мобилок)
+    minZoom: isMobile ? 1.8 : 2.4,
     maxZoom: 8,
-    zoomSnap: 0.25,
+    zoomSnap: isMobile ? 0.5 : 0.25,
     zoomDelta: 0.5,
     wheelPxPerZoomLevel: 100,
     attributionControl: false,
-    maxBounds: mapBounds.pad(0.18),
-    maxBoundsViscosity: 0.85
+    maxBounds: mapBounds.pad(isMobile ? 0.1 : 0.18),
+    maxBoundsViscosity: 0.85,
+    bounceAtZoomLimits: false,
+    tap: !L.Browser.safari,
+    touchZoom: true
   });
 
   // Автоматическая адаптация minZoom под размер экрана, чтобы карта не улетала далеко назад
@@ -98,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const fitZoom = map.getBoundsZoom(mapBounds);
       // Карта никогда не должна уходить назад меньше, чем нужно для комфортного обзора всего острова
-      const optimalMinZoom = Math.max(2.5, fitZoom - 0.15);
+      const optimalMinZoom = isMobile ? Math.max(1.8, fitZoom - 0.1) : Math.max(2.4, fitZoom - 0.15);
       map.setMinZoom(optimalMinZoom);
     } catch (_) {}
   }
@@ -113,9 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!mapEl) return;
 
     mapEl.classList.remove('zoom-tier-far', 'zoom-tier-mid', 'zoom-tier-close');
-    if (z < 4.2) {
+    const farThreshold = isMobile ? 4.5 : 4.2;
+    const midThreshold = isMobile ? 5.5 : 5.2;
+    if (z < farThreshold) {
       mapEl.classList.add('zoom-tier-far');
-    } else if (z < 5.2) {
+    } else if (z < midThreshold) {
       mapEl.classList.add('zoom-tier-mid');
     } else {
       mapEl.classList.add('zoom-tier-close');
@@ -128,15 +138,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // Топографическая карта Altis: здания, дороги, высоты, леса и береговая линия
   const topoLayer = L.tileLayer('', {
     tileSize: 256,
-    minZoom: 2,
+    minZoom: isMobile ? 1.8 : 2,
     maxZoom: 8,
     maxNativeZoom: 7,
     noWrap: true,
-    bounds: mapBounds
+    bounds: mapBounds,
+    updateWhenIdle: isMobile,
+    updateWhenZooming: !isMobile,
+    keepBuffer: isMobile ? 1 : 2
   });
   topoLayer.getTileUrl = (coords) => {
-    if (coords.z < 4) return `/topo-tiles/overview/${coords.z}/${coords.x}/${coords.y}.jpg`;
-    return `/topo-tiles/${coords.z + 8}/map_${coords.x}_${coords.y}.jpg`;
+    const z = Math.max(2, coords.z);
+    if (z < 4) return `/topo-tiles/overview/${z}/${coords.x}/${coords.y}.jpg`;
+    return `/topo-tiles/${z + 8}/map_${coords.x}_${coords.y}.jpg`;
   };
   // Кастомная широкая река из PBO: прозрачный оверлей поверх топографической карты.
   const riverBounds = L.latLngBounds(
@@ -152,15 +166,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // Цветная спутниковая карта высокого разрешения со зданиями, дорогами и кастомной рекой
   const satelliteLayer = L.tileLayer('', {
     tileSize: 256,
-    minZoom: 2,
+    minZoom: isMobile ? 1.8 : 2,
     maxZoom: 8,
     maxNativeZoom: 7,
     noWrap: true,
-    bounds: mapBounds
+    bounds: mapBounds,
+    updateWhenIdle: isMobile,
+    updateWhenZooming: !isMobile,
+    keepBuffer: isMobile ? 1 : 2
   });
   satelliteLayer.getTileUrl = (coords) => {
-    if (coords.z < 4) return `/hybrid-tiles/overview/${coords.z}/${coords.x}/${coords.y}.jpg`;
-    return `/hybrid-tiles/${coords.z + 8}/map_${coords.x}_${coords.y}.jpg`;
+    const z = Math.max(2, coords.z);
+    if (z < 4) return `/hybrid-tiles/overview/${z}/${coords.x}/${coords.y}.jpg`;
+    return `/hybrid-tiles/${z + 8}/map_${coords.x}_${coords.y}.jpg`;
   };
 
   // По умолчанию активен цветной гибридный спутник (или выбор из localStorage)
@@ -207,20 +225,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const gridCoordEl = document.getElementById('grid-coord');
   const posCoordEl  = document.getElementById('pos-coord');
 
-  map.on('mousemove', (e) => {
-    const g = latLngToGame(e.latlng);
-    const gx = Math.max(0, Math.min(WORLD, g.x));
-    const gy = Math.max(0, Math.min(WORLD, g.y));
+  if (!isMobile && gridCoordEl && posCoordEl) {
+    map.on('mousemove', (e) => {
+      const g = latLngToGame(e.latlng);
+      const gx = Math.max(0, Math.min(WORLD, g.x));
+      const gy = Math.max(0, Math.min(WORLD, g.y));
 
-    const gridX = String(Math.floor(gx / 100)).padStart(3, '0');
-    const gridY = String(Math.floor(gy / 100)).padStart(3, '0');
+      const gridX = String(Math.floor(gx / 100)).padStart(3, '0');
+      const gridY = String(Math.floor(gy / 100)).padStart(3, '0');
 
-    gridCoordEl.textContent = `${gridX} ${gridY}`;
-    posCoordEl.textContent  = `X: ${String(gx).padStart(5, ' ')} | Y: ${String(gy).padStart(5, ' ')}`;
-  });
+      gridCoordEl.textContent = `${gridX} ${gridY}`;
+      posCoordEl.textContent  = `X: ${String(gx).padStart(5, ' ')} | Y: ${String(gy).padStart(5, ' ')}`;
+    });
+  }
 
+  let gridOn = false;
   const gridLayer = L.layerGroup();
   function redrawArmaGrid() {
+    if (!gridOn) {
+      gridLayer.clearLayers();
+      return;
+    }
     gridLayer.clearLayers();
     const bounds = map.getBounds();
     const sw = latLngToGame(bounds.getSouthWest());
@@ -245,7 +270,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   map.on('moveend zoomend', redrawArmaGrid);
-  redrawArmaGrid();
 
   /*
    * ВЕКТОРНАЯ ДОРОЖНАЯ СЕТЬ ИЗ КАСТОМНОЙ PBO.
@@ -291,55 +315,64 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  fetch('/api/buildings')
-    .then(r => r.json())
-    .then(garages => {
-      garages.forEach(g => {
-        // Навесы миссии не являются гаражами для захвата и не показываются на карте.
-        if (g.class === 'Land_GarageShelter_01_F') return;
+  function loadBuildings() {
+    fetch('/api/buildings')
+      .then(r => r.json())
+      .then(garages => {
+        garages.forEach(g => {
+          // Навесы миссии не являются гаражами для захвата и не показываются на карте.
+          if (g.class === 'Land_GarageShelter_01_F') return;
 
-        // Увеличенные размеры квадратиков (16х18м) для отличной видимости и кликабельности
-        const coords = rotatedBox(g.x, g.y, g.w || 16, g.l || 18, g.dir || g.yaw || 0);
-        const isMission = (g.source === 'mission');
+          // Увеличенные размеры квадратиков (16х18м) для отличной видимости и кликабельности
+          const coords = rotatedBox(g.x, g.y, g.w || 16, g.l || 18, g.dir || g.yaw || 0);
+          const isMission = (g.source === 'mission');
 
-        const poly = L.polygon(coords, {
-          className: isMission ? 'garage-polygon garage-mission' : 'garage-polygon',
-          weight: 4,
-          color: isMission ? '#fbbf24' : '#00f0ff',
-          fillColor: isMission ? '#fbbf24' : '#00f0ff',
-          fillOpacity: 0.88
+          const poly = L.polygon(coords, {
+            className: isMission ? 'garage-polygon garage-mission' : 'garage-polygon',
+            weight: 4,
+            color: isMission ? '#fbbf24' : '#00f0ff',
+            fillColor: isMission ? '#fbbf24' : '#00f0ff',
+            fillOpacity: 0.88
+          });
+
+          poly._bData = g;
+          poly.on('click', () => openBuildingPanel(g));
+
+          poly.bindTooltip(() => {
+            const c = claimsData[g.id];
+            const typeBadge = isMission
+              ? '<span style="color:#fbbf24; font-weight:bold;">★ Кастомный (миссия)</span>'
+              : '<span style="color:#00f0ff; font-weight:bold;">🏛️ Островной</span>';
+
+            if (c && (c.owner || c.status)) {
+              const statusLabel = c.status === 'hostile'
+                ? '<span style="color:#f85149; font-weight:bold;">🔴 Вражеский</span>'
+                : c.status === 'ally'
+                ? '<span style="color:#bc8cff; font-weight:bold;">🟣 Гараж друга</span>'
+                : c.status === 'loot'
+                ? '<span style="color:#d29922; font-weight:bold;">🟡 Склад</span>'
+                : c.status === 'neutral'
+                ? '<span style="color:#8b949e; font-weight:bold;">⚪ Свободный</span>'
+                : '<span style="color:#3fb950; font-weight:bold;">🟢 Наш гараж</span>';
+
+              return `<b>${g.name || 'Гараж'}</b><br>${typeBadge} • ${statusLabel}<br>Владелец: <span style="color:#58a6ff">${c.owner || '—'}</span><br>Пароль: <code>${c.password ? '••••••' : 'Нет'}</code>`;
+            }
+            return `<b>${g.name || 'Гараж'}</b><br>${typeBadge}<br><small style="color:#58a6ff">Клик — задать владельца и пароль</small>`;
+          }, { className: 'tactical-tooltip', sticky: true });
+
+          garagesLayer.addLayer(poly);
+          buildingPolygons[g.id] = poly;
         });
-
-        poly._bData = g;
-        poly.on('click', () => openBuildingPanel(g));
-
-        poly.bindTooltip(() => {
-          const c = claimsData[g.id];
-          const typeBadge = isMission
-            ? '<span style="color:#fbbf24; font-weight:bold;">★ Кастомный (миссия)</span>'
-            : '<span style="color:#00f0ff; font-weight:bold;">🏛️ Островной</span>';
-
-          if (c && (c.owner || c.status)) {
-            const statusLabel = c.status === 'hostile'
-              ? '<span style="color:#f85149; font-weight:bold;">🔴 Вражеский</span>'
-              : c.status === 'ally'
-              ? '<span style="color:#bc8cff; font-weight:bold;">🟣 Гараж друга</span>'
-              : c.status === 'loot'
-              ? '<span style="color:#d29922; font-weight:bold;">🟡 Склад</span>'
-              : c.status === 'neutral'
-              ? '<span style="color:#8b949e; font-weight:bold;">⚪ Свободный</span>'
-              : '<span style="color:#3fb950; font-weight:bold;">🟢 Наш гараж</span>';
-
-            return `<b>${g.name || 'Гараж'}</b><br>${typeBadge} • ${statusLabel}<br>Владелец: <span style="color:#58a6ff">${c.owner || '—'}</span><br>Пароль: <code>${c.password ? '••••••' : 'Нет'}</code>`;
-          }
-          return `<b>${g.name || 'Гараж'}</b><br>${typeBadge}<br><small style="color:#58a6ff">Клик — задать владельца и пароль</small>`;
-        }, { className: 'tactical-tooltip', sticky: true });
-
-        garagesLayer.addLayer(poly);
-        buildingPolygons[g.id] = poly;
+        updateBuildingsVisuals();
       });
-      updateBuildingsVisuals();
-    });
+  }
+
+  if (isMobile) {
+    // На смартфонах откладываем загрузку сотен полигонов, чтобы базовые тайлы и города появились мгновенно
+    setTimeout(loadBuildings, 250);
+  } else {
+    loadBuildings();
+  }
 
   function updateBuildingsVisuals() {
     Object.keys(buildingPolygons).forEach(updateBuildingVisual);
@@ -2325,10 +2358,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // ======================================================================
   // Переключатель кастомных дорог выключен вместе с самим слоем; см. блок выше.
 
-  let gridOn = false;
   document.getElementById('btn-toggle-grid')?.addEventListener('click', function() {
     gridOn = !gridOn;
     this.classList.toggle('active', gridOn);
-    gridOn ? map.addLayer(gridLayer) : map.removeLayer(gridLayer);
+    if (gridOn) {
+      redrawArmaGrid();
+      map.addLayer(gridLayer);
+    } else {
+      map.removeLayer(gridLayer);
+      gridLayer.clearLayers();
+    }
   });
 });

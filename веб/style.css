@@ -1730,3 +1730,133 @@ body {
   align-items: center;
   gap: 4px;
 }
+
+/* ======================================================================
+   МОБИЛЬНАЯ ОПТИМИЗАЦИЯ И АППАРАТНОЕ УСКОРЕНИЕ (iOS / Android)
+   ====================================================================== */
+.leaflet-tile-pane,
+.leaflet-map-pane,
+.leaflet-marker-pane,
+.leaflet-zoom-animated {
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@media (max-width: 768px) {
+  /* 1. Облегченные маркеры: убираем тяжелые box-shadow, снижая нагрузку на мобильный GPU */
+  .arma-marker-wrap {
+    box-shadow: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    padding: 1px 4px !important;
+  }
+
+  .arma-marker-img {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .garage-polygon {
+    filter: none !important;
+  }
+
+  /* 2. Компактный и отзывчивый мобильный HUD */
+  .hud-top {
+    height: auto !important;
+    min-height: 46px;
+    padding: 6px 10px !important;
+    flex-wrap: wrap;
+    gap: 6px;
+    background: #12161c !important;
+    backdrop-filter: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6) !important;
+  }
+
+  .hud-brand {
+    gap: 6px;
+  }
+
+  .hud-title {
+    font-size: 13px !important;
+    letter-spacing: 0.5px !important;
+  }
+
+  .hud-subtitle {
+    display: none !important;
+  }
+
+  .hud-coords {
+    display: none !important;
+  }
+
+  .hud-squad-status {
+    gap: 4px;
+  }
+
+  .hud-squad-badge {
+    font-size: 11px !important;
+    max-width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .hud-controls {
+    display: flex;
+    overflow-x: auto;
+    width: 100%;
+    padding: 4px 0 2px 0;
+    gap: 5px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .hud-controls::-webkit-scrollbar {
+    display: none;
+  }
+
+  .btn-hud {
+    font-size: 11px !important;
+    padding: 5px 8px !important;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* 3. Адаптивные модальные окна для пальцев на экранах смартфонов */
+  .modal-dialog {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    max-height: 90vh !important;
+    margin: 12px auto !important;
+    border-radius: 6px !important;
+  }
+
+  .modal-header {
+    padding: 10px 14px !important;
+  }
+
+  .modal-body {
+    padding: 12px 14px !important;
+    max-height: calc(90vh - 110px) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .settings-panel {
+    width: 92vw !important;
+    max-width: 92vw !important;
+    top: 54px !important;
+    right: 4vw !important;
+    max-height: 80vh !important;
+  }
+
+  #building-panel {
+    width: 92vw !important;
+    max-width: 92vw !important;
+    left: 4vw !important;
+    bottom: 12px !important;
+  }
+}
+
