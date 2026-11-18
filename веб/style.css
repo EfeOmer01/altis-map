@@ -656,6 +656,9 @@ body {
   border-radius: 8px;
   width: 90%;
   max-width: 580px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8);
   overflow: hidden;
 }
@@ -670,6 +673,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .modal-header h2 {
@@ -683,6 +687,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 18px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  max-height: calc(90vh - 70px);
 }
 
 .squad-tabs {

@@ -240,13 +240,22 @@ if (MONGODB_URI) {
 }
 
 // Middleware аутентификации
-function authMiddleware(req, res, next) {
+async function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Необходима авторизация' });
   }
   const token = authHeader.split(' ')[1];
-  const user = Object.values(usersDb).find(u => u.token === token);
+  let user = Object.values(usersDb).find(u => u.token === token);
+  if (!user && useMongoDb && User) {
+    try {
+      const doc = await User.findOne({ token });
+      if (doc) {
+        user = doc.toObject();
+        usersDb[user.id] = user;
+      }
+    } catch (_) {}
+  }
   if (!user) {
     return res.status(401).json({ error: 'Сессия недействительна' });
   }
@@ -979,19 +988,19 @@ app.post('/api/squads/request_join', authMiddleware, (req, res) => {
   res.json({ success: true, message: `Заявка в сквад "${sName}" успешно отправлена командиру!` });
 });
 
-// 8. Принятие заявки (ТОЛЬКО ДЛЯ ЛИДЕРА)
+// 8. Принятие заявки (ДЛЯ ЛИДЕРА И АДМИНОВ)
 app.post('/api/squads/accept_request', authMiddleware, async (req, res) => {
   const { targetUserId } = req.body;
   const sName = req.user.squadId;
   const squad = squadsDb[sName];
 
   if (!squad) return res.status(404).json({ error: 'Сквад не найден' });
-  if (squad.leaderId !== req.user.id) {
-    return res.status(403).json({ error: 'Только командир может принимать заявки' });
+  if (!isSquadAdminOrLeader(squad, req.user.id)) {
+    return res.status(403).json({ error: 'Только командир или админ может принимать заявки' });
   }
 
   let targetUser = usersDb[targetUserId];
-  if (!targetUser && mongoConnected) {
+  if (!targetUser && useMongoDb && User) {
     const doc = await User.findOne({ id: targetUserId });
     if (doc) {
       targetUser = doc.toObject();
@@ -1028,15 +1037,15 @@ app.post('/api/squads/accept_request', authMiddleware, async (req, res) => {
   res.json({ success: true, squad });
 });
 
-// 9. Отклонение заявки (ТОЛЬКО ДЛЯ ЛИДЕРА)
+// 9. Отклонение заявки (ДЛЯ ЛИДЕРА И АДМИНОВ)
 app.post('/api/squads/reject_request', authMiddleware, (req, res) => {
   const { targetUserId } = req.body;
   const sName = req.user.squadId;
   const squad = squadsDb[sName];
 
   if (!squad) return res.status(404).json({ error: 'Сквад не найден' });
-  if (squad.leaderId !== req.user.id) {
-    return res.status(403).json({ error: 'Только командир может отклонять заявки' });
+  if (!isSquadAdminOrLeader(squad, req.user.id)) {
+    return res.status(403).json({ error: 'Только командир или админ может отклонять заявки' });
   }
 
   squad.joinRequests = (squad.joinRequests || []).filter(r => r.userId !== targetUserId);
@@ -1114,7 +1123,7 @@ io.on('connection', (socket) => {
       onlineUsersBySquad[currentSquad].add(user.id);
 
       socket.emit('squad_data', squadsDb[currentSquad]);
-      if (squadsDb[currentSquad].leaderId === user.id) {
+      if (isSquadAdminOrLeader(squadsDb[currentSquad], user.id)) {
         socket.emit('squad_requests_updated', squadsDb[currentSquad].joinRequests || []);
       }
       io.to(currentSquad).emit('squad_online', Array.from(onlineUsersBySquad[currentSquad]));

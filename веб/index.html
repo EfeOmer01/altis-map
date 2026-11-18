@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=21.0">
+  <link rel="stylesheet" href="style.css?v=22.0">
 </head>
 <body>
   <!-- Верхняя тактическая панель (HUD) -->
@@ -325,9 +325,12 @@
             <div class="squad-tab-card">
               <h3>Войти в существующий</h3>
               <p class="tab-desc">Подключитесь к карте своего клана, чтобы видеть общие базы и пароли</p>
-              <input type="text" id="join-squad-name" placeholder="Название сквада" class="form-input">
-              <input type="password" id="join-squad-password" placeholder="Пароль отряда" class="form-input">
-              <button id="btn-join-squad" class="btn btn-secondary">ВСТУПИТЬ В СКВАД</button>
+              <input type="text" id="join-squad-name" placeholder="Название сквада (например, ENOT)" class="form-input">
+              <input type="password" id="join-squad-password" placeholder="Пароль отряда (если есть)" class="form-input">
+              <div style="display:flex; gap:8px; margin-top:8px;">
+                <button id="btn-join-squad" class="btn btn-secondary" style="flex:1;">ПО ПАРОЛЮ</button>
+                <button id="btn-request-join-squad" class="btn btn-primary" style="flex:1; background:#238636; border-color:#2ea043;" title="Отправить заявку командиру отряда">ПОДАТЬ ЗАЯВКУ</button>
+              </div>
             </div>
           </div>
         </div>
@@ -344,7 +347,7 @@
 
           <!-- Панель управления командира -->
           <div id="leader-control-panel" class="leader-panel hidden">
-            <h4>👑 ПАНЕЛЬ КОМАНДИРА</h4>
+            <h4>👑 ПАНЕЛЬ УПРАВЛЕНИЯ (КОМАНДИР / АДМИН)</h4>
 
             <div class="leader-passcode-row">
               <label>Ссылка-приглашение для бойцов:</label>
@@ -354,7 +357,18 @@
               </div>
             </div>
 
-            <div class="leader-passcode-row">
+            <!-- Входящие заявки на вступление (сразу под ссылкой, максимально заметно) -->
+            <div class="squad-requests-box">
+              <label style="display:flex; align-items:center; justify-content:space-between;">
+                <span>📬 Входящие заявки в отряд:</span>
+                <span id="squad-requests-count" class="badge-role" style="background:#eab308; color:#12161c; padding:1px 7px; border-radius:10px; font-weight:bold;">0</span>
+              </label>
+              <ul id="squad-requests-list" class="squad-requests-list">
+                <li class="empty-list" style="color:var(--text-muted); font-size:12px;">Нет новых заявок</li>
+              </ul>
+            </div>
+
+            <div class="leader-passcode-row" style="margin-top:14px; padding-top:12px; border-top:1px dashed var(--border-color);">
               <label>Пароль для прямого входа (опционально):</label>
               <div class="passcode-edit-group">
                 <input type="text" id="squad-passcode-input" class="form-input" placeholder="Пароль сквада">
@@ -382,13 +396,6 @@
               <button id="btn-open-squad-logs" class="btn btn-secondary btn-sm" style="width:100%; display:flex; justify-content:center; align-items:center; gap:8px; border-color:#a855f7; color:#c084fc; font-weight:600;">
                 <span>📜</span> ИСТОРИЯ ДЕЙСТВИЙ И ОТКАТ
               </button>
-            </div>
-
-            <div class="squad-requests-box">
-              <label>Входящие заявки (<span id="squad-requests-count">0</span>):</label>
-              <ul id="squad-requests-list" class="squad-requests-list">
-                <li class="empty-list" style="color:var(--text-muted); font-size:12px;">Нет новых заявок</li>
-              </ul>
             </div>
           </div>
 
@@ -551,6 +558,6 @@
   <!-- Скрипты: Leaflet локально (без CDN) и Socket.io локально -->
   <script src="/libs/leaflet/leaflet.js"></script>
   <script src="/libs/socket.io.js"></script>
-  <script src="app.js?v=21.0"></script>
+  <script src="app.js?v=22.0"></script>
 </body>
 </html>

@@ -48,6 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     openModal('squad-modal');
+    if (currentSquadData && currentSquadData.members) {
+      renderSquadMembers(currentSquadData.members);
+      renderSquadRequests(currentSquadData.joinRequests || []);
+    }
     if (authToken && typeof socket !== 'undefined' && socket) {
       socket.emit('auth_socket', { token: authToken });
     }
@@ -750,15 +754,19 @@ document.addEventListener('DOMContentLoaded', () => {
         activeView?.classList.add('hidden');
       }
 
+      // Синхронизация интерфейса сквада при обновлении данных пользователя
+      if (currentSquadData && currentSquadData.members) {
+        renderSquadMembers(currentSquadData.members);
+        renderSquadRequests(currentSquadData.joinRequests || []);
+      }
+
       // Если была отложенная заявка по ссылке-приглашению
       const pendingSquad = sessionStorage.getItem('pending_join_squad');
       if (pendingSquad) {
         sessionStorage.removeItem('pending_join_squad');
         if (currentUser.squadId !== pendingSquad) {
           setTimeout(() => {
-            if (confirm(`Вы авторизовались! Отправить заявку на вступление в сквад "${pendingSquad}" командиру?`)) {
-              requestJoinSquad(pendingSquad);
-            }
+            requestJoinSquad(pendingSquad);
           }, 300);
         }
       }
@@ -815,6 +823,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateBuildingsVisuals();
     renderClaimsTable();
     renderSquadMembers(squad.members || []);
+    renderSquadRequests(squad.joinRequests || []);
   });
 
   socket.on('personal_data', (personalGarages) => {
@@ -1417,7 +1426,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Вступление в сквад
+  // Вступление в сквад по паролю
   document.getElementById('btn-join-squad')?.addEventListener('click', async () => {
     if (!currentUser) return;
     const n = document.getElementById('join-squad-name').value.trim();
@@ -1445,6 +1454,18 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) {
       alert('Ошибка сети');
     }
+  });
+
+  // Подача заявки в сквад без знания пароля
+  document.getElementById('btn-request-join-squad')?.addEventListener('click', () => {
+    if (!currentUser) {
+      openModal('auth-modal');
+      showAuthMsg('Сначала войдите в аккаунт, чтобы отправить заявку!', 'warning');
+      return;
+    }
+    const n = document.getElementById('join-squad-name')?.value?.trim();
+    if (!n) return alert('Введите название сквада (например, ENOT)!');
+    requestJoinSquad(n);
   });
 
   // Выход из сквада
