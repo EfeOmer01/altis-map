@@ -29,16 +29,6 @@ let mongoError = null;
 app.use(cors());
 app.use(express.json());
 
-// Автоматический редирект с Render.com на постоянный домен VPS,
-// чтобы игроки не разделялись на два разных сервера и сокета
-app.use((req, res, next) => {
-  const host = req.headers.host || '';
-  if (host.includes('onrender.com')) {
-    return res.redirect(301, `https://amazing-garage.life${req.originalUrl}`);
-  }
-  next();
-});
-
 // Ориентиры городов для информативных логов
 let citiesList = [];
 try {
@@ -265,8 +255,10 @@ if (MONGODB_URI) {
         }
         saveLocalSquads();
         console.log(`✅ Загружено сквадов из Mongo: ${allSquads.length}`);
+        startMongoSyncStreams();
       } else if (Object.keys(squadsDb).length > 0) {
         for (const s of Object.values(squadsDb)) await syncSquadToMongo(s);
+        startMongoSyncStreams();
       }
     })
     .catch(err => {
@@ -275,6 +267,41 @@ if (MONGODB_URI) {
       useMongoDb = false;
       console.log('📁 Работаем в надежном режиме локального JSON');
     });
+}
+
+// Полноценная real-time синхронизация между серверами (Render <-> VPS) через MongoDB Change Streams
+function startMongoSyncStreams() {
+  if (!useMongoDb || !Squad) return;
+  try {
+    const squadStream = Squad.watch([], { fullDocument: 'updateLookup' });
+    squadStream.on('change', (change) => {
+      try {
+        if (change.operationType === 'update' || change.operationType === 'replace' || change.operationType === 'insert') {
+          const doc = change.fullDocument;
+          if (doc && doc.name) {
+            const squadObj = doc.toObject ? doc.toObject() : doc;
+            squadsDb[doc.name] = squadObj;
+            saveLocalSquads();
+            io.to(doc.name).emit('squad_data', squadObj);
+            io.to(doc.name).emit('squad_logs_updated', squadObj.logs || []);
+            io.to(doc.name).emit('squad_members_updated', squadObj.members || []);
+            io.to(doc.name).emit('squad_requests_updated', squadObj.joinRequests || []);
+          }
+        }
+      } catch (err) {
+        console.warn('Ошибка обработки события Change Stream:', err.message);
+      }
+    });
+
+    squadStream.on('error', (err) => {
+      console.warn('Ошибка Change Stream, перезапуск через 5с:', err.message);
+      setTimeout(startMongoSyncStreams, 5000);
+    });
+
+    console.log('⚡ Real-time кросс-серверная синхронизация (Render <-> VPS) активна!');
+  } catch (err) {
+    console.warn('Не удалось запустить Change Streams:', err.message);
+  }
 }
 
 // Middleware аутентификации
@@ -1182,9 +1209,18 @@ io.on('connection', (socket) => {
   let currentUser = null;
   let currentSquad = null;
 
-  socket.on('auth_socket', ({ token }) => {
+  socket.on('auth_socket', async ({ token }) => {
     if (!token) return;
-    const user = Object.values(usersDb).find(u => u.token === token);
+    let user = Object.values(usersDb).find(u => u.token === token);
+    if (!user && useMongoDb && User) {
+      try {
+        const uDoc = await User.findOne({ token });
+        if (uDoc) {
+          user = uDoc.toObject();
+          usersDb[user.id] = user;
+        }
+      } catch (_) {}
+    }
     if (!user) return;
 
     currentUser = user;
@@ -1192,16 +1228,24 @@ io.on('connection', (socket) => {
 
     socket.join('user_' + user.id);
 
-    if (currentSquad && squadsDb[currentSquad]) {
-      socket.join(currentSquad);
-      if (!onlineUsersBySquad[currentSquad]) onlineUsersBySquad[currentSquad] = new Set();
-      onlineUsersBySquad[currentSquad].add(user.id);
-
-      socket.emit('squad_data', squadsDb[currentSquad]);
-      if (isSquadAdminOrLeader(squadsDb[currentSquad], user.id)) {
-        socket.emit('squad_requests_updated', squadsDb[currentSquad].joinRequests || []);
+    if (currentSquad) {
+      if (useMongoDb && Squad) {
+        try {
+          const sDoc = await Squad.findOne({ name: currentSquad });
+          if (sDoc) squadsDb[currentSquad] = sDoc.toObject();
+        } catch (_) {}
       }
-      io.to(currentSquad).emit('squad_online', Array.from(onlineUsersBySquad[currentSquad]));
+      if (squadsDb[currentSquad]) {
+        socket.join(currentSquad);
+        if (!onlineUsersBySquad[currentSquad]) onlineUsersBySquad[currentSquad] = new Set();
+        onlineUsersBySquad[currentSquad].add(user.id);
+
+        socket.emit('squad_data', squadsDb[currentSquad]);
+        if (isSquadAdminOrLeader(squadsDb[currentSquad], user.id)) {
+          socket.emit('squad_requests_updated', squadsDb[currentSquad].joinRequests || []);
+        }
+        io.to(currentSquad).emit('squad_online', Array.from(onlineUsersBySquad[currentSquad]));
+      }
     } else {
       // Одиночка — отправляем личные гаражи
       socket.emit('personal_data', user.personalGarages || {});
