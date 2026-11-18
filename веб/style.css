@@ -409,6 +409,58 @@ body {
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.9)) !important;
 }
 
+/* ЗАМЕТНЫЕ ОБЗОРНЫЕ МЕТКИ ГАРАЖЕЙ ОТ ДАЛЬНЕГО ДО БЛИЖНЕГО ЗУМА */
+.squad-claim-icon-wrapper {
+  background: none !important;
+  border: none !important;
+}
+.squad-claim-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(13, 17, 23, 0.94);
+  border: 1.5px solid #3fb950;
+  border-radius: 12px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #f0f6fc;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), 0 0 10px rgba(63, 185, 80, 0.5);
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease;
+  user-select: none;
+  z-index: 600;
+}
+.squad-claim-badge .badge-icon {
+  font-size: 12px;
+  line-height: 1;
+}
+.squad-claim-badge .badge-name {
+  font-family: var(--font-sans);
+  letter-spacing: 0.2px;
+}
+.squad-claim-badge:hover {
+  transform: translate(-50%, -50%) scale(1.15);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.95);
+  z-index: 1000;
+  opacity: 1 !important;
+}
+.squad-claim-badge.status-friendly { border-color: #3fb950; box-shadow: 0 0 10px rgba(63, 185, 80, 0.6); }
+.squad-claim-badge.status-ally { border-color: #bc8cff; box-shadow: 0 0 10px rgba(188, 140, 255, 0.6); }
+.squad-claim-badge.status-hostile { border-color: #f85149; box-shadow: 0 0 10px rgba(248, 81, 73, 0.6); }
+.squad-claim-badge.status-loot { border-color: #d29922; box-shadow: 0 0 10px rgba(210, 153, 34, 0.6); }
+.squad-claim-badge.status-neutral { border-color: #8b949e; box-shadow: 0 0 8px rgba(139, 148, 158, 0.4); }
+
+/* При близком зуме (когда виден сам полигон здания) делаем значок полупрозрачным, чтобы не загораживать */
+#map.zoom-tier-close .squad-claim-badge {
+  opacity: 0.55;
+}
+#map.zoom-tier-close .squad-claim-badge:hover {
+  opacity: 1;
+}
+
 /* --- ДОРОГИ (ТОЧНЫЕ ЦВЕТА ARMA 3 ALTIS) --- */
 .road-highway-casing {
   stroke: #1c2025;

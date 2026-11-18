@@ -92,25 +92,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const map = L.map('map', {
     crs: L.CRS.Simple,
     preferCanvas: true, // Аппаратный Canvas GPU рендеринг вместо сотен тяжелых SVG узлов (критично для мобилок)
-    minZoom: isMobile ? 1.8 : 2.4,
+    minZoom: 2.0,
     maxZoom: 8,
     zoomSnap: isMobile ? 0.5 : 0.25,
     zoomDelta: 0.5,
     wheelPxPerZoomLevel: 100,
     attributionControl: false,
-    maxBounds: mapBounds.pad(isMobile ? 0.1 : 0.18),
-    maxBoundsViscosity: 0.85,
+    maxBounds: mapBounds,
+    maxBoundsViscosity: 1.0,
     bounceAtZoomLimits: false,
     tap: !L.Browser.safari,
     touchZoom: true
   });
 
-  // Автоматическая адаптация minZoom под размер экрана, чтобы карта не улетала далеко назад
+  // Автоматическая адаптация minZoom под размер экрана, чтобы карта не улетала далеко назад и не двоилась
   function adjustMinZoom() {
     try {
-      const fitZoom = map.getBoundsZoom(mapBounds);
-      // Карта никогда не должна уходить назад меньше, чем нужно для комфортного обзора всего острова
-      const optimalMinZoom = isMobile ? Math.max(1.8, fitZoom - 0.1) : Math.max(2.4, fitZoom - 0.15);
+      const fitZoom = map.getBoundsZoom(mapBounds, true);
+      const optimalMinZoom = Math.max(2.0, fitZoom);
       map.setMinZoom(optimalMinZoom);
     } catch (_) {}
   }
@@ -142,7 +141,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Топографическая карта Altis: здания, дороги, высоты, леса и береговая линия
   const topoLayer = L.tileLayer('', {
     tileSize: 256,
-    minZoom: isMobile ? 1.8 : 2,
+    minZoom: 2,
+    minNativeZoom: 2,
     maxZoom: 8,
     maxNativeZoom: 7,
     noWrap: true,
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     keepBuffer: isMobile ? 1 : 2
   });
   topoLayer.getTileUrl = (coords) => {
-    const z = Math.max(2, coords.z);
+    const z = Math.max(2, Math.min(8, coords.z));
     if (z < 4) return `/topo-tiles/overview/${z}/${coords.x}/${coords.y}.jpg`;
     return `/topo-tiles/${z + 8}/map_${coords.x}_${coords.y}.jpg`;
   };
@@ -170,7 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Цветная спутниковая карта высокого разрешения со зданиями, дорогами и кастомной рекой
   const satelliteLayer = L.tileLayer('', {
     tileSize: 256,
-    minZoom: isMobile ? 1.8 : 2,
+    minZoom: 2,
+    minNativeZoom: 2,
     maxZoom: 8,
     maxNativeZoom: 7,
     noWrap: true,
@@ -180,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
     keepBuffer: isMobile ? 1 : 2
   });
   satelliteLayer.getTileUrl = (coords) => {
-    const z = Math.max(2, coords.z);
+    const z = Math.max(2, Math.min(8, coords.z));
     if (z < 4) return `/hybrid-tiles/overview/${z}/${coords.x}/${coords.y}.jpg`;
     return `/hybrid-tiles/${z + 8}/map_${coords.x}_${coords.y}.jpg`;
   };
@@ -378,11 +379,75 @@ document.addEventListener('DOMContentLoaded', () => {
     loadBuildings();
   }
 
+  const squadClaimsOverviewLayer = L.layerGroup().addTo(map);
+  const squadClaimMarkers = {};
+
+  function updateGaragesCounter() {
+    const btn = document.getElementById('btn-claims-list');
+    const count = Object.keys(claimsData).length;
+    if (btn) {
+      btn.textContent = count > 0 ? `📋 ГАРАЖИ (${count})` : 'СПИСОК ГАРАЖЕЙ';
+    }
+  }
+
+  function updateSquadOverviewBadge(id) {
+    const c = claimsData[id];
+    const poly = buildingPolygons[id];
+    const bData = poly?._bData;
+    const x = c?.x || bData?.x;
+    const y = c?.y || bData?.y;
+
+    if (!c || (!c.owner && !c.status) || !x || !y) {
+      if (squadClaimMarkers[id]) {
+        squadClaimsOverviewLayer.removeLayer(squadClaimMarkers[id]);
+        delete squadClaimMarkers[id];
+      }
+      return;
+    }
+
+    const statusIcons = {
+      friendly: '🟢',
+      ally: '🟣',
+      hostile: '🔴',
+      loot: '🟡',
+      neutral: '⚪'
+    };
+    const stIcon = statusIcons[c.status] || '🟢';
+    const ownerName = c.owner || 'Наш';
+    const html = `<div class="squad-claim-badge status-${c.status || 'friendly'}"><span class="badge-icon">${stIcon}</span><span class="badge-name">${ownerName}</span></div>`;
+
+    if (!squadClaimMarkers[id]) {
+      const customIcon = L.divIcon({
+        className: 'squad-claim-icon-wrapper',
+        html: html,
+        iconSize: null
+      });
+      const m = L.marker(gameToLatLng(x, y), { icon: customIcon, zIndexOffset: 500 });
+      m.on('click', () => {
+        if (bData) openBuildingPanel(bData);
+        else map.flyTo(gameToLatLng(x, y), 6, { duration: 0.8 });
+      });
+      squadClaimsOverviewLayer.addLayer(m);
+      squadClaimMarkers[id] = m;
+    } else {
+      const m = squadClaimMarkers[id];
+      const customIcon = L.divIcon({
+        className: 'squad-claim-icon-wrapper',
+        html: html,
+        iconSize: null
+      });
+      m.setIcon(customIcon);
+    }
+  }
+
   function updateBuildingsVisuals() {
     Object.keys(buildingPolygons).forEach(updateBuildingVisual);
+    Object.keys(claimsData).forEach(updateSquadOverviewBadge);
+    updateGaragesCounter();
   }
 
   function updateBuildingVisual(id) {
+    updateSquadOverviewBadge(id);
     const poly = buildingPolygons[id];
     if (!poly) return;
     const c = claimsData[id];
@@ -1693,6 +1758,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderClaimsTable() {
+    updateGaragesCounter();
     const tbody = document.getElementById('claims-table-body');
     const filter = (document.getElementById('search-claims-input')?.value || '').toLowerCase().trim();
     tbody.innerHTML = '';

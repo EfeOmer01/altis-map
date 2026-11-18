@@ -29,6 +29,40 @@ let mongoError = null;
 app.use(cors());
 app.use(express.json());
 
+// Автоматический редирект с Render.com на постоянный домен VPS,
+// чтобы игроки не разделялись на два разных сервера и сокета
+app.use((req, res, next) => {
+  const host = req.headers.host || '';
+  if (host.includes('onrender.com')) {
+    return res.redirect(301, `https://amazing-garage.life${req.originalUrl}`);
+  }
+  next();
+});
+
+// Ориентиры городов для информативных логов
+let citiesList = [];
+try {
+  const pCities = path.join(DATA_DIR, 'города.json');
+  if (fs.existsSync(pCities)) citiesList = JSON.parse(fs.readFileSync(pCities, 'utf8'));
+} catch (_) {}
+
+function getLandmarkName(x, y) {
+  if (!x || !y || !citiesList.length) return '';
+  let nearest = null;
+  let minDist = Infinity;
+  for (const c of citiesList) {
+    const d = Math.hypot(c.x - x, c.y - y);
+    if (d < minDist) {
+      minDist = d;
+      nearest = c;
+    }
+  }
+  if (nearest && minDist < 2000) {
+    return `${nearest.name} (${Math.round(minDist)}м)`;
+  }
+  return nearest ? `${nearest.name}` : '';
+}
+
 // Health-check для UptimeRobot
 app.get('/health', (req, res) => res.status(200).send('OK'));
 
@@ -224,8 +258,11 @@ if (MONGODB_URI) {
       const allSquads = await Squad.find({});
       if (allSquads.length > 0) {
         for (const s of allSquads) {
-          squadsDb[s.name] = s.toObject();
+          const sObj = s.toObject();
+          backfillHistoricalLogs(sObj);
+          squadsDb[s.name] = sObj;
         }
+        saveLocalSquads();
         console.log(`✅ Загружено сквадов из Mongo: ${allSquads.length}`);
       } else if (Object.keys(squadsDb).length > 0) {
         for (const s of Object.values(squadsDb)) await syncSquadToMongo(s);
@@ -586,6 +623,43 @@ function addSquadLog(squad, entry) {
   }
   io.to(squad.name).emit('squad_logs_updated', squad.logs);
   return logItem;
+}
+
+// Автоматическое заполнение истории для существующих меток отряда
+function backfillHistoricalLogs(squad) {
+  if (!squad || !squad.claims) return;
+  squad.logs = squad.logs || [];
+  const existingTargetIds = new Set(squad.logs.map(l => l.targetId));
+  let added = 0;
+  for (const [id, c] of Object.entries(squad.claims)) {
+    if (!existingTargetIds.has(id)) {
+      const lm = getLandmarkName(c.x, c.y);
+      const lmText = lm ? ` у ${lm}` : '';
+      const coordText = (c.x && c.y) ? ` [X: ${Math.round(c.x)}, Y: ${Math.round(c.y)}]` : '';
+      const targetDisplayName = `Гараж #${id}${lmText}`;
+      squad.logs.push({
+        id: 'log_bf_' + id,
+        timestamp: c.updatedAt || new Date().toISOString(),
+        isReverted: false,
+        revertedAt: null,
+        revertedBy: null,
+        userId: 'u_archive',
+        userName: c.updatedBy || 'Боец',
+        userAvatar: '',
+        actionType: 'claim_save',
+        targetId: id,
+        targetName: targetDisplayName,
+        description: `Поставил метку: ${targetDisplayName}${coordText} (статус: ${getStatusLabel(c.status)}, владелец: "${c.owner || '—'}"${c.password ? `, пароль: "${c.password}"` : ''})`,
+        previousState: null,
+        newState: JSON.parse(JSON.stringify(c))
+      });
+      added++;
+    }
+  }
+  if (added > 0) {
+    squad.logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    console.log(`📜 Добавлено ${added} архивных меток в историю сквада "${squad.name}"`);
+  }
 }
 
 // 4. Кик участника (ТОЛЬКО ДЛЯ ЛИДЕРА)
@@ -1154,9 +1228,14 @@ io.on('connection', (socket) => {
       };
       squad.claims[claim.id] = newClaim;
 
+      const lm = getLandmarkName(claim.x, claim.y);
+      const lmText = lm ? ` у ${lm}` : '';
+      const coordText = (claim.x && claim.y) ? ` [X: ${Math.round(claim.x)}, Y: ${Math.round(claim.y)}]` : '';
+      const targetDisplayName = `Гараж #${claim.id}${lmText}`;
+
       let actionDesc = '';
       if (!prevClaim) {
-        actionDesc = `Захватил гараж #${claim.id} (статус: ${getStatusLabel(newClaim.status)}${newClaim.password ? `, пароль: "${newClaim.password}"` : ''})`;
+        actionDesc = `Поставил метку: ${targetDisplayName}${coordText} (статус: ${getStatusLabel(newClaim.status)}, владелец: "${assignedOwner}"${newClaim.password ? `, пароль: "${newClaim.password}"` : ''})`;
       } else {
         const changes = [];
         if (prevClaim.status !== newClaim.status) {
@@ -1168,12 +1247,12 @@ io.on('connection', (socket) => {
         if (prevClaim.owner !== newClaim.owner) {
           changes.push(`владелец "${prevClaim.owner || '—'}" ➔ "${newClaim.owner}"`);
         }
-        if (prevClaim.comment !== newClaim.comment) {
-          changes.push(`комментарий обновлен`);
+        if (prevClaim.notes !== newClaim.notes) {
+          changes.push(`заметка обновлена`);
         }
         actionDesc = changes.length > 0 
-          ? `Изменил гараж #${claim.id}: ${changes.join(', ')}`
-          : `Обновил данные гаража #${claim.id}`;
+          ? `Изменил метку: ${targetDisplayName}${coordText} (${changes.join(', ')})`
+          : `Обновил данные метки: ${targetDisplayName}${coordText}`;
       }
 
       addSquadLog(squad, {
@@ -1182,7 +1261,7 @@ io.on('connection', (socket) => {
         userAvatar: currentUser.avatar || '',
         actionType: 'claim_save',
         targetId: claim.id,
-        targetName: claim.name || `Гараж #${claim.id}`,
+        targetName: targetDisplayName,
         description: actionDesc,
         previousState: prevClaim,
         newState: JSON.parse(JSON.stringify(newClaim))
@@ -1214,14 +1293,19 @@ io.on('connection', (socket) => {
         const prevClaim = JSON.parse(JSON.stringify(squad.claims[claimId]));
         delete squad.claims[claimId];
 
+        const lm = getLandmarkName(prevClaim.x, prevClaim.y);
+        const lmText = lm ? ` у ${lm}` : '';
+        const coordText = (prevClaim.x && prevClaim.y) ? ` [X: ${Math.round(prevClaim.x)}, Y: ${Math.round(prevClaim.y)}]` : '';
+        const targetDisplayName = `Гараж #${claimId}${lmText}`;
+
         addSquadLog(squad, {
           userId: currentUser.id,
           userName: currentUser.name || 'Боец',
           userAvatar: currentUser.avatar || '',
           actionType: 'claim_delete',
           targetId: claimId,
-          targetName: prevClaim.name || `Гараж #${claimId}`,
-          description: `Удалил гараж #${claimId} (статус был: ${getStatusLabel(prevClaim.status)}, пароль: ${prevClaim.password || 'нет'})`,
+          targetName: targetDisplayName,
+          description: `Удалил метку: ${targetDisplayName}${coordText} (был статус: ${getStatusLabel(prevClaim.status)}, владелец: "${prevClaim.owner || '—'}")`,
           previousState: prevClaim,
           newState: null
         });
