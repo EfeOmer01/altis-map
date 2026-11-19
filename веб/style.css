@@ -1441,20 +1441,49 @@ body {
   letter-spacing: 0.5px !important;
 }
 
-/* На дальнем зуме скрываем громоздкие текстовые плашки у маркеров, оставляя чистые иконки */
-.zoom-tier-far .arma-marker-wrap .arma-marker-text {
+/* На дальнем зуме скрываем громоздкие текстовые плашки у обычных маркеров, оставляя чистые иконки */
+.zoom-tier-far .arma-marker-wrap:not(.arma-marker-dp) .arma-marker-text {
   display: none !important;
 }
 
-/* DP метки на дальнем зуме: компактная плашка без текста */
-.zoom-tier-far .arma-marker-wrap.arma-marker-dp {
-  padding: 2px 3px !important;
-  border-radius: 3px !important;
-  box-shadow: 0 1px 4px rgba(250, 204, 21, 0.4) !important;
+/* DP метки курьера ВСЕГДА четко отображаются с номером (DP 1, DP 25...) при любом зуме и перемещении */
+.arma-marker-wrap.arma-marker-dp,
+.zoom-tier-far .arma-marker-wrap.arma-marker-dp,
+.zoom-tier-mid .arma-marker-wrap.arma-marker-dp,
+.zoom-tier-close .arma-marker-wrap.arma-marker-dp {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+  background: #facc15 !important;
+  color: #000000 !important;
+  border: 1.5px solid #000000 !important;
+  padding: 1px 5px !important;
+  border-radius: 4px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6) !important;
+  white-space: nowrap !important;
+  z-index: 100 !important;
 }
+
+.arma-marker-wrap.arma-marker-dp .arma-marker-text,
+.zoom-tier-far .arma-marker-wrap.arma-marker-dp .arma-marker-text,
+.zoom-tier-mid .arma-marker-wrap.arma-marker-dp .arma-marker-text,
+.zoom-tier-close .arma-marker-wrap.arma-marker-dp .arma-marker-text {
+  display: inline-block !important;
+  color: #000000 !important;
+  font-family: var(--font-arma) !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.3px !important;
+  line-height: 1 !important;
+}
+
+.arma-marker-wrap.arma-marker-dp .arma-marker-img,
 .zoom-tier-far .arma-marker-wrap.arma-marker-dp .arma-marker-img {
-  width: 16px !important;
-  height: 16px !important;
+  width: 14px !important;
+  height: 14px !important;
+  object-fit: contain !important;
+  vertical-align: middle !important;
 }
 
 /* При наведении курсора на маркер на дальнем зуме текст плашки временно всплывает */
@@ -2127,7 +2156,6 @@ body {
    ====================================================================== */
 .leaflet-tile-pane,
 .leaflet-map-pane,
-.leaflet-marker-pane,
 .leaflet-zoom-animated {
   will-change: transform;
   transform: translateZ(0);

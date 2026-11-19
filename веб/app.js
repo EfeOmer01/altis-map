@@ -658,10 +658,13 @@ document.addEventListener('DOMContentLoaded', () => {
           className: iconWrapClass,
           html: `${iconInner}<span class="arma-marker-text">${label}</span>`,
           iconSize: null,
-          iconAnchor: [14, 14]
+          iconAnchor: isDP ? [20, 10] : [14, 14]
         });
 
-        const marker = L.marker(gameToLatLng(m.x, m.y), { icon });
+        const marker = L.marker(gameToLatLng(m.x, m.y), { 
+          icon,
+          zIndexOffset: isDP ? 300 : 0
+        });
         marker.bindTooltip(`<b>${label}</b><br><small style="color:#8b949e">Категория: ${m.category}<br>X: ${m.x} | Y: ${m.y}</small>`, {
           className: 'tactical-tooltip',
           offset: [0, -12]
@@ -673,6 +676,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         allMarkerEntries.push({ marker, data: m, cat: targetCat });
       });
+
+      // Синхронизируем состояние слоев категорий с настройками пользователя
+      loadSavedCategoryFilters();
     });
 
   // ======================================================================
@@ -2483,15 +2489,17 @@ document.addEventListener('DOMContentLoaded', () => {
   function loadSavedCategoryFilters() {
     try {
       const raw = localStorage.getItem('altis_category_filters');
-      if (!raw) return;
-      const state = JSON.parse(raw);
+      const state = raw ? JSON.parse(raw) : {};
       catNames.forEach(cat => {
-        if (typeof state[cat] === 'boolean') {
-          const chk = document.getElementById(`chk-cat-${cat}`);
-          const lyr = categoryLayers[cat];
-          if (chk) chk.checked = state[cat];
-          if (lyr) {
-            state[cat] ? map.addLayer(lyr) : map.removeLayer(lyr);
+        const isChecked = (typeof state[cat] === 'boolean') ? state[cat] : true;
+        const chk = document.getElementById(`chk-cat-${cat}`);
+        const lyr = categoryLayers[cat];
+        if (chk) chk.checked = isChecked;
+        if (lyr) {
+          if (isChecked) {
+            if (!map.hasLayer(lyr)) map.addLayer(lyr);
+          } else {
+            if (map.hasLayer(lyr)) map.removeLayer(lyr);
           }
         }
       });
