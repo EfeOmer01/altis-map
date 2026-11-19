@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=34.0">
+  <link rel="stylesheet" href="style.css?v=35.0">
 </head>
 <body>
   <!-- Верхняя тактическая панель (HUD) -->
@@ -82,7 +82,10 @@
 
     <div class="settings-search-bar">
       <button id="btn-search-prev" class="settings-nav-btn" title="Предыдущий результат / Снять все">&lt;</button>
-      <input type="text" id="settings-search-input" class="settings-search-input" placeholder="Поиск меток..." autocomplete="off">
+      <div class="settings-search-input-wrap">
+        <input type="search" id="settings-search-input" class="settings-search-input" placeholder="Поиск меток..." autocomplete="off" name="search_altis_markers_unique_no_autofill" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" data-form-type="other">
+        <button id="btn-clear-marker-search" class="btn-clear-search" title="Очистить поиск" type="button">&times;</button>
+      </div>
       <button id="btn-search-next" class="settings-nav-btn" title="Следующий результат / Выбрать все">&gt;</button>
     </div>
 
@@ -462,7 +465,7 @@
       </div>
       <div class="modal-body">
         <div class="claims-filter-wrap" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-          <input type="text" id="search-claims-input" placeholder="Поиск по ориентиру (город, DP), владельцу, ID..." class="form-input" style="flex:1; min-width:240px;">
+          <input type="search" id="search-claims-input" placeholder="Поиск по ориентиру (город, DP), владельцу, ID..." class="form-input" style="flex:1; min-width:240px;" autocomplete="off" name="search_claims_no_autofill" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" data-form-type="other" spellcheck="false">
           
           <div class="hud-garage-status-filters modal-garage-status-filters">
             <button class="garage-status-filter-btn status-friendly active" data-status="friendly" title="🟢 Наши"><span class="filter-dot"></span>НАШИ</button>
@@ -603,6 +606,6 @@
   <!-- Скрипты: Leaflet локально (без CDN) и Socket.io локально -->
   <script src="/libs/leaflet/leaflet.js"></script>
   <script src="/libs/socket.io.js"></script>
-  <script src="app.js?v=34.0"></script>
+  <script src="app.js?v=35.0"></script>
 </body>
 </html>

@@ -868,6 +868,10 @@ document.addEventListener('DOMContentLoaded', () => {
           }, 300);
         }
       }
+
+      if (typeof sanitizeSearchInput === 'function') {
+        sanitizeSearchInput();
+      }
     } else {
       btnAuth?.classList.remove('hidden');
       badge?.classList.add('hidden');
@@ -2422,6 +2426,9 @@ document.addEventListener('DOMContentLoaded', () => {
   btnToggleSettings?.addEventListener('click', () => {
     settingsPanel.classList.toggle('hidden');
     btnToggleSettings.classList.toggle('active', !settingsPanel.classList.contains('hidden'));
+    if (!settingsPanel.classList.contains('hidden')) {
+      if (typeof sanitizeSearchInput === 'function') sanitizeSearchInput();
+    }
   });
 
   btnSettingsClose?.addEventListener('click', () => {
@@ -2519,6 +2526,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       saveCategoryFilters();
       // Перепроверяем фильтрацию при поиске
+      if (typeof sanitizeSearchInput === 'function') sanitizeSearchInput();
       const q = (document.getElementById('settings-search-input')?.value || '').trim().toLowerCase();
       if (q) filterMarkersByQuery(q);
     });
@@ -2553,6 +2561,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     saveCategoryFilters();
+    if (typeof sanitizeSearchInput === 'function') sanitizeSearchInput();
     const q = (document.getElementById('settings-search-input')?.value || '').trim().toLowerCase();
     if (q) filterMarkersByQuery(q);
   }
@@ -2561,8 +2570,55 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('settings-search-input');
   const btnSearchPrev = document.getElementById('btn-search-prev');
   const btnSearchNext = document.getElementById('btn-search-next');
+  const btnClearSearch = document.getElementById('btn-clear-marker-search');
   let currentSearchResults = [];
   let currentSearchIdx = 0;
+
+  function updateMarkerSearchClearBtn() {
+    if (!btnClearSearch || !searchInput) return;
+    btnClearSearch.style.display = searchInput.value ? 'block' : 'none';
+  }
+
+  function sanitizeSearchInput() {
+    if (!searchInput) return false;
+    const v = (searchInput.value || '').trim();
+    if (!v) {
+      updateMarkerSearchClearBtn();
+      return false;
+    }
+    // Если браузер автозаполнил логин или ник пользователя в поиск меток
+    if (currentUser) {
+      const uName = (currentUser.username || '').trim().toLowerCase();
+      const fName = (currentUser.name || '').trim().toLowerCase();
+      if ((uName && v.toLowerCase() === uName) || (fName && v.toLowerCase() === fName)) {
+        searchInput.value = '';
+        updateMarkerSearchClearBtn();
+        filterMarkersByQuery('');
+        return true;
+      }
+    }
+    updateMarkerSearchClearBtn();
+    return false;
+  }
+
+  // Принудительно очищаем поле поиска при загрузке, чтобы не срабатывало автозаполнение браузера
+  if (searchInput) {
+    searchInput.value = '';
+    updateMarkerSearchClearBtn();
+  }
+  setTimeout(sanitizeSearchInput, 150);
+  setTimeout(sanitizeSearchInput, 600);
+  setTimeout(sanitizeSearchInput, 1500);
+
+  btnClearSearch?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (searchInput) {
+      searchInput.value = '';
+      searchInput.focus();
+    }
+    updateMarkerSearchClearBtn();
+    filterMarkersByQuery('');
+  });
 
   function filterMarkersByQuery(query) {
     currentSearchResults = [];
@@ -2602,8 +2658,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   searchInput?.addEventListener('input', () => {
+    if (sanitizeSearchInput()) return;
     const q = searchInput.value.trim().toLowerCase();
     filterMarkersByQuery(q);
+    updateMarkerSearchClearBtn();
   });
 
   function focusSearchResult(entry) {
