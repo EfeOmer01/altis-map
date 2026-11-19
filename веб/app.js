@@ -383,11 +383,37 @@ document.addEventListener('DOMContentLoaded', () => {
   const squadClaimsOverviewLayer = L.layerGroup().addTo(map);
   const squadClaimMarkers = {};
 
+  // Фильтры статусов гаражей (наши, друзья, враги, склад)
+  const activeGarageStatusFilters = {
+    friendly: true,
+    ally: true,
+    hostile: true,
+    loot: true
+  };
+  try {
+    const savedFilters = localStorage.getItem('altis_garage_status_filters');
+    if (savedFilters) {
+      Object.assign(activeGarageStatusFilters, JSON.parse(savedFilters));
+    }
+  } catch (e) {}
+
+  function isGarageStatusVisible(status) {
+    const s = status || 'friendly';
+    return activeGarageStatusFilters[s] !== false;
+  }
+
   function updateGaragesCounter() {
     const btn = document.getElementById('btn-claims-list');
-    const count = Object.keys(claimsData).length;
+    const totalCount = Object.keys(claimsData).length;
+    const visibleCount = Object.values(claimsData).filter(c => isGarageStatusVisible(c.status || 'friendly')).length;
     if (btn) {
-      btn.textContent = count > 0 ? `📋 ГАРАЖИ (${count})` : 'СПИСОК ГАРАЖЕЙ';
+      if (totalCount === 0) {
+        btn.textContent = 'СПИСОК ГАРАЖЕЙ';
+      } else if (visibleCount !== totalCount) {
+        btn.textContent = `📋 ГАРАЖИ (${visibleCount}/${totalCount})`;
+      } else {
+        btn.textContent = `📋 ГАРАЖИ (${totalCount})`;
+      }
     }
   }
 
@@ -397,8 +423,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const bData = poly?._bData;
     const x = c?.x || bData?.x;
     const y = c?.y || bData?.y;
+    const status = c?.status || 'friendly';
 
-    if (!c || (!c.owner && !c.status) || !x || !y) {
+    if (!c || (!c.owner && !c.status) || !x || !y || !isGarageStatusVisible(status)) {
       if (squadClaimMarkers[id]) {
         squadClaimsOverviewLayer.removeLayer(squadClaimMarkers[id]);
         delete squadClaimMarkers[id];
@@ -407,7 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const ownerName = c.owner || 'Наш';
-    const html = `<div class="squad-claim-marker status-${c.status || 'friendly'}"><div class="claim-badge-bubble"><span class="claim-status-dot"></span><span class="claim-badge-name">${ownerName}</span></div><div class="claim-badge-arrow"></div></div>`;
+    const html = `<div class="squad-claim-marker status-${status}"><div class="claim-badge-bubble"><span class="claim-status-dot"></span><span class="claim-badge-name">${ownerName}</span></div><div class="claim-badge-arrow"></div></div>`;
 
     if (!squadClaimMarkers[id]) {
       const customIcon = L.divIcon({
@@ -453,8 +480,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const isMission = (g && g.source === 'mission');
     const defaultCol = isMission ? '#fbbf24' : '#00f0ff';
+    const status = c?.status || 'friendly';
 
-    if (!c || (!c.owner && !c.status)) {
+    if (!c || (!c.owner && !c.status) || !isGarageStatusVisible(status)) {
       poly.setStyle({
         color: defaultCol,
         fillColor: defaultCol,
@@ -471,7 +499,7 @@ document.addEventListener('DOMContentLoaded', () => {
       loot: '#d29922',
       neutral: '#8b949e'
     };
-    const col = palette[c.status] || palette.friendly;
+    const col = palette[status] || palette.friendly;
     poly.setStyle({
       color: col,
       fillColor: col,
@@ -480,7 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (el) {
-      el.classList.add(`status-${c.status || 'friendly'}`);
+      el.classList.add(`status-${status}`);
     }
   }
 
@@ -1776,6 +1804,78 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('modal-claims-close').addEventListener('click', () => claimsModal.classList.add('hidden'));
 
+  // ======================================================================
+  //  БЫСТРЫЙ ФИЛЬТР СТАТУСОВ ГАРАЖЕЙ (ЗЕЛЕНЫЕ, ФИОЛЕТОВЫЕ, КРАСНЫЕ, ЖЕЛТЫЕ)
+  // ======================================================================
+  function syncGarageStatusFilterUI() {
+    document.querySelectorAll('.garage-status-filter-btn').forEach(btn => {
+      const st = btn.dataset.status;
+      if (!st) return;
+      const isActive = activeGarageStatusFilters[st] !== false;
+      btn.classList.toggle('active', isActive);
+    });
+  }
+
+  function initGarageStatusFilters() {
+    syncGarageStatusFilterUI();
+
+    let clickTimer = null;
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.garage-status-filter-btn');
+      if (!btn) return;
+      const st = btn.dataset.status;
+      if (!st) return;
+
+      e.preventDefault();
+
+      if (e.altKey) {
+        isolateStatus(st);
+        return;
+      }
+
+      if (clickTimer) {
+        clearTimeout(clickTimer);
+        clickTimer = null;
+        // Двойной клик - показать ТОЛЬКО этот статус (изолировать)
+        isolateStatus(st);
+        return;
+      }
+
+      clickTimer = setTimeout(() => {
+        clickTimer = null;
+        // Одиночный клик - переключить вкл/выкл
+        activeGarageStatusFilters[st] = !activeGarageStatusFilters[st];
+        saveAndApplyStatusFilters();
+      }, 230);
+    });
+
+    function isolateStatus(st) {
+      const statuses = ['friendly', 'ally', 'hostile', 'loot'];
+      const isOnlyOne = statuses.every(s => (s === st ? activeGarageStatusFilters[s] : !activeGarageStatusFilters[s]));
+
+      if (isOnlyOne) {
+        // Если уже был изолирован только этот цвет - возвращаем показ всех
+        statuses.forEach(s => { activeGarageStatusFilters[s] = true; });
+      } else {
+        // Иначе включаем ТОЛЬКО этот
+        statuses.forEach(s => { activeGarageStatusFilters[s] = (s === st); });
+      }
+      saveAndApplyStatusFilters();
+    }
+
+    function saveAndApplyStatusFilters() {
+      try {
+        localStorage.setItem('altis_garage_status_filters', JSON.stringify(activeGarageStatusFilters));
+      } catch (e) {}
+      syncGarageStatusFilterUI();
+      updateBuildingsVisuals();
+      renderClaimsTable();
+    }
+  }
+
+  initGarageStatusFilters();
+
   function normalizeDP(s) {
     if (!s) return '';
     return String(s).toLowerCase().replace(/дп/g, 'dp').replace(/[\s\-_]/g, '');
@@ -1919,6 +2019,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tbody.innerHTML = '';
 
     const list = Object.values(claimsData).filter(c => {
+      if (!isGarageStatusVisible(c.status || 'friendly')) return false;
       const lm = getGarageLandmark(c.x, c.y);
       return matchGarageSearch(c, lm, filter);
     });

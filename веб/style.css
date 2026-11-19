@@ -143,6 +143,105 @@ body {
 .hud-controls {
   display: flex;
   gap: 8px;
+  align-items: center;
+}
+
+/* Фильтры статусов гаражей в HUD */
+.hud-garage-status-filters {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(13, 17, 23, 0.75);
+  padding: 3px 5px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+}
+
+.garage-status-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #94a3b8;
+  font-family: var(--font-arma);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  opacity: 0.4;
+}
+
+.garage-status-filter-btn .filter-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  background: currentColor;
+}
+
+.garage-status-filter-btn:hover {
+  opacity: 0.85;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.garage-status-filter-btn.active {
+  opacity: 1;
+}
+
+/* 🟢 НАШИ */
+.garage-status-filter-btn.status-friendly.active {
+  background: rgba(63, 185, 80, 0.22);
+  border-color: #3fb950;
+  color: #86efac;
+  box-shadow: 0 0 8px rgba(63, 185, 80, 0.35);
+}
+.garage-status-filter-btn.status-friendly .filter-dot {
+  background: #3fb950;
+  box-shadow: 0 0 6px #3fb950;
+}
+
+/* 🟣 ДРУЗЬЯ */
+.garage-status-filter-btn.status-ally.active {
+  background: rgba(188, 140, 255, 0.22);
+  border-color: #bc8cff;
+  color: #d8b4fe;
+  box-shadow: 0 0 8px rgba(188, 140, 255, 0.35);
+}
+.garage-status-filter-btn.status-ally .filter-dot {
+  background: #bc8cff;
+  box-shadow: 0 0 6px #bc8cff;
+}
+
+/* 🔴 ВРАГИ */
+.garage-status-filter-btn.status-hostile.active {
+  background: rgba(248, 81, 73, 0.22);
+  border-color: #f85149;
+  color: #fca5a5;
+  box-shadow: 0 0 8px rgba(248, 81, 73, 0.35);
+}
+.garage-status-filter-btn.status-hostile .filter-dot {
+  background: #f85149;
+  box-shadow: 0 0 6px #f85149;
+}
+
+/* 🟡 СКЛАД */
+.garage-status-filter-btn.status-loot.active {
+  background: rgba(227, 179, 65, 0.22);
+  border-color: #e3b341;
+  color: #fde047;
+  box-shadow: 0 0 8px rgba(227, 179, 65, 0.35);
+}
+.garage-status-filter-btn.status-loot .filter-dot {
+  background: #e3b341;
+  box-shadow: 0 0 6px #e3b341;
 }
 
 /* --- КНОПКИ --- */

@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=29.0">
+  <link rel="stylesheet" href="style.css?v=30.0">
 </head>
 <body>
   <!-- Верхняя тактическая панель (HUD) -->
@@ -51,6 +51,22 @@
       <button id="btn-toggle-basemap" class="btn btn-hud" title="Переключить подложку">СПУТНИК</button>
       <button id="btn-toggle-grid" class="btn btn-hud">СЕТКА</button>
       <button id="btn-claims-list" class="btn btn-hud">СПИСОК ГАРАЖЕЙ</button>
+
+      <!-- Быстрый фильтр статусов гаражей (зеленые, фиолетовые, красные, желтые) -->
+      <div class="hud-garage-status-filters" id="hud-garage-status-filters" title="Фильтр отображения гаражей по статусу">
+        <button class="garage-status-filter-btn status-friendly active" data-status="friendly" title="🟢 Наши гаражи / База (клик: переключить, 2-й клик: только наши)">
+          <span class="filter-dot"></span><span class="filter-text">НАШИ</span>
+        </button>
+        <button class="garage-status-filter-btn status-ally active" data-status="ally" title="🟣 Союзники / Друзья (клик: переключить, 2-й клик: только друзья)">
+          <span class="filter-dot"></span><span class="filter-text">ДРУЗЬЯ</span>
+        </button>
+        <button class="garage-status-filter-btn status-hostile active" data-status="hostile" title="🔴 Вражеские гаражи (клик: переключить, 2-й клик: только враги)">
+          <span class="filter-dot"></span><span class="filter-text">ВРАГИ</span>
+        </button>
+        <button class="garage-status-filter-btn status-loot active" data-status="loot" title="🟡 Склады / Схроны (клик: переключить, 2-й клик: только склады)">
+          <span class="filter-dot"></span><span class="filter-text">СКЛАД</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -451,6 +467,14 @@
       <div class="modal-body">
         <div class="claims-filter-wrap" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
           <input type="text" id="search-claims-input" placeholder="Поиск по ориентиру (город, DP), владельцу, ID..." class="form-input" style="flex:1; min-width:240px;">
+          
+          <div class="hud-garage-status-filters modal-garage-status-filters">
+            <button class="garage-status-filter-btn status-friendly active" data-status="friendly" title="🟢 Наши"><span class="filter-dot"></span>НАШИ</button>
+            <button class="garage-status-filter-btn status-ally active" data-status="ally" title="🟣 Друзья"><span class="filter-dot"></span>ДРУЗЬЯ</button>
+            <button class="garage-status-filter-btn status-hostile active" data-status="hostile" title="🔴 Враги"><span class="filter-dot"></span>ВРАГИ</button>
+            <button class="garage-status-filter-btn status-loot active" data-status="loot" title="🟡 Склад"><span class="filter-dot"></span>СКЛАД</button>
+          </div>
+
           <div id="bulk-garage-password-wrap-quick" style="display:flex; gap:6px; align-items:center;">
             <input type="text" id="bulk-garage-password-input-quick" class="form-input" placeholder="Новый пароль..." style="width:140px; font-size:12px;" autocomplete="off" name="quick_bulk_no_autofill" data-lpignore="true">
             <button id="btn-bulk-change-password-quick" class="btn btn-sm btn-primary" style="background:#238636; border-color:#2ea043; white-space:nowrap; font-size:12px;">
@@ -583,6 +607,6 @@
   <!-- Скрипты: Leaflet локально (без CDN) и Socket.io локально -->
   <script src="/libs/leaflet/leaflet.js"></script>
   <script src="/libs/socket.io.js"></script>
-  <script src="app.js?v=29.0"></script>
+  <script src="app.js?v=30.0"></script>
 </body>
 </html>
