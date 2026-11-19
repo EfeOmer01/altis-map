@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=30.0">
+  <link rel="stylesheet" href="style.css?v=31.0">
 </head>
 <body>
   <!-- Верхняя тактическая панель (HUD) -->
@@ -52,7 +52,7 @@
       <button id="btn-toggle-grid" class="btn btn-hud">СЕТКА</button>
       <button id="btn-claims-list" class="btn btn-hud">СПИСОК ГАРАЖЕЙ</button>
 
-      <!-- Быстрый фильтр статусов гаражей (зеленые, фиолетовые, красные, желтые) -->
+      <!-- Быстрый фильтр статусов гаражей (зеленые, фиолетовые, красные) -->
       <div class="hud-garage-status-filters" id="hud-garage-status-filters" title="Фильтр отображения гаражей по статусу">
         <button class="garage-status-filter-btn status-friendly active" data-status="friendly" title="🟢 Наши гаражи / База (клик: переключить, 2-й клик: только наши)">
           <span class="filter-dot"></span><span class="filter-text">НАШИ</span>
@@ -62,9 +62,6 @@
         </button>
         <button class="garage-status-filter-btn status-hostile active" data-status="hostile" title="🔴 Вражеские гаражи (клик: переключить, 2-й клик: только враги)">
           <span class="filter-dot"></span><span class="filter-text">ВРАГИ</span>
-        </button>
-        <button class="garage-status-filter-btn status-loot active" data-status="loot" title="🟡 Склады / Схроны (клик: переключить, 2-й клик: только склады)">
-          <span class="filter-dot"></span><span class="filter-text">СКЛАД</span>
         </button>
       </div>
     </div>
@@ -225,31 +222,33 @@
         <h3 id="panel-building-name">Постройка</h3>
         <span id="panel-building-id" class="panel-meta">ID: -----</span>
       </div>
-      <button id="panel-close-btn" class="btn-icon">&times;</button>
+      <button id="panel-close-btn" class="btn-icon" title="Закрыть">&times;</button>
     </div>
 
     <div class="panel-body">
-      <div class="info-row">
-        <span class="info-label">Координаты:</span>
-        <span id="panel-building-coords" class="info-value">X: ---, Y: ---</span>
-      </div>
+      <div class="panel-telemetry-box">
+        <div class="info-row">
+          <span class="info-label">КООРДИНАТЫ:</span>
+          <span id="panel-building-coords" class="info-value">X: ---, Y: ---</span>
+        </div>
 
-      <div class="info-row" id="panel-claim-author-row" style="display:none; margin-top:4px;">
-        <span class="info-label">Запись добавил:</span>
-        <span id="panel-claim-author" class="info-value">---</span>
+        <div class="info-row" id="panel-claim-author-row" style="display:none;">
+          <span class="info-label">ДОБАВИЛ:</span>
+          <span id="panel-claim-author" class="info-value">---</span>
+        </div>
       </div>
 
       <div class="form-group">
-        <label for="claim-owner">Владелец / Сквад:</label>
-        <input type="text" id="claim-owner" list="existing-owners-datalist" placeholder="Например: Валера авган / Склад" class="form-input" autocomplete="off" name="garage_owner_no_autofill" data-lpignore="true" spellcheck="false">
+        <label for="claim-owner">Владелец / Название гаража:</label>
+        <input type="text" id="claim-owner" list="existing-owners-datalist" placeholder="Например: Мерк, Китобой..." class="form-input" autocomplete="off" name="garage_owner_no_autofill" data-lpignore="true" spellcheck="false">
         <datalist id="existing-owners-datalist"></datalist>
         <div id="quick-owners-chips" class="quick-owners-chips"></div>
       </div>
 
       <div class="form-group">
-        <label for="claim-password">Пароль / Код замка:</label>
+        <label for="claim-password">Код замка / Пароль:</label>
         <div class="password-input-wrap">
-          <input type="text" id="claim-password" placeholder="Пароль от гаража/базы" class="form-input masked-garage-code" autocomplete="off" name="garage_code_no_autofill" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" data-form-type="other" spellcheck="false">
+          <input type="text" id="claim-password" placeholder="Код гаража..." class="form-input masked-garage-code" autocomplete="off" name="garage_code_no_autofill" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" data-form-type="other" spellcheck="false">
           <button id="btn-toggle-password-view" class="btn-secondary" title="Показать/скрыть пароль" type="button">👁️</button>
           <button id="btn-copy-password" class="btn-secondary" title="Скопировать пароль" type="button">📋</button>
         </div>
@@ -261,18 +260,11 @@
           <option value="friendly">🟢 Наш гараж / База</option>
           <option value="ally">🟣 Гараж друга / Союзники</option>
           <option value="hostile">🔴 Вражеский гараж</option>
-          <option value="neutral">⚪ Свободный гараж</option>
-          <option value="loot">🟡 Склад / Схрон</option>
         </select>
       </div>
 
-      <div class="form-group">
-        <label for="claim-notes">Заметки / Инвентарь:</label>
-        <textarea id="claim-notes" rows="3" placeholder="Что внутри, транспорт, детали..." class="form-input"></textarea>
-      </div>
-
       <div class="panel-actions">
-        <button id="btn-save-claim" class="btn btn-primary">СОХРАНИТЬ В ОТРЯД</button>
+        <button id="btn-save-claim" class="btn btn-primary">СОХРАНИТЬ В СКВАД</button>
         <button id="btn-delete-claim" class="btn btn-danger">ОЧИСТИТЬ</button>
       </div>
     </div>
@@ -472,7 +464,6 @@
             <button class="garage-status-filter-btn status-friendly active" data-status="friendly" title="🟢 Наши"><span class="filter-dot"></span>НАШИ</button>
             <button class="garage-status-filter-btn status-ally active" data-status="ally" title="🟣 Друзья"><span class="filter-dot"></span>ДРУЗЬЯ</button>
             <button class="garage-status-filter-btn status-hostile active" data-status="hostile" title="🔴 Враги"><span class="filter-dot"></span>ВРАГИ</button>
-            <button class="garage-status-filter-btn status-loot active" data-status="loot" title="🟡 Склад"><span class="filter-dot"></span>СКЛАД</button>
           </div>
 
           <div id="bulk-garage-password-wrap-quick" style="display:flex; gap:6px; align-items:center;">
@@ -607,6 +598,6 @@
   <!-- Скрипты: Leaflet локально (без CDN) и Socket.io локально -->
   <script src="/libs/leaflet/leaflet.js"></script>
   <script src="/libs/socket.io.js"></script>
-  <script src="app.js?v=30.0"></script>
+  <script src="app.js?v=31.0"></script>
 </body>
 </html>

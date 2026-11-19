@@ -355,8 +355,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ? '<span style="color:#f85149; font-weight:bold;">🔴 Вражеский</span>'
                 : c.status === 'ally'
                 ? '<span style="color:#bc8cff; font-weight:bold;">🟣 Гараж друга</span>'
-                : c.status === 'loot'
-                ? '<span style="color:#d29922; font-weight:bold;">🟡 Склад</span>'
                 : c.status === 'neutral'
                 ? '<span style="color:#8b949e; font-weight:bold;">⚪ Свободный</span>'
                 : '<span style="color:#3fb950; font-weight:bold;">🟢 Наш гараж</span>';
@@ -383,17 +381,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const squadClaimsOverviewLayer = L.layerGroup().addTo(map);
   const squadClaimMarkers = {};
 
-  // Фильтры статусов гаражей (наши, друзья, враги, склад)
+  // Фильтры статусов гаражей (наши 🟢, друзья 🟣, враги 🔴)
   const activeGarageStatusFilters = {
     friendly: true,
     ally: true,
-    hostile: true,
-    loot: true
+    hostile: true
   };
   try {
     const savedFilters = localStorage.getItem('altis_garage_status_filters');
     if (savedFilters) {
       Object.assign(activeGarageStatusFilters, JSON.parse(savedFilters));
+      delete activeGarageStatusFilters.loot; // очищаем устаревший склад
     }
   } catch (e) {}
 
@@ -475,7 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const el = poly.getElement();
 
     if (el) {
-      el.classList.remove('status-friendly', 'status-ally', 'status-hostile', 'status-loot', 'status-neutral');
+      el.classList.remove('status-friendly', 'status-ally', 'status-hostile', 'status-neutral');
     }
 
     const isMission = (g && g.source === 'mission');
@@ -496,7 +494,6 @@ document.addEventListener('DOMContentLoaded', () => {
       friendly: '#3fb950',
       ally: '#bc8cff',
       hostile: '#f85149',
-      loot: '#d29922',
       neutral: '#8b949e'
     };
     const col = palette[status] || palette.friendly;
@@ -1419,8 +1416,8 @@ document.addEventListener('DOMContentLoaded', () => {
       btnTogglePass.textContent = '👁️';
       btnTogglePass.title = 'Показать пароль';
     }
-    statusIn.value = c.status   || 'friendly';
-    notesIn.value  = c.notes    || '';
+    statusIn.value = (c.status === 'loot' ? 'friendly' : (c.status || 'friendly'));
+    if (notesIn) notesIn.value = c.notes || '';
 
     // Отображаем, кто добавил запись (и дату)
     if (claimAuthorRow && claimAuthorVal) {
@@ -1476,7 +1473,7 @@ document.addEventListener('DOMContentLoaded', () => {
       owner: ownerIn.value.trim() || authorName,
       password: passIn.value.trim(),
       status: statusIn.value,
-      notes: notesIn.value.trim(),
+      notes: notesIn ? notesIn.value.trim() : '',
       updatedBy: authorName,
       updatedAt: new Date().toISOString()
     };
@@ -1851,7 +1848,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function isolateStatus(st) {
-      const statuses = ['friendly', 'ally', 'hostile', 'loot'];
+      const statuses = ['friendly', 'ally', 'hostile'];
       const isOnlyOne = statuses.every(s => (s === st ? activeGarageStatusFilters[s] : !activeGarageStatusFilters[s]));
 
       if (isOnlyOne) {
@@ -2029,8 +2026,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Сортировка: Сначала наши 🟢, потом друзья 🟣, склад 🟡, враги 🔴, свободные ⚪
-    const statusPriority = { friendly: 1, ally: 2, loot: 3, hostile: 4, neutral: 5 };
+    // Сортировка: Сначала наши 🟢, потом друзья 🟣, враги 🔴, свободные ⚪
+    const statusPriority = { friendly: 1, ally: 2, hostile: 3, neutral: 4 };
     list.sort((a, b) => {
       const pA = statusPriority[a.status] || 1;
       const pB = statusPriority[b.status] || 1;
@@ -2044,7 +2041,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const tr = document.createElement('tr');
       const icon = c.status === 'hostile' ? '🔴 Враг'
         : c.status === 'ally' ? '🟣 Друг'
-        : c.status === 'loot' ? '🟡 Склад'
         : c.status === 'neutral' ? '⚪ Свободен'
         : '🟢 Наш';
 
