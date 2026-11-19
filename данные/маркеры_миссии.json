@@ -486,7 +486,7 @@
     "icon": "/icons/amazing_marker_DP.png",
     "color": "ColorYellow",
     "x": 19409.4,
-    "y": 13219.4,
+    "y": 13219.3,
     "category": "dp"
   },
   {
@@ -2205,18 +2205,8 @@
     "type": "amazing_group_valk",
     "icon": "/icons/amazing_group_valk.png",
     "color": "ColorYellow",
-    "x": 20604.3,
-    "y": 20110.5,
-    "category": "bases"
-  },
-  {
-    "name": "valk_sub_base_marker",
-    "text": "VALK",
-    "type": "amazing_group_valk",
-    "icon": "/icons/amazing_group_valk.png",
-    "color": "ColorYellow",
-    "x": 16611.8,
-    "y": 9159.1,
+    "x": 6740.1,
+    "y": 10850.1,
     "category": "bases"
   },
   {
@@ -3247,6 +3237,36 @@
     "color": "ColorYellow",
     "x": 23041.8,
     "y": 22245.1,
+    "category": "bases"
+  },
+  {
+    "name": "kifo_sub_base_marker",
+    "text": "KIFO",
+    "type": "amazing_group_kifo",
+    "icon": "/icons/amazing_group_kifo.png",
+    "color": "ColorYellow",
+    "x": 18069.1,
+    "y": 7123.6,
+    "category": "bases"
+  },
+  {
+    "name": "kifo_main_base_marker",
+    "text": "KIFO",
+    "type": "amazing_group_kifo",
+    "icon": "/icons/amazing_group_kifo.png",
+    "color": "ColorYellow",
+    "x": 20606.7,
+    "y": 20110.1,
+    "category": "bases"
+  },
+  {
+    "name": "valk_sub_base_marker",
+    "text": "VALK",
+    "type": "amazing_group_valk",
+    "icon": "/icons/amazing_group_valk.png",
+    "color": "ColorYellow",
+    "x": 26591.0,
+    "y": 23857.8,
     "category": "bases"
   }
 ]
