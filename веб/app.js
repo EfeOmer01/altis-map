@@ -106,6 +106,11 @@ document.addEventListener('DOMContentLoaded', () => {
     touchZoom: true
   });
 
+  // Выделенный слой для названий городов (фоновые надписи карты) ниже маркеров (чтобы маркеры DP и POI не перекрывались)
+  map.createPane('citiesPane');
+  map.getPane('citiesPane').style.zIndex = '450';
+  map.getPane('citiesPane').style.pointerEvents = 'none';
+
   // Автоматическая адаптация minZoom под размер экрана, чтобы карта не улетала далеко назад и не двоилась
   function adjustMinZoom() {
     try {
@@ -623,7 +628,11 @@ document.addEventListener('DOMContentLoaded', () => {
           iconAnchor: [80, 10]
         });
 
-        const marker = L.marker(gameToLatLng(c.x, c.y), { icon, interactive: false });
+        const marker = L.marker(gameToLatLng(c.x, c.y), { 
+          icon, 
+          interactive: false,
+          pane: 'citiesPane'
+        });
         categoryLayers.names.addLayer(marker);
       });
     });
@@ -658,12 +667,12 @@ document.addEventListener('DOMContentLoaded', () => {
           className: iconWrapClass,
           html: `${iconInner}<span class="arma-marker-text">${label}</span>`,
           iconSize: null,
-          iconAnchor: isDP ? [20, 10] : [14, 14]
+          iconAnchor: [14, 14]
         });
 
         const marker = L.marker(gameToLatLng(m.x, m.y), { 
           icon,
-          zIndexOffset: isDP ? 300 : 0
+          zIndexOffset: isDP ? 500 : 0
         });
         marker.bindTooltip(`<b>${label}</b><br><small style="color:#8b949e">Категория: ${m.category}<br>X: ${m.x} | Y: ${m.y}</small>`, {
           className: 'tactical-tooltip',
