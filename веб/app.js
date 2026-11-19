@@ -1309,27 +1309,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const datalist = document.getElementById('existing-owners-datalist');
     const chipsContainer = document.getElementById('quick-owners-chips');
     
-    const set = new Set();
-    // 1. Все владельцы из сохраненных гаражей
-    Object.values(claimsData || {}).forEach(c => {
-      const o = (c.owner || '').trim();
-      if (o) set.add(o);
-    });
-    // 2. Все участники текущего сквада
+    // Собираем технические логины бойцов, чтобы отфильтровать их из названий гаражей
+    const memberLogins = new Set();
     if (currentSquadData && Array.isArray(currentSquadData.members)) {
       currentSquadData.members.forEach(m => {
-        const name = (m.name || m.username || '').trim();
-        if (name) set.add(name);
+        if (m.username) memberLogins.add(m.username.trim().toLowerCase());
+        if (m.name) memberLogins.add(m.name.trim().toLowerCase());
       });
     }
-    // 3. Текущий игрок
     if (currentUser) {
-      if (currentUser.name) set.add(currentUser.name.trim());
-      if (currentUser.username) set.add(currentUser.username.trim());
+      if (currentUser.username) memberLogins.add(currentUser.username.trim().toLowerCase());
+      if (currentUser.name) memberLogins.add(currentUser.name.trim().toLowerCase());
     }
-    // 4. Общепринятые теги
-    set.add('Наш');
-    set.add('Склад');
+
+    const set = new Set();
+    // Берем ТОЛЬКО реальные кастомные названия гаражей из сохраненных меток
+    Object.values(claimsData || {}).forEach(c => {
+      const o = (c.owner || '').trim();
+      if (!o) return;
+      // Пропускаем технические логины аккаунтов (например, EfeOmer01, barsik13, d0x1g, salazarwilson)
+      if (memberLogins.has(o.toLowerCase())) return;
+      set.add(o);
+    });
 
     const names = Array.from(set).filter(Boolean).sort((a, b) => a.localeCompare(b, 'ru'));
 
