@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=26.0">
+  <link rel="stylesheet" href="style.css?v=27.0">
 </head>
 <body>
   <!-- Верхняя тактическая панель (HUD) -->
@@ -218,17 +218,24 @@
         <span id="panel-building-coords" class="info-value">X: ---, Y: ---</span>
       </div>
 
+      <div class="info-row" id="panel-claim-author-row" style="display:none; margin-top:4px;">
+        <span class="info-label">Запись добавил:</span>
+        <span id="panel-claim-author" class="info-value">---</span>
+      </div>
+
       <div class="form-group">
         <label for="claim-owner">Владелец / Сквад:</label>
-        <input type="text" id="claim-owner" placeholder="Например: Himan / E.N.O.T" class="form-input">
+        <input type="text" id="claim-owner" list="existing-owners-datalist" placeholder="Например: Валера авган / Склад" class="form-input" autocomplete="off" name="garage_owner_no_autofill" data-lpignore="true" spellcheck="false">
+        <datalist id="existing-owners-datalist"></datalist>
+        <div id="quick-owners-chips" class="quick-owners-chips"></div>
       </div>
 
       <div class="form-group">
         <label for="claim-password">Пароль / Код замка:</label>
         <div class="password-input-wrap">
-          <input type="password" id="claim-password" placeholder="Пароль от гаража/базы" class="form-input">
-          <button id="btn-toggle-password-view" class="btn-secondary" title="Показать/скрыть пароль">👁️</button>
-          <button id="btn-copy-password" class="btn-secondary" title="Скопировать пароль">📋</button>
+          <input type="text" id="claim-password" placeholder="Пароль от гаража/базы" class="form-input masked-garage-code" autocomplete="off" name="garage_code_no_autofill" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" data-form-type="other" spellcheck="false">
+          <button id="btn-toggle-password-view" class="btn-secondary" title="Показать/скрыть пароль" type="button">👁️</button>
+          <button id="btn-copy-password" class="btn-secondary" title="Скопировать пароль" type="button">📋</button>
         </div>
       </div>
 
@@ -389,7 +396,7 @@
             <div class="leader-passcode-row" style="margin-top:14px; padding-top:12px; border-top:1px dashed var(--border-color);">
               <label>Пароль для прямого входа (опционально):</label>
               <div class="passcode-edit-group">
-                <input type="text" id="squad-passcode-input" class="form-input" placeholder="Пароль сквада">
+                <input type="text" id="squad-passcode-input" class="form-input" placeholder="Пароль сквада" autocomplete="off" name="squad_pass_no_autofill" data-lpignore="true">
                 <button id="btn-save-squad-passcode" class="btn btn-primary btn-sm">СОХРАНИТЬ</button>
               </div>
             </div>
@@ -400,7 +407,7 @@
                 Сменит пароль сразу на <b>всех</b> гаражах со статусом 🟢 «Наш гараж / База».
               </div>
               <div class="passcode-edit-group">
-                <input type="text" id="bulk-garage-password-input" class="form-input" placeholder="Новый пароль (например, 1111)">
+                <input type="text" id="bulk-garage-password-input" class="form-input" placeholder="Новый пароль (например, 1111)" autocomplete="off" name="bulk_pass_no_autofill" data-lpignore="true">
                 <button id="btn-bulk-change-password" class="btn btn-primary btn-sm" style="white-space:nowrap; background:#238636; border-color:#2ea043;">СМЕНИТЬ НА ВСЕХ</button>
               </div>
               <div id="bulk-pass-status-msg" style="font-size:12px; margin-top:5px; display:none;"></div>
@@ -445,7 +452,7 @@
         <div class="claims-filter-wrap" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
           <input type="text" id="search-claims-input" placeholder="Поиск по ориентиру (город, DP), владельцу, ID..." class="form-input" style="flex:1; min-width:240px;">
           <div id="bulk-garage-password-wrap-quick" style="display:flex; gap:6px; align-items:center;">
-            <input type="text" id="bulk-garage-password-input-quick" class="form-input" placeholder="Новый пароль..." style="width:140px; font-size:12px;">
+            <input type="text" id="bulk-garage-password-input-quick" class="form-input" placeholder="Новый пароль..." style="width:140px; font-size:12px;" autocomplete="off" name="quick_bulk_no_autofill" data-lpignore="true">
             <button id="btn-bulk-change-password-quick" class="btn btn-sm btn-primary" style="background:#238636; border-color:#2ea043; white-space:nowrap; font-size:12px;">
               🔑 СМЕНИТЬ ПАРОЛЬ НА ВСЕХ НАШИХ
             </button>
@@ -576,6 +583,6 @@
   <!-- Скрипты: Leaflet локально (без CDN) и Socket.io локально -->
   <script src="/libs/leaflet/leaflet.js"></script>
   <script src="/libs/socket.io.js"></script>
-  <script src="app.js?v=26.0"></script>
+  <script src="app.js?v=27.0"></script>
 </body>
 </html>

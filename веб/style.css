@@ -756,6 +756,57 @@ body {
   font-family: var(--font-mono);
 }
 
+/* Маскирование кода гаража без триггера автозаполнения паролей браузера */
+.masked-garage-code {
+  -webkit-text-security: disc !important;
+  text-security: disc !important;
+  font-family: var(--font-mono) !important;
+  letter-spacing: 2px !important;
+}
+
+.masked-garage-code.revealed {
+  -webkit-text-security: none !important;
+  text-security: none !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* Быстрые кликабельные чипы имен владельцев */
+.quick-owners-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+  max-height: 85px;
+  overflow-y: auto;
+}
+
+.owner-chip {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #94a3b8;
+  font-family: var(--font-arma);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.12s ease;
+  white-space: nowrap;
+}
+
+.owner-chip:hover {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: #60a5fa;
+  color: #ffffff;
+}
+
+.owner-chip.active {
+  background: rgba(34, 197, 94, 0.25);
+  border-color: #3fb950;
+  color: #86efac;
+}
+
 .panel-actions {
   display: flex;
   gap: 8px;

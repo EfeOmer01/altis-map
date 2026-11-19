@@ -1282,15 +1282,93 @@ document.addEventListener('DOMContentLoaded', () => {
   // ======================================================================
   //  9. БОКОВАЯ ПАНЕЛЬ ПОСТРОЙКИ (ВЛАДЕЛЕЦ / ПАРОЛЬ)
   // ======================================================================
-  const panel       = document.getElementById('building-panel');
-  const panelName   = document.getElementById('panel-building-name');
-  const panelId     = document.getElementById('panel-building-id');
-  const panelCoords = document.getElementById('panel-building-coords');
-  const ownerIn     = document.getElementById('claim-owner');
-  const passIn      = document.getElementById('claim-password');
-  const statusIn    = document.getElementById('claim-status');
-  const notesIn     = document.getElementById('claim-notes');
-  const btnSaveClaim = document.getElementById('btn-save-claim');
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  const panel          = document.getElementById('building-panel');
+  const panelName      = document.getElementById('panel-building-name');
+  const panelId        = document.getElementById('panel-building-id');
+  const panelCoords    = document.getElementById('panel-building-coords');
+  const claimAuthorRow = document.getElementById('panel-claim-author-row');
+  const claimAuthorVal = document.getElementById('panel-claim-author');
+  const ownerIn        = document.getElementById('claim-owner');
+  const passIn         = document.getElementById('claim-password');
+  const statusIn       = document.getElementById('claim-status');
+  const notesIn        = document.getElementById('claim-notes');
+  const btnSaveClaim   = document.getElementById('btn-save-claim');
+  const btnTogglePass  = document.getElementById('btn-toggle-password-view');
+
+  function updateExistingOwnersUI(currentVal) {
+    const datalist = document.getElementById('existing-owners-datalist');
+    const chipsContainer = document.getElementById('quick-owners-chips');
+    
+    const set = new Set();
+    // 1. Все владельцы из сохраненных гаражей
+    Object.values(claimsData || {}).forEach(c => {
+      const o = (c.owner || '').trim();
+      if (o) set.add(o);
+    });
+    // 2. Все участники текущего сквада
+    if (currentSquadData && Array.isArray(currentSquadData.members)) {
+      currentSquadData.members.forEach(m => {
+        const name = (m.name || m.username || '').trim();
+        if (name) set.add(name);
+      });
+    }
+    // 3. Текущий игрок
+    if (currentUser) {
+      if (currentUser.name) set.add(currentUser.name.trim());
+      if (currentUser.username) set.add(currentUser.username.trim());
+    }
+    // 4. Общепринятые теги
+    set.add('Наш');
+    set.add('Склад');
+
+    const names = Array.from(set).filter(Boolean).sort((a, b) => a.localeCompare(b, 'ru'));
+
+    // Заполняем datalist для выпадающего списка
+    if (datalist) {
+      datalist.innerHTML = names.map(n => `<option value="${escapeHtml(n)}"></option>`).join('');
+    }
+
+    // Заполняем быстрые кликабельные чипы под полем
+    if (chipsContainer) {
+      chipsContainer.innerHTML = '';
+      names.forEach(name => {
+        const chip = document.createElement('span');
+        chip.className = 'owner-chip' + (currentVal && currentVal.toLowerCase() === name.toLowerCase() ? ' active' : '');
+        chip.textContent = name;
+        chip.title = `Выбрать «${name}»`;
+        chip.addEventListener('click', (e) => {
+          e.preventDefault();
+          ownerIn.value = name;
+          chipsContainer.querySelectorAll('.owner-chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          ownerIn.focus();
+        });
+        chipsContainer.appendChild(chip);
+      });
+    }
+  }
+
+  ownerIn?.addEventListener('input', () => {
+    const v = (ownerIn.value || '').trim().toLowerCase();
+    const chips = document.querySelectorAll('#quick-owners-chips .owner-chip');
+    chips.forEach(c => {
+      if (c.textContent.trim().toLowerCase() === v) {
+        c.classList.add('active');
+      } else {
+        c.classList.remove('active');
+      }
+    });
+  });
 
   function openBuildingPanel(b) {
     selectedBuilding = b;
@@ -1307,8 +1385,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const c = claimsData[b.id] || {};
     ownerIn.value  = (c.owner !== undefined) ? c.owner : '';
     passIn.value   = c.password || '';
+    passIn.classList.remove('revealed');
+    if (btnTogglePass) {
+      btnTogglePass.textContent = '👁️';
+      btnTogglePass.title = 'Показать пароль';
+    }
     statusIn.value = c.status   || 'friendly';
     notesIn.value  = c.notes    || '';
+
+    // Отображаем, кто добавил запись (и дату)
+    if (claimAuthorRow && claimAuthorVal) {
+      if (c && (c.updatedBy || c.owner)) {
+        const author = c.updatedBy || c.owner;
+        let dateStr = '';
+        if (c.updatedAt) {
+          try {
+            const d = new Date(c.updatedAt);
+            dateStr = ` <span style="font-size:11px; color:#8b949e; font-weight:normal;">(${d.toLocaleDateString('ru-RU')} ${d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })})</span>`;
+          } catch (_) {}
+        }
+        claimAuthorVal.innerHTML = `<span style="color:#60a5fa; font-weight:700;">👤 ${escapeHtml(author)}</span>${dateStr}`;
+        claimAuthorRow.style.display = 'flex';
+      } else {
+        claimAuthorRow.style.display = 'none';
+      }
+    }
+
+    // Обновляем список известных владельцев и чипы
+    updateExistingOwnersUI(ownerIn.value);
 
     if (btnSaveClaim) {
       if (currentUser && currentUser.squadId) {
@@ -1334,16 +1438,17 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    const authorName = currentUser.name || currentUser.username || 'Боец';
     const obj = {
       id: selectedBuilding.id,
       type: selectedBuilding.type,
       x: selectedBuilding.x,
       y: selectedBuilding.y,
-      owner: ownerIn.value.trim() || currentUser.name,
+      owner: ownerIn.value.trim() || authorName,
       password: passIn.value.trim(),
       status: statusIn.value,
       notes: notesIn.value.trim(),
-      updatedBy: currentUser.name,
+      updatedBy: authorName,
       updatedAt: new Date().toISOString()
     };
 
@@ -1351,6 +1456,7 @@ document.addEventListener('DOMContentLoaded', () => {
     claimsData[selectedBuilding.id] = obj;
     updateBuildingVisual(selectedBuilding.id);
     renderClaimsTable();
+    updateExistingOwnersUI();
     panel.classList.add('hidden');
   });
 
@@ -1361,11 +1467,16 @@ document.addEventListener('DOMContentLoaded', () => {
     delete claimsData[selectedBuilding.id];
     updateBuildingVisual(selectedBuilding.id);
     renderClaimsTable();
+    updateExistingOwnersUI();
     panel.classList.add('hidden');
   });
 
-  document.getElementById('btn-toggle-password-view').addEventListener('click', () => {
-    passIn.type = passIn.type === 'password' ? 'text' : 'password';
+  btnTogglePass?.addEventListener('click', (e) => {
+    e.preventDefault();
+    passIn.classList.toggle('revealed');
+    const isRev = passIn.classList.contains('revealed');
+    btnTogglePass.textContent = isRev ? '🙈' : '👁️';
+    btnTogglePass.title = isRev ? 'Скрыть пароль' : 'Показать пароль';
   });
 
   document.getElementById('btn-copy-password').addEventListener('click', () => {
@@ -1373,6 +1484,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navigator.clipboard.writeText(passIn.value).then(() => {
       alert('Пароль скопирован в буфер обмена!');
     });
+  });
   });
 
   // ======================================================================
