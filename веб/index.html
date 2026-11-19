@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=24.0">
+  <link rel="stylesheet" href="style.css?v=25.0">
 </head>
 <body>
   <!-- Верхняя тактическая панель (HUD) -->
@@ -269,28 +269,46 @@
           <div id="google-button-slot"></div>
           <div class="squad-divider">ИЛИ ЛОГИН И ПАРОЛЬ</div>
         </div>
-        <div id="google-not-configured-notice" class="auth-section">
-          <div class="auth-subtitle">Быстрый вход в систему:</div>
-          <div class="auth-hint">Введите ваш логин и пароль ниже (регистрация в 1 клик):</div>
+
+        <div class="auth-tabs-nav">
+          <button id="tab-btn-login" class="auth-tab-btn active" type="button">ВХОД</button>
+          <button id="tab-btn-register" class="auth-tab-btn" type="button">РЕГИСТРАЦИЯ</button>
         </div>
 
-        <div class="auth-section">
-          <label>Логин:</label>
-          <input type="text" id="auth-username" placeholder="Логин (например, Hawk_77)" class="form-input" autocomplete="username">
+        <!-- 1. Форма входа -->
+        <form id="auth-login-form" class="auth-section" autocomplete="on">
+          <label for="auth-username">Логин:</label>
+          <input type="text" id="auth-username" name="username" placeholder="Логин (например, Hawk_77)" class="form-input" autocomplete="username" required>
           
-          <label>Пароль:</label>
-          <input type="password" id="auth-password" placeholder="Пароль" class="form-input" autocomplete="current-password">
-          
-          <label>Позывной в игре (для регистрации):</label>
-          <input type="text" id="auth-name" placeholder="Позывной / Имя" class="form-input">
+          <label for="auth-password">Пароль:</label>
+          <input type="password" id="auth-password" name="password" placeholder="Пароль" class="form-input" autocomplete="current-password" required>
 
-          <div class="auth-btn-row">
-            <button id="btn-auth-login" class="btn btn-primary">ВОЙТИ</button>
-            <button id="btn-auth-register" class="btn btn-secondary">РЕГИСТРАЦИЯ</button>
+          <button type="submit" id="btn-auth-login" class="btn btn-primary" style="margin-top:6px; width:100%;">ВОЙТИ</button>
+          
+          <div style="text-align:center; font-size:12px; color:var(--text-muted); margin-top:8px;">
+            Нет аккаунта? <a href="#" id="link-go-to-reg" style="color:#60a5fa; text-decoration:none; font-weight:600;">Зарегистрироваться</a>
           </div>
+        </form>
 
-          <div id="auth-status-msg" class="auth-status-msg hidden"></div>
-        </div>
+        <!-- 2. Форма регистрации (Google Chrome сам предлагает надежный пароль и сохраняет) -->
+        <form id="auth-register-form" class="auth-section hidden" autocomplete="on">
+          <label for="reg-username">Логин для входа:</label>
+          <input type="text" id="reg-username" name="username" placeholder="Придумайте логин (например, Hawk_77)" class="form-input" autocomplete="username" required>
+
+          <label for="reg-name">Позывной в игре (отображается в скваде):</label>
+          <input type="text" id="reg-name" name="nickname" placeholder="Позывной / Имя" class="form-input" autocomplete="nickname">
+
+          <label for="reg-password">Пароль (Google предложит надежный пароль):</label>
+          <input type="password" id="reg-password" name="password" placeholder="Придумайте надежный пароль" class="form-input" autocomplete="new-password" required>
+
+          <button type="submit" id="btn-auth-register" class="btn btn-primary" style="margin-top:6px; width:100%; background:#238636; border-color:#2ea043;">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+
+          <div style="text-align:center; font-size:12px; color:var(--text-muted); margin-top:8px;">
+            Уже есть аккаунт? <a href="#" id="link-go-to-login" style="color:#60a5fa; text-decoration:none; font-weight:600;">Войти</a>
+          </div>
+        </form>
+
+        <div id="auth-status-msg" class="auth-status-msg hidden"></div>
       </div>
     </div>
   </div>
@@ -558,6 +576,6 @@
   <!-- Скрипты: Leaflet локально (без CDN) и Socket.io локально -->
   <script src="/libs/leaflet/leaflet.js"></script>
   <script src="/libs/socket.io.js"></script>
-  <script src="app.js?v=24.0"></script>
+  <script src="app.js?v=25.0"></script>
 </body>
 </html>

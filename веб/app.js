@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Кнопка ВОЙТИ в HUD
   document.getElementById('btn-open-auth-modal')?.addEventListener('click', () => {
     openModal('auth-modal');
+    if (typeof setAuthTab === 'function') setAuthTab('login');
   });
 
   // Клик по профилю (если уже авторизован) -> открывает окно сквадов или профиля
@@ -1379,10 +1380,40 @@ document.addEventListener('DOMContentLoaded', () => {
   //  10. МОДАЛКИ: АВТОРИЗАЦИЯ И СКВАДЫ (ОБРАБОТКА ФОРМ)
   // ======================================================================
 
+  // Вкладки авторизации ВХОД / РЕГИСТРАЦИЯ
+  const tabBtnLogin = document.getElementById('tab-btn-login');
+  const tabBtnRegister = document.getElementById('tab-btn-register');
+  const formLogin = document.getElementById('auth-login-form');
+  const formRegister = document.getElementById('auth-register-form');
+
+  function setAuthTab(tab) {
+    const isReg = (tab === 'register');
+    if (isReg) {
+      tabBtnRegister?.classList.add('active');
+      tabBtnLogin?.classList.remove('active');
+      formRegister?.classList.remove('hidden');
+      formLogin?.classList.add('hidden');
+      setTimeout(() => document.getElementById('reg-username')?.focus(), 50);
+    } else {
+      tabBtnLogin?.classList.add('active');
+      tabBtnRegister?.classList.remove('active');
+      formLogin?.classList.remove('hidden');
+      formRegister?.classList.add('hidden');
+      setTimeout(() => document.getElementById('auth-username')?.focus(), 50);
+    }
+    const msg = document.getElementById('auth-status-msg');
+    if (msg) msg.classList.add('hidden');
+  }
+
+  tabBtnLogin?.addEventListener('click', () => setAuthTab('login'));
+  tabBtnRegister?.addEventListener('click', () => setAuthTab('register'));
+  document.getElementById('link-go-to-reg')?.addEventListener('click', (e) => { e.preventDefault(); setAuthTab('register'); });
+  document.getElementById('link-go-to-login')?.addEventListener('click', (e) => { e.preventDefault(); setAuthTab('login'); });
+
   // Логин по паролю
-  document.getElementById('btn-auth-login')?.addEventListener('click', async () => {
-    const u = document.getElementById('auth-username').value.trim();
-    const p = document.getElementById('auth-password').value.trim();
+  async function performLogin() {
+    const u = document.getElementById('auth-username')?.value.trim();
+    const p = document.getElementById('auth-password')?.value.trim();
     if (!u || !p) return showAuthMsg('Заполните логин и пароль', 'error');
 
     showAuthMsg('Вход в систему...', '');
@@ -1409,23 +1440,25 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) {
       showAuthMsg('Ошибка сети при входе', 'error');
     }
+  }
+
+  formLogin?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    performLogin();
+  });
+  document.getElementById('btn-auth-login')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    performLogin();
   });
 
-  // Нажатие Enter в полях логина
-  ['auth-username', 'auth-password'].forEach(id => {
-    document.getElementById(id)?.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        document.getElementById('btn-auth-login')?.click();
-      }
-    });
-  });
-
-  // Регистрация
-  document.getElementById('btn-auth-register')?.addEventListener('click', async () => {
-    const u = document.getElementById('auth-username').value.trim();
-    const p = document.getElementById('auth-password').value.trim();
-    const n = document.getElementById('auth-name').value.trim() || u;
+  // Регистрация (с поддержкой надежного пароля Chrome autocomplete="new-password")
+  async function performRegister() {
+    const u = (document.getElementById('reg-username')?.value || document.getElementById('auth-username')?.value || '').trim();
+    const p = (document.getElementById('reg-password')?.value || document.getElementById('auth-password')?.value || '').trim();
+    const n = (document.getElementById('reg-name')?.value || document.getElementById('auth-name')?.value || u).trim() || u;
     if (!u || !p) return showAuthMsg('Заполните логин и пароль', 'error');
+
+    showAuthMsg('Создание аккаунта...', '');
 
     try {
       const res = await fetch('/api/auth/register', {
@@ -1440,13 +1473,24 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('arma_token', authToken);
         updateAuthUI();
         authModal.classList.add('hidden');
-        socket.emit('auth_socket', { token: authToken });
+        if (typeof socket !== 'undefined' && socket) {
+          socket.emit('auth_socket', { token: authToken });
+        }
       } else {
         showAuthMsg(data.error || 'Ошибка регистрации', 'error');
       }
     } catch (e) {
-      showAuthMsg('Ошибка сети', 'error');
+      showAuthMsg('Ошибка сети при регистрации', 'error');
     }
+  }
+
+  formRegister?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    performRegister();
+  });
+  document.getElementById('btn-auth-register')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    performRegister();
   });
 
   // Выход из аккаунта
