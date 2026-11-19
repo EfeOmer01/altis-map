@@ -406,16 +406,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const statusIcons = {
-      friendly: '🟢',
-      ally: '🟣',
-      hostile: '🔴',
-      loot: '🟡',
-      neutral: '⚪'
-    };
-    const stIcon = statusIcons[c.status] || '🟢';
     const ownerName = c.owner || 'Наш';
-    const html = `<div class="squad-claim-badge status-${c.status || 'friendly'}"><span class="badge-icon">${stIcon}</span><span class="badge-name">${ownerName}</span></div>`;
+    const html = `<div class="squad-claim-marker status-${c.status || 'friendly'}"><div class="claim-badge-bubble"><span class="claim-status-dot"></span><span class="claim-badge-name">${ownerName}</span></div><div class="claim-badge-arrow"></div></div>`;
 
     if (!squadClaimMarkers[id]) {
       const customIcon = L.divIcon({
@@ -571,9 +563,16 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(r => r.json())
     .then(cities => {
       // Фильтруем ТОЛЬКО настоящие населенные пункты (столицы, города, поселки)
-      // Исключаем все технические метки Arma (factory, military, quarry, power plant, hill11...),
-      // которые создавали второй призрачный слой и накладывались друг на друга.
-      const realSettlements = cities.filter(c => ['NameCityCapital', 'NameCity', 'CityCenter', 'NameVillage'].includes(c.type));
+      // Исключаем дубликаты (например, NameCity + CityCenter у Agios Dionysios) и технические метки
+      const seenCityNames = new Set();
+      const realSettlements = [];
+      cities.forEach(c => {
+        if (!['NameCityCapital', 'NameCity', 'NameVillage', 'CityCenter'].includes(c.type)) return;
+        const normName = (c.name || '').toLowerCase().trim();
+        if (normName && seenCityNames.has(normName)) return;
+        seenCityNames.add(normName);
+        realSettlements.push(c);
+      });
       allSettlementsData = realSettlements;
       renderClaimsTable();
 

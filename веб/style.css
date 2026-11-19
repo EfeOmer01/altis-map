@@ -409,55 +409,136 @@ body {
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.9)) !important;
 }
 
-/* ЗАМЕТНЫЕ ОБЗОРНЫЕ МЕТКИ ГАРАЖЕЙ ОТ ДАЛЬНЕГО ДО БЛИЖНЕГО ЗУМА */
+/* ТАКТИЧЕСКИЕ ОБЗОРНЫЕ МЕТКИ ГАРАЖЕЙ СКВАДА (ARMA 3 TACTICAL PIN) */
 .squad-claim-icon-wrapper {
   background: none !important;
   border: none !important;
 }
-.squad-claim-badge {
+
+.squad-claim-marker {
+  position: relative;
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
-  gap: 5px;
-  background: rgba(13, 17, 23, 0.94);
-  border: 1.5px solid #3fb950;
-  border-radius: 12px;
-  padding: 3px 8px;
-  font-size: 11px;
-  font-weight: 700;
-  color: #f0f6fc;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), 0 0 10px rgba(63, 185, 80, 0.5);
+  transform: translate(-50%, -100%); /* Стрелка указывает точно в координаты гаража */
   cursor: pointer;
   pointer-events: auto;
-  transform: translate(-50%, -50%);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease;
   user-select: none;
-  z-index: 600;
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s ease;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.85));
 }
-.squad-claim-badge .badge-icon {
-  font-size: 12px;
-  line-height: 1;
-}
-.squad-claim-badge .badge-name {
-  font-family: var(--font-sans);
-  letter-spacing: 0.2px;
-}
-.squad-claim-badge:hover {
-  transform: translate(-50%, -50%) scale(1.15);
-  box-shadow: 0 0 16px rgba(255, 255, 255, 0.95);
-  z-index: 1000;
-  opacity: 1 !important;
-}
-.squad-claim-badge.status-friendly { border-color: #3fb950; box-shadow: 0 0 10px rgba(63, 185, 80, 0.6); }
-.squad-claim-badge.status-ally { border-color: #bc8cff; box-shadow: 0 0 10px rgba(188, 140, 255, 0.6); }
-.squad-claim-badge.status-hostile { border-color: #f85149; box-shadow: 0 0 10px rgba(248, 81, 73, 0.6); }
-.squad-claim-badge.status-loot { border-color: #d29922; box-shadow: 0 0 10px rgba(210, 153, 34, 0.6); }
-.squad-claim-badge.status-neutral { border-color: #8b949e; box-shadow: 0 0 8px rgba(139, 148, 158, 0.4); }
 
-/* При близком зуме (когда виден сам полигон здания) делаем значок полупрозрачным, чтобы не загораживать */
-#map.zoom-tier-close .squad-claim-badge {
-  opacity: 0.55;
+.squad-claim-marker:hover {
+  transform: translate(-50%, -100%) scale(1.15);
+  z-index: 10000 !important;
 }
-#map.zoom-tier-close .squad-claim-badge:hover {
+
+.claim-badge-bubble {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(13, 17, 23, 0.93);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-family: var(--font-arma);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: #f0f6fc;
+  white-space: nowrap;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.7);
+}
+
+.claim-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.claim-badge-name {
+  line-height: 1.1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+.claim-badge-arrow {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid rgba(13, 17, 23, 0.93);
+  margin-top: -1px;
+  transition: border-top-color 0.15s ease;
+}
+
+/* Статусы гаражей с тактическим свечением */
+.squad-claim-marker.status-friendly .claim-badge-bubble {
+  border-color: rgba(63, 185, 80, 0.75);
+  box-shadow: 0 0 10px rgba(63, 185, 80, 0.35);
+}
+.squad-claim-marker.status-friendly .claim-status-dot {
+  background: #3fb950;
+  box-shadow: 0 0 6px #3fb950;
+}
+.squad-claim-marker.status-friendly .claim-badge-arrow {
+  border-top-color: #3fb950;
+}
+
+.squad-claim-marker.status-ally .claim-badge-bubble {
+  border-color: rgba(188, 140, 255, 0.75);
+  box-shadow: 0 0 10px rgba(188, 140, 255, 0.35);
+}
+.squad-claim-marker.status-ally .claim-status-dot {
+  background: #bc8cff;
+  box-shadow: 0 0 6px #bc8cff;
+}
+.squad-claim-marker.status-ally .claim-badge-arrow {
+  border-top-color: #bc8cff;
+}
+
+.squad-claim-marker.status-hostile .claim-badge-bubble {
+  border-color: rgba(248, 81, 73, 0.75);
+  box-shadow: 0 0 10px rgba(248, 81, 73, 0.35);
+}
+.squad-claim-marker.status-hostile .claim-status-dot {
+  background: #f85149;
+  box-shadow: 0 0 6px #f85149;
+}
+.squad-claim-marker.status-hostile .claim-badge-arrow {
+  border-top-color: #f85149;
+}
+
+.squad-claim-marker.status-loot .claim-badge-bubble {
+  border-color: rgba(227, 179, 65, 0.75);
+  box-shadow: 0 0 10px rgba(227, 179, 65, 0.35);
+}
+.squad-claim-marker.status-loot .claim-status-dot {
+  background: #e3b341;
+  box-shadow: 0 0 6px #e3b341;
+}
+.squad-claim-marker.status-loot .claim-badge-arrow {
+  border-top-color: #e3b341;
+}
+
+.squad-claim-marker.status-neutral .claim-badge-bubble {
+  border-color: rgba(139, 148, 158, 0.6);
+}
+.squad-claim-marker.status-neutral .claim-status-dot {
+  background: #8b949e;
+}
+.squad-claim-marker.status-neutral .claim-badge-arrow {
+  border-top-color: #8b949e;
+}
+
+/* При близком зуме делаем метку полупрозрачной, чтобы был виден сам гараж */
+#map.zoom-tier-close .squad-claim-marker {
+  opacity: 0.75;
+}
+#map.zoom-tier-close .squad-claim-marker:hover {
   opacity: 1;
 }
 
