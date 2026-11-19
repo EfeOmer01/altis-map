@@ -381,17 +381,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const squadClaimsOverviewLayer = L.layerGroup().addTo(map);
   const squadClaimMarkers = {};
 
-  // Фильтры статусов гаражей (наши 🟢, друзья 🟣, враги 🔴)
+  // Фильтры статусов гаражей (наши 🟢, друзья 🟣, враги 🔴, свободные ⚪)
   const activeGarageStatusFilters = {
     friendly: true,
     ally: true,
-    hostile: true
+    hostile: true,
+    neutral: true
   };
   try {
     const savedFilters = localStorage.getItem('altis_garage_status_filters');
     if (savedFilters) {
       Object.assign(activeGarageStatusFilters, JSON.parse(savedFilters));
       delete activeGarageStatusFilters.loot; // очищаем устаревший склад
+      if (activeGarageStatusFilters.neutral === undefined) activeGarageStatusFilters.neutral = true;
     }
   } catch (e) {}
 
@@ -1848,7 +1850,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function isolateStatus(st) {
-      const statuses = ['friendly', 'ally', 'hostile'];
+      const statuses = ['friendly', 'ally', 'hostile', 'neutral'];
       const isOnlyOne = statuses.every(s => (s === st ? activeGarageStatusFilters[s] : !activeGarageStatusFilters[s]));
 
       if (isOnlyOne) {
