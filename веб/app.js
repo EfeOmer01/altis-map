@@ -480,7 +480,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const defaultCol = isMission ? '#fbbf24' : '#00f0ff';
     const status = c?.status || 'friendly';
 
-    if (!c || (!c.owner && !c.status) || !isGarageStatusVisible(status)) {
+    if (!c || (!c.owner && !c.status)) {
       poly.setStyle({
         color: defaultCol,
         fillColor: defaultCol,
