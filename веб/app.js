@@ -2268,7 +2268,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Клик по всей строке категории переключает чекбокс
   document.querySelectorAll('.settings-row').forEach(row => {
     row.addEventListener('click', (e) => {
-      if (e.target.closest('input') || e.target.closest('button') || e.target.closest('.settings-row-actions')) return;
+      // Игнорируем клики по самому label чекбокса (он переключается нативно браузером), кнопкам и действиям
+      if (e.target.closest('label') || e.target.closest('input') || e.target.closest('button') || e.target.closest('.settings-row-actions')) return;
       const chk = row.querySelector('input[type="checkbox"]');
       if (chk) {
         chk.checked = !chk.checked;

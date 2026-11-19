@@ -1001,6 +1001,7 @@ body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   transition: background 0.12s;
   cursor: pointer;
+  user-select: none;
 }
 
 .settings-row:hover {
